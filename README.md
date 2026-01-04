@@ -212,6 +212,71 @@ Extracted from the **Nebulae project**:
 
 ---
 
+## Limitations & Hard Lessons
+
+### The Honest Truth: AI Agents Don't Always Follow Protocols
+
+Even with explicit instructions, AI coders frequently:
+- Skip reading required docs before making changes
+- "Forget" to update documentation after code changes
+- Create bug patterns for issues that were already fixed
+- Ignore invariant citation requirements
+- Provide superficial "proof of compliance" checklists
+
+**This framework helps, but it doesn't solve the problem completely.**
+
+### Failure Modes We've Encountered
+
+| Problem | Frequency | Impact |
+|---------|-----------|--------|
+| Agent skips doc reading | Common | Makes changes that violate invariants |
+| Agent "verifies" without actually checking | Common | Reports bugs that don't exist in current code |
+| Agent updates docs superficially | Occasional | Documentation technically updated but unhelpful |
+| Agent ignores Tier A warnings | Occasional | Critical files modified without proper review |
+| Sub-agents lose protocol context | Common | Task tool spawns agents without governance |
+
+### Safeguards We've Implemented
+
+**For Claude / Primary AI Coder:**
+1. **Pre-flight checklists** in AGENT_PROTOCOL.md — explicit "STOP" before proceeding
+2. **Mandatory report format** — forces structure even if content is weak
+3. **Git hooks as hard blocks** — can't commit without docs (catches what AI missed)
+4. **Confidence decay** — stale docs automatically hurt the score (visible consequence)
+
+**For Sub-Agents (Task tool):**
+1. **Protocol injection** — AGENT_PROTOCOL block must be included in every agent prompt
+2. **Verification requirements** — agents must prove they checked current code, not cached
+3. **Proof of compliance section** — mandatory in all agent reports
+4. **Escalation path** — if agent returns without docs, don't commit
+
+**For Humans:**
+1. **Dashboard visibility** — see confidence score trends over time
+2. **Blast radius warnings** — know when changes are high-risk
+3. **CODE_DOC_MAP** — single source of truth for what needs what docs
+
+### What Still Doesn't Work Well
+
+- **Agents still skip docs** — protocols are advisory until git hooks catch them
+- **Verification is shallow** — agents check boxes without deep verification
+- **Context window limits** — large codebases can't fit all relevant docs
+- **No runtime enforcement** — only catches issues at commit time
+- **Human discipline required** — someone must review agent compliance reports
+
+### Our Recommendation
+
+```
+Don't trust. Verify.
+```
+
+1. **Review agent reports** — actually read the "proof of compliance"
+2. **Spot-check doc updates** — are they meaningful or checkbox-filling?
+3. **Run confidence scoring regularly** — watch for unexpected drops
+4. **Use git hooks as safety net** — they catch what protocols miss
+
+This framework raises the floor, not the ceiling. It makes careless mistakes harder, but doesn't guarantee careful work.
+
+---
+
 ## Documentation
 
 | Document | Description |
