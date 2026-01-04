@@ -162,9 +162,66 @@ Self-Healing:       ❌ No                        ✅ Yes (staleness decay)
 
 ## A Cognitive System That Builds Itself
 
-This isn't just documentation you write once. It's a **living system that grows with your project**:
+This isn't just documentation you write once. It's a **living system that grows with your project** — and the reason agents always get the best possible context.
 
-### The Feedback Loop
+### The Continuous Loop (Why Agents Get Fresh Context)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    THE LIVING DOCUMENTATION LOOP                │
+└─────────────────────────────────────────────────────────────────┘
+
+     ┌──────────────┐
+     │  Code Change │
+     └──────┬───────┘
+            │
+            ▼
+     ┌──────────────┐     Git hooks enforce
+     │  Doc Update  │◄─── "no code change without doc update"
+     │  (Required)  │
+     └──────┬───────┘
+            │
+            ▼
+     ┌──────────────┐
+     │  Map Updated │     CODE_DOC_MAP, BUG_PATTERNS,
+     │  (Auto)      │     INVARIANTS all stay current
+     └──────┬───────┘
+            │
+            ▼
+     ┌──────────────┐
+     │  Next Agent  │     Fresh architecture, bugs, decisions
+     │  Session     │◄─── loaded from git (not stale memory)
+     └──────┬───────┘
+            │
+            ▼
+     ┌──────────────┐
+     │  Best Prompt │     Agent knows: what files do, what broke,
+     │  Possible    │     what rules exist, why decisions made
+     └──────┬───────┘
+            │
+            ▼
+     ┌──────────────┐
+     │  Better Code │     Informed changes, fewer mistakes,
+     │  Changes     │     respects invariants
+     └──────┬───────┘
+            │
+            └──────────────────────┐
+                                   │
+     ┌──────────────┐              │
+     │  Code Change │◄─────────────┘
+     └──────────────┘
+
+            ∞ LOOP CONTINUES ∞
+```
+
+**This is why the framework works**: Every code change forces documentation updates. Updated docs mean the architecture map is always current. Current maps mean the next agent session starts with perfect context. Perfect context means better code changes. Better changes loop back.
+
+**Other tools break this loop:**
+- MCP: Context can drift from reality (no enforcement)
+- RALPH: Memory is session-specific, not git-synced
+- Static context files: No mechanism to force updates
+
+### The Feedback Loop (What Gets Captured)
 
 ```
 Bug discovered → Document pattern → Detection rule added → Future bugs caught
@@ -356,9 +413,18 @@ Click a file → see known patterns, ADRs that justify it, historical blast radi
 
 ![System Architecture](docs/images/architecture-overview.png)
 
+The architecture is designed around one principle: **every change must update the knowledge base, so the next session starts smarter.**
+
 ### The Closed Feedback Loop
 
 ![Feedback Loop](docs/images/feedback-loop.png)
+
+**Why this matters for prompt quality:**
+- Git hooks ensure docs stay synchronized with code
+- CODE_DOC_MAP always reflects current file structure
+- BUG_PATTERNS grows with every fix
+- INVARIANTS block violations before they happen
+- **Result**: When an agent starts, it loads truth, not stale notes
 
 ### Core Documents & Update Triggers
 
