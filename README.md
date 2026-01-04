@@ -231,11 +231,14 @@ The Problem:
                                         Loop Breaks
 ```
 
-**Current safeguards:**
+**Current safeguards (in this repo):**
 - **Git hooks** catch missing docs at commit time (hard block)
-- **Fingerprint system** tracks agent compliance across sessions
 - **Confidence decay** makes staleness visible
 - **Proof-of-compliance** sections required in agent reports
+
+**Additional safeguards (still in Nebulae, not yet extracted):**
+- **Fingerprint system** tracks agent compliance across sessions
+- **Session memory packs** preserve context between runs
 
 **What still breaks:**
 - Agents skip reading docs before making changes
@@ -248,7 +251,7 @@ The Problem:
 | Idea | Status | Contributor Welcome? |
 |------|--------|---------------------|
 | Pre-change verification hooks | Concept | ✅ Yes |
-| Agent context fingerprinting | Working prototype | ✅ Help improve |
+| Agent context fingerprinting | In Nebulae, needs extraction | ✅ Help extract & generalize |
 | Mandatory context loading proof | Concept | ✅ Yes |
 | Protocol injection for sub-agents | Partial | ✅ Yes |
 | Runtime compliance monitoring | Not started | ✅ Yes |
@@ -754,11 +757,19 @@ This framework raises the floor, not the ceiling. It makes careless mistakes har
 
 ### What's Fully Extracted (Ready to Use)
 
-| Tool | Purpose | Dynamic Config |
-|------|---------|----------------|
-| `calculate_confidence.py` | Exponential-decay confidence scoring | ✅ Uses `config.py` |
-| `config.py` | Python configuration loader | ✅ Reads `living-doc-config.yaml` |
-| `load-config.sh` | Shell configuration loader | ✅ Reads `living-doc-config.yaml` |
+| Tool | Purpose | Lines |
+|------|---------|-------|
+| `calculate_confidence.py` | Exponential-decay confidence scoring | 465 |
+| `config.py` | Python configuration loader | 220 |
+| `load-config.sh` | Shell configuration loader | ~200 |
+| `hooks/pre-commit` | Block commits without doc updates | 136 |
+| `hooks/post-commit` | Auto-update triggers | ~30 |
+| `hooks/commit-msg` | Message validation | ~50 |
+| `hooks/install.sh` | One-command hook setup | ~50 |
+| `protocols/AGENT_PROTOCOL.md` | AI agent compliance rules | — |
+| `commands/living-docs.md` | Slash command for context loading | — |
+
+All tools use the central config system — **no hardcoded paths**.
 
 ### What's Documented (Not Yet Extracted)
 
@@ -770,7 +781,8 @@ These tools exist in the source Nebulae project and are documented with extracti
 | `auto-doc-mapper.sh` | 381 | 📋 Documented |
 | `spawn-agent.sh` | ~200 | 📋 Documented |
 | `session-memory-pack.sh` | ~150 | 📋 Documented |
-| 10 more utilities | various | 📋 See [EXTRACTION_GUIDE.md](tools/EXTRACTION_GUIDE.md) |
+| `fingerprint-tracker.sh` | ~300 | 📋 In Nebulae, needs extraction |
+| 10+ more utilities | various | 📋 See [EXTRACTION_GUIDE.md](tools/EXTRACTION_GUIDE.md) |
 
 ### Dashboard
 
@@ -867,10 +879,11 @@ We're actively looking for contributors, especially for **closing the agent comp
 | Area | Problem | Skills Needed |
 |------|---------|---------------|
 | **Agent Compliance** | AI agents don't always follow protocols | Prompt engineering, hooks |
-| **Fingerprint System** | Track agent behavior across sessions | Python, data structures |
+| **Fingerprint System Extraction** | Extract from Nebulae, generalize for any project | Python, data structures |
 | **Pre-change Hooks** | Verify context was loaded before changes | Shell, git hooks |
 | **Sub-agent Protocol Injection** | Ensure spawned agents inherit governance | Prompt engineering |
-| **Dashboard Extraction** | Generalize from Nebulae | Shell, Chart.js |
+| **Dashboard Extraction** | Extract from Nebulae (~1,500 lines) | Shell, Chart.js |
+| **Session Memory Packs** | Extract from Nebulae, generalize | Shell, Python |
 
 ### How to Contribute
 
