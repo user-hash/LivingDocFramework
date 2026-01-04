@@ -38,10 +38,14 @@ AI-assisted development has a fundamental problem: **AI agents are stateless**.
 
 Other tools try to solve this by giving AI more context (MCP, RALPH, context files). But context without enforcement is just suggestions that can be ignored.
 
-**This framework enforces at the commit level.** The project itself blocks changes that violate its documented understanding.
+**This framework does both:**
+
+1. **Delivers fresh, structured context** — architecture, bugs, decisions, patterns, invariants
+2. **Enforces at the commit level** — blocks changes that violate documented understanding
 
 ```
 The AI doesn't need to remember — the codebase remembers for it.
+And the codebase enforces what it remembers.
 ```
 
 ---
@@ -62,13 +66,18 @@ To set expectations clearly:
 
 **Problem:** AI agents lose context between sessions. Bugs reappear. Documentation drifts. Critical files get broken.
 
-**Solution:** This framework makes documentation *enforceable*. If code changes, docs must change too — or the commit is blocked.
+**Solution:** This framework provides **dual-layer protection**:
 
-```
-Code change without doc update? → Blocked.
-Tier A file edited without invariant citation? → Blocked.
-Bug fixed without pattern documented? → Warning.
-```
+1. **Context Layer** — Every session starts with fresh, structured knowledge:
+   - Architecture map, bug patterns, invariants, decisions, golden paths
+   - AI knows what files do, what broke before, what rules exist
+
+2. **Enforcement Layer** — Git hooks block bad commits:
+   ```
+   Code change without doc update? → Blocked.
+   Tier A file edited without invariant citation? → Blocked.
+   Bug fixed without pattern documented? → Warning.
+   ```
 
 **Result:** 93% system confidence maintained across 6 months and 181K lines of code.
 
@@ -81,17 +90,64 @@ Bug fixed without pattern documented? → Warning.
 | **MCP Servers** | Connect AI to external tools/data | No enforcement. AI can ignore context. |
 | **RALPH / Memory Systems** | Store conversation history | Memory without governance. No blocking. |
 | **Context Files (.claude, AGENTS.md)** | Provide static context to AI | Read-only. No validation. Drifts silently. |
-| **Living Documentation** | **Enforce documentation as code** | Requires initial setup investment |
+| **Living Documentation** | **Dual-layer: Context + Enforcement** | Requires initial setup investment |
 
-### The Key Difference
+### The Key Difference: Two Layers, Not One
 
-Other tools operate at the **prompt level** — they give AI more context.
+Other tools operate **only at the prompt level** — they give AI more context and hope it uses it.
 
-This framework operates at the **commit level** — it prevents bad changes from entering the codebase.
+This framework operates at **both layers**:
+
+**Layer 1: Prompt-Level Context (Like Others, But Better)**
+- AI gets **all relevant, fresh context** automatically:
+  - Current architecture map (`CODE_DOC_MAP.md`)
+  - Known bug patterns and anti-patterns
+  - Active invariants and safety rules
+  - Historical decisions with rationale
+  - Golden paths and best practices
+- Context is **structured and validated**, not ad-hoc notes
+- Context is **always current** — tied to git, not stale memory
+
+**Layer 2: Commit-Level Enforcement (What Others Don't Have)**
+- Git hooks **block commits** that violate documented rules
+- Tier A files **require** invariant citations before changes
+- Documentation updates are **mandatory**, not optional
+- Confidence scoring **degrades automatically** when docs go stale
 
 ```
-MCP/RALPH: "Here's context, please use it" (advisory)
-Living Docs: "You cannot commit without updating docs" (enforced)
+MCP/RALPH:     "Here's context, please use it"        (advisory only)
+Living Docs:   "Here's context, AND you must use it"  (enforced)
+                    ↓                    ↓
+              Layer 1: Fresh           Layer 2: Git hooks
+              structured context       block violations
+```
+
+### What AI Agents Actually Receive
+
+When an AI agent starts working on your codebase, it gets:
+
+| Context Type | What's Loaded | Why It Matters |
+|--------------|---------------|----------------|
+| **Architecture** | CODE_DOC_MAP with file → doc mappings | Knows where to look, what docs to read |
+| **Bug History** | BUG_PATTERNS with detection greps | Avoids reintroducing known issues |
+| **Safety Rules** | INVARIANTS with citation requirements | Knows what cannot be violated |
+| **Decisions** | ADRs with rationale and context | Understands *why*, not just *what* |
+| **Best Practices** | GOLDEN_PATHS for this codebase | Follows established patterns |
+| **Current Health** | Confidence scores, staleness flags | Knows what needs attention |
+
+**This isn't just "more context" — it's the right context, structured for action.**
+
+### The Compound Advantage
+
+```
+                    MCP/RALPH                    Living Documentation
+                    ─────────                    ────────────────────
+Prompt Context:     ✅ Yes (tools/data)          ✅ Yes (structured, validated)
+Fresh Context:      ⚠️  Depends on setup         ✅ Yes (git-synced)
+Structured:         ❌ Varies                    ✅ Yes (schemas, templates)
+Enforced:           ❌ No                        ✅ Yes (git hooks)
+Measurable:         ❌ No                        ✅ Yes (confidence scoring)
+Self-Healing:       ❌ No                        ✅ Yes (staleness decay)
 ```
 
 ### Why This Matters
@@ -100,6 +156,7 @@ Living Docs: "You cannot commit without updating docs" (enforced)
 - **Agent-resistant**: Works regardless of which AI model or version you use
 - **Turnover-resistant**: New team members (human or AI) inherit documented decisions
 - **Drift-resistant**: Stale documentation automatically degrades confidence scores
+- **Quality-resistant**: Bad changes get blocked, not just warned about
 
 ---
 
