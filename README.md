@@ -38,10 +38,14 @@ AI-assisted development has a fundamental problem: **AI agents are stateless**.
 
 Other tools try to solve this by giving AI more context (MCP, RALPH, context files). But context without enforcement is just suggestions that can be ignored.
 
-**This framework enforces at the commit level.** The project itself blocks changes that violate its documented understanding.
+**This framework does both:**
+
+1. **Delivers fresh, structured context** — architecture, bugs, decisions, patterns, invariants
+2. **Enforces at the commit level** — blocks changes that violate documented understanding
 
 ```
 The AI doesn't need to remember — the codebase remembers for it.
+And the codebase enforces what it remembers.
 ```
 
 ---
@@ -62,13 +66,18 @@ To set expectations clearly:
 
 **Problem:** AI agents lose context between sessions. Bugs reappear. Documentation drifts. Critical files get broken.
 
-**Solution:** This framework makes documentation *enforceable*. If code changes, docs must change too — or the commit is blocked.
+**Solution:** This framework provides **dual-layer protection**:
 
-```
-Code change without doc update? → Blocked.
-Tier A file edited without invariant citation? → Blocked.
-Bug fixed without pattern documented? → Warning.
-```
+1. **Context Layer** — Every session starts with fresh, structured knowledge:
+   - Architecture map, bug patterns, invariants, decisions, golden paths
+   - AI knows what files do, what broke before, what rules exist
+
+2. **Enforcement Layer** — Git hooks block bad commits:
+   ```
+   Code change without doc update? → Blocked.
+   Tier A file edited without invariant citation? → Blocked.
+   Bug fixed without pattern documented? → Warning.
+   ```
 
 **Result:** 93% system confidence maintained across 6 months and 181K lines of code.
 
@@ -81,17 +90,64 @@ Bug fixed without pattern documented? → Warning.
 | **MCP Servers** | Connect AI to external tools/data | No enforcement. AI can ignore context. |
 | **RALPH / Memory Systems** | Store conversation history | Memory without governance. No blocking. |
 | **Context Files (.claude, AGENTS.md)** | Provide static context to AI | Read-only. No validation. Drifts silently. |
-| **Living Documentation** | **Enforce documentation as code** | Requires initial setup investment |
+| **Living Documentation** | **Dual-layer: Context + Enforcement** | Requires initial setup investment |
 
-### The Key Difference
+### The Key Difference: Two Layers, Not One
 
-Other tools operate at the **prompt level** — they give AI more context.
+Other tools operate **only at the prompt level** — they give AI more context and hope it uses it.
 
-This framework operates at the **commit level** — it prevents bad changes from entering the codebase.
+This framework operates at **both layers**:
+
+**Layer 1: Prompt-Level Context (Like Others, But Better)**
+- AI gets **all relevant, fresh context** automatically:
+  - Current architecture map (`CODE_DOC_MAP.md`)
+  - Known bug patterns and anti-patterns
+  - Active invariants and safety rules
+  - Historical decisions with rationale
+  - Golden paths and best practices
+- Context is **structured and validated**, not ad-hoc notes
+- Context is **always current** — tied to git, not stale memory
+
+**Layer 2: Commit-Level Enforcement (What Others Don't Have)**
+- Git hooks **block commits** that violate documented rules
+- Tier A files **require** invariant citations before changes
+- Documentation updates are **mandatory**, not optional
+- Confidence scoring **degrades automatically** when docs go stale
 
 ```
-MCP/RALPH: "Here's context, please use it" (advisory)
-Living Docs: "You cannot commit without updating docs" (enforced)
+MCP/RALPH:     "Here's context, please use it"        (advisory only)
+Living Docs:   "Here's context, AND you must use it"  (enforced)
+                    ↓                    ↓
+              Layer 1: Fresh           Layer 2: Git hooks
+              structured context       block violations
+```
+
+### What AI Agents Actually Receive
+
+When an AI agent starts working on your codebase, it gets:
+
+| Context Type | What's Loaded | Why It Matters |
+|--------------|---------------|----------------|
+| **Architecture** | CODE_DOC_MAP with file → doc mappings | Knows where to look, what docs to read |
+| **Bug History** | BUG_PATTERNS with detection greps | Avoids reintroducing known issues |
+| **Safety Rules** | INVARIANTS with citation requirements | Knows what cannot be violated |
+| **Decisions** | ADRs with rationale and context | Understands *why*, not just *what* |
+| **Best Practices** | GOLDEN_PATHS for this codebase | Follows established patterns |
+| **Current Health** | Confidence scores, staleness flags | Knows what needs attention |
+
+**This isn't just "more context" — it's the right context, structured for action.**
+
+### The Compound Advantage
+
+```
+                    MCP/RALPH                    Living Documentation
+                    ─────────                    ────────────────────
+Prompt Context:     ✅ Yes (tools/data)          ✅ Yes (structured, validated)
+Fresh Context:      ⚠️  Depends on setup         ✅ Yes (git-synced)
+Structured:         ❌ Varies                    ✅ Yes (schemas, templates)
+Enforced:           ❌ No                        ✅ Yes (git hooks)
+Measurable:         ❌ No                        ✅ Yes (confidence scoring)
+Self-Healing:       ❌ No                        ✅ Yes (staleness decay)
 ```
 
 ### Why This Matters
@@ -100,14 +156,114 @@ Living Docs: "You cannot commit without updating docs" (enforced)
 - **Agent-resistant**: Works regardless of which AI model or version you use
 - **Turnover-resistant**: New team members (human or AI) inherit documented decisions
 - **Drift-resistant**: Stale documentation automatically degrades confidence scores
+- **Quality-resistant**: Bad changes get blocked, not just warned about
 
 ---
 
 ## A Cognitive System That Builds Itself
 
-This isn't just documentation you write once. It's a **living system that grows with your project**:
+This isn't just documentation you write once. It's a **living system that grows with your project** — and the reason agents always get the best possible context.
 
-### The Feedback Loop
+### The Continuous Loop (Why Agents Get Fresh Context)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    THE LIVING DOCUMENTATION LOOP                │
+└─────────────────────────────────────────────────────────────────┘
+
+     ┌──────────────┐
+     │  Code Change │
+     └──────┬───────┘
+            │
+            ▼
+     ┌──────────────┐     Git hooks enforce
+     │  Doc Update  │◄─── "no code change without doc update"
+     │  (Required)  │
+     └──────┬───────┘
+            │
+            ▼
+     ┌──────────────┐
+     │  Map Updated │     CODE_DOC_MAP, BUG_PATTERNS,
+     │  (Auto)      │     INVARIANTS all stay current
+     └──────┬───────┘
+            │
+            ▼
+     ┌──────────────┐
+     │  Next Agent  │     Fresh architecture, bugs, decisions
+     │  Session     │◄─── loaded from git (not stale memory)
+     └──────┬───────┘
+            │
+            ▼
+     ┌──────────────┐
+     │  Best Prompt │     Agent knows: what files do, what broke,
+     │  Possible    │     what rules exist, why decisions made
+     └──────┬───────┘
+            │
+            ▼
+     ┌──────────────┐
+     │  Better Code │     Informed changes, fewer mistakes,
+     │  Changes     │     respects invariants
+     └──────┬───────┘
+            │
+            └──────────────────────┐
+                                   │
+     ┌──────────────┐              │
+     │  Code Change │◄─────────────┘
+     └──────────────┘
+
+            ∞ LOOP CONTINUES ∞
+```
+
+**This is why the framework works**: Every code change forces documentation updates. Updated docs mean the architecture map is always current. Current maps mean the next agent session starts with perfect context. Perfect context means better code changes. Better changes loop back.
+
+### ⚠️ The Loop Isn't Fully Closed Yet (Help Wanted)
+
+**Honest reality**: The loop above assumes agents follow protocols. They often don't.
+
+```
+The Problem:
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Protocol  │────▶│   AI Agent  │────▶│   Ignores   │
+│   Says...   │     │   Receives  │     │   Protocol  │
+└─────────────┘     └─────────────┘     └─────────────┘
+                                              │
+                                              ▼
+                                        Loop Breaks
+```
+
+**Current safeguards (in this repo):**
+- **Git hooks** catch missing docs at commit time (hard block)
+- **Confidence decay** makes staleness visible
+- **Proof-of-compliance** sections required in agent reports
+
+**Additional safeguards (still in Nebulae, not yet extracted):**
+- **Fingerprint system** tracks agent compliance across sessions
+- **Session memory packs** preserve context between runs
+
+**What still breaks:**
+- Agents skip reading docs before making changes
+- Agents update docs superficially (checkbox compliance)
+- Sub-agents spawned without protocol context
+- No way to verify agent actually loaded context
+
+**🔧 We need better solutions. Ideas from contributors:**
+
+| Idea | Status | Contributor Welcome? |
+|------|--------|---------------------|
+| Pre-change verification hooks | Concept | ✅ Yes |
+| Agent context fingerprinting | In Nebulae, needs extraction | ✅ Help extract & generalize |
+| Mandatory context loading proof | Concept | ✅ Yes |
+| Protocol injection for sub-agents | Partial | ✅ Yes |
+| Runtime compliance monitoring | Not started | ✅ Yes |
+
+**If you have ideas for closing this loop, we want to hear them.** See [Contributing](#contributing) or open a Discussion.
+
+**Other tools break this loop:**
+- MCP: Context can drift from reality (no enforcement)
+- RALPH: Memory is session-specific, not git-synced
+- Static context files: No mechanism to force updates
+
+### The Feedback Loop (What Gets Captured)
 
 ```
 Bug discovered → Document pattern → Detection rule added → Future bugs caught
@@ -299,9 +455,18 @@ Click a file → see known patterns, ADRs that justify it, historical blast radi
 
 ![System Architecture](docs/images/architecture-overview.png)
 
+The architecture is designed around one principle: **every change must update the knowledge base, so the next session starts smarter.**
+
 ### The Closed Feedback Loop
 
 ![Feedback Loop](docs/images/feedback-loop.png)
+
+**Why this matters for prompt quality:**
+- Git hooks ensure docs stay synchronized with code
+- CODE_DOC_MAP always reflects current file structure
+- BUG_PATTERNS grows with every fix
+- INVARIANTS block violations before they happen
+- **Result**: When an agent starts, it loads truth, not stale notes
 
 ### Core Documents & Update Triggers
 
@@ -592,11 +757,19 @@ This framework raises the floor, not the ceiling. It makes careless mistakes har
 
 ### What's Fully Extracted (Ready to Use)
 
-| Tool | Purpose | Dynamic Config |
-|------|---------|----------------|
-| `calculate_confidence.py` | Exponential-decay confidence scoring | ✅ Uses `config.py` |
-| `config.py` | Python configuration loader | ✅ Reads `living-doc-config.yaml` |
-| `load-config.sh` | Shell configuration loader | ✅ Reads `living-doc-config.yaml` |
+| Tool | Purpose | Lines |
+|------|---------|-------|
+| `calculate_confidence.py` | Exponential-decay confidence scoring | 465 |
+| `config.py` | Python configuration loader | 220 |
+| `load-config.sh` | Shell configuration loader | ~200 |
+| `hooks/pre-commit` | Block commits without doc updates | 136 |
+| `hooks/post-commit` | Auto-update triggers | ~30 |
+| `hooks/commit-msg` | Message validation | ~50 |
+| `hooks/install.sh` | One-command hook setup | ~50 |
+| `protocols/AGENT_PROTOCOL.md` | AI agent compliance rules | — |
+| `commands/living-docs.md` | Slash command for context loading | — |
+
+All tools use the central config system — **no hardcoded paths**.
 
 ### What's Documented (Not Yet Extracted)
 
@@ -608,7 +781,8 @@ These tools exist in the source Nebulae project and are documented with extracti
 | `auto-doc-mapper.sh` | 381 | 📋 Documented |
 | `spawn-agent.sh` | ~200 | 📋 Documented |
 | `session-memory-pack.sh` | ~150 | 📋 Documented |
-| 10 more utilities | various | 📋 See [EXTRACTION_GUIDE.md](tools/EXTRACTION_GUIDE.md) |
+| `fingerprint-tracker.sh` | ~300 | 📋 In Nebulae, needs extraction |
+| 10+ more utilities | various | 📋 See [EXTRACTION_GUIDE.md](tools/EXTRACTION_GUIDE.md) |
 
 ### Dashboard
 
@@ -693,6 +867,38 @@ $LDF_BUG_TRACKER              # Configured doc path
 - [ ] Automated test suite
 - [ ] CI/CD integration examples
 - [ ] Web-based dashboard viewer
+
+---
+
+## Contributing
+
+We're actively looking for contributors, especially for **closing the agent compliance loop**.
+
+### High-Priority Areas
+
+| Area | Problem | Skills Needed |
+|------|---------|---------------|
+| **Agent Compliance** | AI agents don't always follow protocols | Prompt engineering, hooks |
+| **Fingerprint System Extraction** | Extract from Nebulae, generalize for any project | Python, data structures |
+| **Pre-change Hooks** | Verify context was loaded before changes | Shell, git hooks |
+| **Sub-agent Protocol Injection** | Ensure spawned agents inherit governance | Prompt engineering |
+| **Dashboard Extraction** | Extract from Nebulae (~1,500 lines) | Shell, Chart.js |
+| **Session Memory Packs** | Extract from Nebulae, generalize | Shell, Python |
+
+### How to Contribute
+
+1. **Open an Issue** — Describe your idea or the problem you're solving
+2. **Join Discussions** — Share approaches, especially for agent compliance
+3. **Submit PRs** — Follow the existing patterns in the codebase
+
+### We Especially Want to Hear From You If...
+
+- You've built systems that successfully constrain AI agent behavior
+- You have ideas for verifying agents actually loaded context (not just claimed to)
+- You've worked on multi-agent orchestration with governance
+- You have experience with git hooks for complex validation
+
+**The hardest unsolved problem**: How do you *prove* an AI agent read and understood documentation before making changes?
 
 ---
 
