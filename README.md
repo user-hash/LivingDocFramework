@@ -319,6 +319,10 @@ Extracted from the **Nebulae project**:
 | System Confidence | 93% |
 | Production Use | 6+ months |
 
+### Key Benefits & ROI
+
+![Key Benefits and ROI](docs/images/Key%20benefits,%20ROI.png)
+
 ---
 
 ## Limitations & Hard Lessons
