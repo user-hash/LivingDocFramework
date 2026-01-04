@@ -21,8 +21,8 @@
 ### 3. dashboard-v3.sh (1511 lines)
 **Purpose**: Generate Grafana-style HTML dashboard with Chart.js
 **Generalizations needed**:
-- Replace version extraction from BeatGridConfig.cs → Use `$LDF_VERSION_FILE` with `$LDF_VERSION_PATTERN`
-- Replace `find Assets -name "*.cs"` → `ldf_find_code`
+- Replace version extraction from project config → Use `$LDF_VERSION_FILE` with `$LDF_VERSION_PATTERN`
+- Replace hardcoded file finding → `ldf_find_code`
 - Replace hardcoded doc paths → Use config variables
 - Keep Chart.js HTML generation (universal)
 - Status: ✅ Ready to extract (large file - extract core logic)

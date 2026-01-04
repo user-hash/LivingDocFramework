@@ -1,5 +1,5 @@
 # C# Language Profile for Living Documentation Framework
-# Example: Unity Game Development (Nebulae-style)
+# Example: Unity Game Development
 
 language: csharp
 display_name: "C# / Unity"
@@ -7,7 +7,7 @@ display_name: "C# / Unity"
 # Version detection
 version:
   files:
-    - "BeatGridConfig.cs"  # Project-specific
+    - "GameConfig.cs"  # Customize for your project
     - "AssemblyInfo.cs"
     - "*.csproj"
   patterns:
@@ -18,7 +18,7 @@ version:
 # Code file patterns
 code:
   extensions: ["cs"]
-  root: "Assets/_Project/Scripts/"  # Unity convention
+  root: "Assets/_Project/Scripts/"  # Unity convention - customize for your project
   exclude:
     - "**/obj/**"
     - "**/bin/**"
@@ -53,28 +53,27 @@ tiering:
   tier_a_patterns:
     - "**/*Config.cs"
     - "**/*Manager.cs"
-    - "**/Multiplayer/**/*.cs"
-    - "**/Audio/*Pool*.cs"
+    - "**/Core/**/*.cs"
+    - "**/Systems/**/*.cs"
     - "**/SaveSystem.cs"
-    - "**/BeatGrid/AdaptiveBeatGrid*.cs"
 
-# Common subsystems in Unity/C# projects
+# Common subsystems in Unity/C# projects - customize for your project
 subsystems:
-  - name: "multiplayer"
-    patterns: ["**/Multiplayer/**"]
-    docs: ["MULTIPLAYER_ARCHITECTURE.md"]
+  - name: "networking"
+    patterns: ["**/Networking/**", "**/Multiplayer/**"]
+    docs: ["NETWORKING_ARCHITECTURE.md"]
   - name: "audio"
-    patterns: ["**/Audio/**", "**/BeatGrid/**Audio*.cs"]
+    patterns: ["**/Audio/**", "**/Sound/**"]
     docs: ["AUDIO_ARCHITECTURE.md"]
   - name: "ui"
     patterns: ["**/UI/**"]
     docs: ["UI_ARCHITECTURE.md"]
-  - name: "recording"
-    patterns: ["**/Recording/**"]
-    docs: ["RECORDING_ARCHITECTURE.md"]
-  - name: "grid"
-    patterns: ["**/BeatGrid/**"]
-    docs: ["GRID_ARCHITECTURE.md"]
+  - name: "gameplay"
+    patterns: ["**/Gameplay/**", "**/Game/**"]
+    docs: ["GAMEPLAY_ARCHITECTURE.md"]
+  - name: "core"
+    patterns: ["**/Core/**", "**/Systems/**"]
+    docs: ["CORE_ARCHITECTURE.md"]
 
 # Documentation conventions
 docs:
