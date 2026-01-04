@@ -277,6 +277,82 @@ This framework raises the floor, not the ceiling. It makes careless mistakes har
 
 ---
 
+## Tooling & Extraction Status
+
+### What's Fully Extracted (Ready to Use)
+
+| Tool | Purpose | Dynamic Config |
+|------|---------|----------------|
+| `calculate_confidence.py` | Exponential-decay confidence scoring | ✅ Uses `config.py` |
+| `config.py` | Python configuration loader | ✅ Reads `living-doc-config.yaml` |
+| `load-config.sh` | Shell configuration loader | ✅ Reads `living-doc-config.yaml` |
+
+### What's Documented (Not Yet Extracted)
+
+These tools exist in the source Nebulae project and are documented with extraction guides:
+
+| Tool | Lines | Status |
+|------|-------|--------|
+| `dashboard-v3.sh` | 1,511 | 📋 Documented, extraction guide provided |
+| `auto-doc-mapper.sh` | 381 | 📋 Documented |
+| `spawn-agent.sh` | ~200 | 📋 Documented |
+| `session-memory-pack.sh` | ~150 | 📋 Documented |
+| 10 more utilities | various | 📋 See [EXTRACTION_GUIDE.md](tools/EXTRACTION_GUIDE.md) |
+
+### Dashboard
+
+**Current Status**: Dashboard generator is documented but not extracted.
+
+**What would it provide**:
+- Grafana-style HTML dashboard with Chart.js
+- Historical confidence score tracking
+- Bug severity distribution charts
+- Subsystem health radar charts
+- Auto-generated from `.claude/dashboard/history.json`
+
+**To use dashboards today**:
+1. Run `calculate_confidence.py --update` to log scores
+2. Manually create dashboard or extract `dashboard-v3.sh` following the guide
+
+**Dashboard paths** (configured in `config.py`):
+```
+.claude/dashboard/
+├── index.html      # Generated dashboard
+└── history.json    # Historical metrics
+```
+
+### Dynamic Configuration
+
+All extracted tools use the central config system — **no hardcoded paths**:
+
+```python
+# Python tools
+from config import get_config
+config = get_config()
+config.find_code_files()      # Respects language profile
+config.bug_tracker_path       # Returns correct path
+config.code_extensions        # ['py'], ['js'], etc.
+```
+
+```bash
+# Shell tools
+source "$SCRIPT_DIR/../core/load-config.sh"
+ldf_find_code                 # Uses configured extensions
+$LDF_CODE_ROOT                # From living-doc-config.yaml
+$LDF_BUG_TRACKER              # Configured doc path
+```
+
+### Why Not All Tools Extracted?
+
+**Pragmatic choice**: The confidence calculator provides ~80% of the value. Dashboard and mapper are nice-to-have but require significant generalization effort.
+
+**You can extract more** using the [EXTRACTION_GUIDE.md](tools/EXTRACTION_GUIDE.md) which documents:
+- Line-by-line replacement patterns
+- Testing checklist for each language
+- Common gotchas
+
+---
+
 ## Documentation
 
 | Document | Description |
