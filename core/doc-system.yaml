@@ -1,0 +1,351 @@
+# Living Documentation System Schema v1.0
+# This schema drives ALL automation - no hardcoding needed
+# Language-agnostic configuration - override with project-config.yaml
+
+version: "1.0"
+auto_discovery: true
+
+# =============================================================================
+# DOCUMENT CATEGORIES - Add new categories here, system auto-discovers
+# =============================================================================
+categories:
+  bugs:
+    name: "Bug Tracking"
+    files:
+      - "BUG_TRACKER.md"
+    metrics:
+      - name: "sev_p0"
+        pattern: '"P0":\s*(\d+)'
+        weight: 10
+        dashboard: true
+      - name: "sev_p1"
+        pattern: '"P1":\s*(\d+)'
+        weight: 3
+        dashboard: true
+      - name: "sev_p2"
+        pattern: '"P2":\s*(\d+)'
+        weight: 1
+        dashboard: true
+      - name: "sev_p3"
+        pattern: '"P3":\s*(\d+)'
+        weight: 0.05  # Low priority/improvements
+        dashboard: true
+      - name: "bugs_open"
+        pattern: 'bugs_open:\s*(\d+)'
+        dashboard: true
+      - name: "bugs_fixed"
+        pattern: 'bugs_fixed:\s*(\d+)'
+        dashboard: false
+
+  patterns:
+    name: "Bug Patterns"
+    files:
+      - "BUG_PATTERNS.md"
+    metrics:
+      - name: "patterns_total"
+        pattern: '### PATTERN-(\d+)'
+        count: true
+        dashboard: false
+    subcategories:
+      # Define your project's subsystems here
+      # Examples: multiplayer, audio, ui, thread, database, api, etc.
+      - name: "multiplayer"
+        pattern: '\*\*System:\*\*.*Multiplayer'
+      - name: "audio"
+        pattern: '\*\*System:\*\*.*Audio'
+      - name: "ui"
+        pattern: '\*\*System:\*\*.*UI'
+      - name: "thread"
+        pattern: '\*\*System:\*\*.*Thread'
+      - name: "tooling"
+        pattern: '\*\*System:\*\*.*Tooling'
+
+  invariants:
+    name: "Safety Invariants"
+    files:
+      - "INVARIANTS.md"
+    metrics:
+      - name: "invariants_total"
+        pattern: '### INV-[\d.]+'
+        count: true
+        dashboard: false
+    subcategories:
+      # Group invariants by domain - customize for your project
+      - name: "thread_safety"
+        pattern: '## \d+\. Thread Safety'
+        section_range: true
+      - name: "audio"
+        pattern: '## \d+\. Audio'
+        section_range: true
+      - name: "multiplayer"
+        pattern: '## \d+\. Multiplayer'
+        section_range: true
+      - name: "security"
+        pattern: '## \d+\. Security'
+        section_range: true
+      - name: "performance"
+        pattern: '## \d+\. Performance'
+        section_range: true
+
+  golden_paths:
+    name: "Golden Paths"
+    files:
+      - "GOLDEN_PATHS.md"
+    metrics:
+      - name: "golden_total"
+        pattern: '### GP-\d+'
+        count: true
+        dashboard: false
+
+  decisions:
+    name: "Architecture Decisions"
+    files:
+      - "DECISIONS.md"
+    metrics:
+      - name: "adrs_total"
+        pattern: '### ADR-\d+'
+        count: true
+        dashboard: false
+    subcategories:
+      - name: "accepted"
+        pattern: '\*\*Status:\*\*.*Accepted'
+      - name: "deprecated"
+        pattern: '\*\*Status:\*\*.*Deprecated'
+      - name: "proposed"
+        pattern: '\*\*Status:\*\*.*Proposed'
+
+  staleness:
+    name: "Documentation Staleness"
+    computed: true
+    metrics:
+      - name: "stale_count"
+        dashboard: true
+      - name: "avg_staleness"
+        dashboard: true
+
+# =============================================================================
+# FILE TIERING RULES - Auto-tier based on patterns
+# Configure patterns for your language/framework in project-config.yaml
+# =============================================================================
+tiering:
+  rules:
+    tier_a:
+      name: "Critical"
+      enforcement: "blocking"
+      patterns:
+        # Examples - customize for your project:
+        # Python: "**/config.py", "**/settings.py", "**/database/*.py"
+        # JavaScript: "**/config/*.js", "**/*Manager.js", "**/server.js"
+        # Go: "**/*config.go", "**/*manager.go", "**/main.go"
+        # Rust: "**/config.rs", "**/lib.rs", "**/main.rs"
+        - "**/*Config.{{EXT}}"
+        - "**/*Manager.{{EXT}}"
+        - "**/config/**/*.{{EXT}}"
+        - "**/core/**/*.{{EXT}}"
+      keywords:
+        - "CRITICAL"
+        - "INVARIANT"
+        - "TIER A"
+        - "SAFETY"
+        - "SECURITY"
+      min_references: 10  # If referenced by 10+ files, auto-tier A
+
+    tier_b:
+      name: "Important"
+      enforcement: "warning"
+      patterns:
+        - "**/api/**/*.{{EXT}}"
+        - "**/services/**/*.{{EXT}}"
+        - "**/models/**/*.{{EXT}}"
+        - "**/*Service.{{EXT}}"
+      keywords:
+        - "IMPORTANT"
+        - "SAFETY"
+      min_references: 5
+
+    tier_c:
+      name: "Standard"
+      enforcement: "advisory"
+      patterns:
+        - "**/ui/**/*.{{EXT}}"
+        - "**/utils/**/*.{{EXT}}"
+        - "**/helpers/**/*.{{EXT}}"
+      default: true  # Files not matching other rules
+
+    tier_d:
+      name: "Legacy/Deprecated"
+      enforcement: "none"
+      patterns:
+        - "**/deprecated/**/*.{{EXT}}"
+        - "**/legacy/**/*.{{EXT}}"
+      keywords:
+        - "[Obsolete]"
+        - "// DEPRECATED"
+        - "# DEPRECATED"
+        - "@deprecated"
+
+# =============================================================================
+# AUTO-MAPPING RULES - Link files to docs automatically
+# Customize these patterns for your project structure
+# =============================================================================
+auto_mapping:
+  enabled: true
+  rules:
+    # Example: API/Services subsystem
+    - file_pattern: "**/api/**"
+      docs:
+        - "API_ARCHITECTURE.md"
+        - "INVARIANTS.md#api"
+      tests:
+        - "**/tests/**/api*.{{TEST_EXT}}"
+
+    # Example: Database subsystem
+    - file_pattern: "**/database/**"
+      docs:
+        - "DATABASE_ARCHITECTURE.md"
+        - "INVARIANTS.md#database"
+      tests:
+        - "**/tests/**/database*.{{TEST_EXT}}"
+
+    # Example: Core/Engine subsystem
+    - file_pattern: "**/core/**"
+      docs:
+        - "CORE_ARCHITECTURE.md"
+      tests:
+        - "**/tests/**/core*.{{TEST_EXT}}"
+
+    # Example: Authentication subsystem
+    - file_pattern: "**/auth/**"
+      docs:
+        - "AUTH_ARCHITECTURE.md"
+        - "INVARIANTS.md#security"
+      tests:
+        - "**/tests/**/auth*.{{TEST_EXT}}"
+
+# =============================================================================
+# DASHBOARD CONFIGURATION - What to show on graphs
+# =============================================================================
+dashboard:
+  main_chart:
+    title: "Project Health Over Time"
+    y_axis_left:
+      label: "Confidence %"
+      min: 0
+      max: 100
+    y_axis_right:
+      label: "Count"
+      auto_scale: true
+    series:
+      - metric: "confidence"
+        color: "#00d4ff"
+        fill: true
+        label: "Confidence %"
+      - metric: "sev_p0"
+        color: "#ff4444"
+        label: "P0 Bugs"
+        scale: "right"
+      - metric: "sev_p1"
+        color: "#ff8800"
+        label: "P1 Bugs"
+        scale: "right"
+      - metric: "sev_p2"
+        color: "#ffcc00"
+        label: "P2 Bugs"
+        scale: "right"
+      - metric: "stale_count"
+        color: "#aa44ff"
+        dashed: true
+        label: "Stale Docs"
+        scale: "right"
+
+  category_breakdown:
+    title: "Documentation Categories"
+    type: "stacked_bar"
+    auto_populate: true  # Auto-add from categories with subcategories
+
+  health_cards:
+    - metric: "confidence"
+      label: "Confidence"
+      format: "percent"
+      thresholds:
+        good: 75
+        warn: 50
+        bad: 25
+    - metric: "sev_p0"
+      label: "P0 Bugs"
+      format: "count"
+      thresholds:
+        good: 0
+        warn: 1
+        bad: 2
+    - metric: "bugs_open"
+      label: "Open Bugs"
+      format: "count"
+
+# =============================================================================
+# LOOP CLOSURE - Ensure all related files are updated
+# File patterns use {{EXT}} placeholder - replaced at runtime based on language
+# =============================================================================
+loop_closure:
+  enabled: true
+  rules:
+    - trigger: "code_change"
+      file_pattern: "**/*.{{EXT}}"
+      requires:
+        - "CHANGELOG.md"  # Always
+      conditional:
+        - if: "tier_a"
+          requires:
+            - "INVARIANTS.md"
+            - "linked_architecture_doc"
+        - if: "bug_fix"
+          requires:
+            - "BUG_TRACKER.md"
+            - "BUG_PATTERNS.md"
+
+    - trigger: "new_file"
+      requires:
+        - "CODE_DOC_MAP.md"
+
+    - trigger: "version_bump"
+      requires:
+        - "CHANGELOG.md"
+        - "{{VERSION_FILE}}"  # Configured per language
+        - "CLAUDE.md"
+
+# =============================================================================
+# CONFIDENCE SCORING - How to calculate system confidence
+# =============================================================================
+confidence:
+  formula: "weighted_average"
+  components:
+    - name: "documentation_coverage"
+      weight: 0.30
+      calculation: "mapped_files / total_files"
+
+    - name: "pattern_prevention"
+      weight: 0.25
+      calculation: "patterns_documented / total_patterns"
+
+    - name: "invariant_compliance"
+      weight: 0.25
+      calculation: "tier_a_with_citations / tier_a_total"
+
+    - name: "freshness"
+      weight: 0.15
+      calculation: "1 - (stale_docs / total_docs)"
+
+    - name: "test_coverage"
+      weight: 0.05
+      calculation: "files_with_tests / tier_a_files"
+
+# =============================================================================
+# LANGUAGE PLACEHOLDERS
+# These are replaced based on core/languages/*.yaml or project-config.yaml
+# =============================================================================
+placeholders:
+  EXT: "{{EXT}}"  # File extension (py, js, go, rs, java, cs)
+  TEST_EXT: "{{TEST_EXT}}"  # Test file extension/pattern
+  VERSION_FILE: "{{VERSION_FILE}}"  # Where version is defined
+  MAIN_BRANCH: "{{MAIN_BRANCH}}"  # Usually "main" or "master"
+  CODE_ROOT: "{{CODE_ROOT}}"  # Root directory for source code

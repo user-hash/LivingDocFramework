@@ -1,0 +1,143 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "pattern.schema.json",
+  "title": "Bug Pattern",
+  "description": "Schema for bug patterns in BUG_PATTERNS.md",
+  "type": "object",
+  "required": ["id", "title", "root_cause", "fix", "prevention"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^PATTERN-[0-9]{3}$",
+      "description": "Unique pattern identifier (PATTERN-001, PATTERN-002, etc.)"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 100,
+      "description": "Brief descriptive title"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "null-reference",
+        "race-condition",
+        "encoding-mismatch",
+        "event-wiring",
+        "array-bounds",
+        "state-sync",
+        "type-conversion",
+        "resource-leak",
+        "timing",
+        "configuration",
+        "serialization",
+        "network",
+        "ui",
+        "audio",
+        "other"
+      ],
+      "description": "Category of the bug pattern"
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low"],
+      "description": "How severe bugs of this pattern typically are"
+    },
+    "frequency": {
+      "type": "string",
+      "enum": ["common", "occasional", "rare"],
+      "description": "How often this pattern occurs"
+    },
+    "root_cause": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Detailed explanation of why this bug occurs"
+    },
+    "symptoms": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Observable symptoms when this bug occurs"
+    },
+    "detection": {
+      "type": "object",
+      "properties": {
+        "grep_pattern": {
+          "type": "string",
+          "description": "Regex pattern to find potential instances"
+        },
+        "static_analysis": {
+          "type": "string",
+          "description": "Static analysis rule or check"
+        },
+        "runtime_indicator": {
+          "type": "string",
+          "description": "Runtime behavior that indicates this bug"
+        }
+      }
+    },
+    "fix": {
+      "type": "string",
+      "minLength": 20,
+      "description": "How to fix bugs matching this pattern"
+    },
+    "prevention": {
+      "type": "string",
+      "minLength": 20,
+      "description": "How to prevent this pattern in new code"
+    },
+    "code_example": {
+      "type": "object",
+      "properties": {
+        "bad": {
+          "type": "string",
+          "description": "Example of buggy code"
+        },
+        "good": {
+          "type": "string",
+          "description": "Example of correct code"
+        }
+      }
+    },
+    "related_patterns": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^PATTERN-[0-9]{3}$"
+      },
+      "description": "IDs of related patterns"
+    },
+    "affected_files": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Files where this pattern has been found"
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "enum": ["commit", "issue", "pr", "doc"] },
+          "id": { "type": "string" },
+          "url": { "type": "string", "format": "uri" }
+        }
+      },
+      "description": "Related commits, issues, PRs"
+    },
+    "created": {
+      "type": "string",
+      "format": "date",
+      "description": "When this pattern was documented"
+    },
+    "last_seen": {
+      "type": "string",
+      "format": "date",
+      "description": "When this pattern was last encountered"
+    },
+    "occurrences": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of times this pattern has occurred"
+    }
+  }
+}

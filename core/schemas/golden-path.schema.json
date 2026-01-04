@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "golden-path.schema.json",
+  "title": "Golden Path",
+  "description": "Schema for best practices in GOLDEN_PATHS.md",
+  "type": "object",
+  "required": ["id", "title", "context", "solution"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^GP-[A-Z]+-[0-9]{3}$",
+      "description": "Unique golden path ID (GP-AUDIO-001, GP-NET-002, etc.)"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 100,
+      "description": "Brief descriptive title"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "architecture",
+        "patterns",
+        "testing",
+        "error-handling",
+        "performance",
+        "security",
+        "ui",
+        "audio",
+        "network",
+        "state-management",
+        "documentation"
+      ],
+      "description": "Category of this golden path"
+    },
+    "context": {
+      "type": "string",
+      "minLength": 20,
+      "description": "When should this pattern be used?"
+    },
+    "problem": {
+      "type": "string",
+      "description": "What problem does this solve?"
+    },
+    "solution": {
+      "type": "string",
+      "minLength": 50,
+      "description": "The recommended approach"
+    },
+    "examples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": { "type": "string" },
+          "code": { "type": "string" },
+          "language": { "type": "string", "default": "csharp" }
+        }
+      },
+      "minItems": 1,
+      "description": "Code examples demonstrating the pattern"
+    },
+    "anti_patterns": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "What NOT to do (brief descriptions)"
+    },
+    "related_patterns": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(GP|PATTERN)-[A-Z]*-?[0-9]{3}$"
+      },
+      "description": "Related golden paths or bug patterns"
+    },
+    "prevents_patterns": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^PATTERN-[0-9]{3}$"
+      },
+      "description": "Bug patterns this golden path prevents"
+    },
+    "trade_offs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Trade-offs of using this approach"
+    },
+    "when_not_to_use": {
+      "type": "string",
+      "description": "Situations where this pattern is NOT appropriate"
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "url": { "type": "string", "format": "uri" }
+        }
+      },
+      "description": "External references"
+    },
+    "adopted_in": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Files where this pattern is used"
+    }
+  }
+}

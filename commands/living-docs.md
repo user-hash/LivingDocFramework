@@ -1,0 +1,134 @@
+---
+description: Check documentation health and suggest updates
+---
+
+# Living Documentation Health Check
+
+Analyze the current state of living documentation and provide actionable recommendations.
+
+## Objective
+
+Scan the project for documentation issues and suggest specific actions to improve documentation health.
+
+## Steps
+
+### 1. Configuration Check
+- Verify `living-doc-config.yaml` exists and is valid
+- Check all configured paths exist
+- Validate language profile loaded correctly
+
+### 2. File Coverage Analysis
+- Count total code files in configured code root
+- Check how many are mapped in CODE_DOC_MAP.md
+- Identify unmapped files
+- Suggest mappings for new files
+
+### 3. Documentation Completeness
+- Check all required docs exist:
+  - CHANGELOG.md
+  - BUG_TRACKER.md
+  - BUG_PATTERNS.md
+  - docs/INVARIANTS.md
+  - docs/GOLDEN_PATHS.md
+  - docs/DECISIONS.md
+  - docs/CODE_DOC_MAP.md
+- Flag any missing documents
+- Suggest creating missing docs from templates
+
+### 4. Tier A Validation
+- Extract Tier A files from CODE_DOC_MAP.md
+- Verify each has corresponding INVARIANTS.md entry
+- Flag Tier A files without invariants
+- Suggest invariants to add
+
+### 5. Confidence Score
+- Run `tools/calculate_confidence.py --json`
+- Display current score
+- Show penalty breakdown
+- Highlight top 3 areas for improvement
+
+### 6. Staleness Detection
+- Check git log for files modified recently
+- Compare against last doc update dates
+- Flag potentially stale documentation
+- Suggest docs to review
+
+### 7. Bug Tracking Health
+- Check BUG_TRACKER.md for P0/P1 bugs
+- Count open vs fixed bugs
+- Calculate resolution rate
+- Flag critical bugs needing attention
+
+## Output Format
+
+```markdown
+# Living Documentation Health Report
+
+## 📊 Overview
+- Project: [name]
+- Language: [language]
+- Confidence: [X]% ([status])
+- Code Files: [mapped]/[total] ([X]% coverage)
+
+## ⚠️  Issues Found
+
+### Critical (Fix First)
+1. [Issue description] - [Suggested action]
+2. ...
+
+### Important (Fix Soon)
+1. [Issue description] - [Suggested action]
+2. ...
+
+### Minor (Low Priority)
+1. [Issue description] - [Suggested action]
+2. ...
+
+## ✅ Strengths
+- [What's working well]
+- ...
+
+## 🎯 Recommended Actions (Priority Order)
+
+1. **[Action Name]** - [Why this matters]
+   ```bash
+   [Command to run or what to do]
+   ```
+
+2. **[Action Name]** - [Why this matters]
+   ...
+
+## 📈 Metrics
+
+| Metric | Current | Target | Gap |
+|--------|---------|--------|-----|
+| Confidence | [X]% | 85% | [gap] |
+| Coverage | [X]% | 90% | [gap] |
+| P0 Bugs | [N] | 0 | [N] |
+| Stale Docs | [N] | <3 | [gap] |
+
+## 💡 Quick Wins
+
+These high-impact, low-effort improvements can boost confidence quickly:
+- [ ] [Quick win 1]
+- [ ] [Quick win 2]
+- [ ] [Quick win 3]
+```
+
+## Success Criteria
+
+- Report generated without errors
+- At least 3 actionable recommendations
+- Confidence score calculated
+- All critical issues flagged
+
+## Notes
+
+- Run this command at session start
+- Run after major changes
+- Run before releases
+- Schedule weekly for ongoing projects
+
+---
+
+*This command helps close the feedback loop by identifying documentation gaps and suggesting specific fixes.*

@@ -1,0 +1,126 @@
+# C# Language Profile for Living Documentation Framework
+# Example: Unity Game Development (Nebulae-style)
+
+language: csharp
+display_name: "C# / Unity"
+
+# Version detection
+version:
+  files:
+    - "BeatGridConfig.cs"  # Project-specific
+    - "AssemblyInfo.cs"
+    - "*.csproj"
+  patterns:
+    - 'public const string VERSION = "([0-9.]+)"'  # const VERSION = "1.2.3"
+    - 'public const.*VERSION.*"([0-9.]+)"'  # Flexible version constant
+    - '<Version>([0-9.]+)</Version>'  # .csproj file
+
+# Code file patterns
+code:
+  extensions: ["cs"]
+  root: "Assets/_Project/Scripts/"  # Unity convention
+  exclude:
+    - "**/obj/**"
+    - "**/bin/**"
+    - "**/Library/**"
+    - "**/Temp/**"
+    - "*.meta"  # Unity metadata
+
+# Test file patterns
+tests:
+  extensions: ["cs"]
+  patterns:
+    - "**/Tests/**/*.cs"
+    - "**/*Tests.cs"
+    - "**/*Test.cs"
+  frameworks:
+    - NUnit
+    - xUnit
+    - MSTest
+    - Unity_Test_Framework
+
+# Tiering keywords specific to C#/Unity
+tiering:
+  tier_a_keywords:
+    - "// CRITICAL"
+    - "// INVARIANT"
+    - "// SECURITY"
+    - "// THREAD-SAFE"
+    - "[Singleton]"
+    - "static readonly"
+    - "Config"
+    - "Manager"
+  tier_a_patterns:
+    - "**/*Config.cs"
+    - "**/*Manager.cs"
+    - "**/Multiplayer/**/*.cs"
+    - "**/Audio/*Pool*.cs"
+    - "**/SaveSystem.cs"
+    - "**/BeatGrid/AdaptiveBeatGrid*.cs"
+
+# Common subsystems in Unity/C# projects
+subsystems:
+  - name: "multiplayer"
+    patterns: ["**/Multiplayer/**"]
+    docs: ["MULTIPLAYER_ARCHITECTURE.md"]
+  - name: "audio"
+    patterns: ["**/Audio/**", "**/BeatGrid/**Audio*.cs"]
+    docs: ["AUDIO_ARCHITECTURE.md"]
+  - name: "ui"
+    patterns: ["**/UI/**"]
+    docs: ["UI_ARCHITECTURE.md"]
+  - name: "recording"
+    patterns: ["**/Recording/**"]
+    docs: ["RECORDING_ARCHITECTURE.md"]
+  - name: "grid"
+    patterns: ["**/BeatGrid/**"]
+    docs: ["GRID_ARCHITECTURE.md"]
+
+# Documentation conventions
+docs:
+  style: "xmldoc"  # C# XML documentation
+  required_for_public: true  # Public APIs should have XML docs
+  tools:
+    - DocFX
+    - Sandcastle
+    - Doxygen
+
+# Linting and code quality
+quality:
+  linters:
+    - StyleCop
+    - Roslynator
+  config_files:
+    - ".editorconfig"
+    - "stylecop.json"
+  formatters:
+    - dotnet_format
+
+# Common architecture patterns
+patterns:
+  unity_patterns:
+    - Singleton
+    - ScriptableObject
+    - Event_Bus
+    - Object_Pooling
+  general_patterns:
+    - Repository
+    - Factory
+    - Observer
+
+# Dependencies
+dependencies:
+  file: "packages.config"  # or *.csproj
+  unity_packages: "Packages/manifest.json"
+
+# Unity-specific conventions
+unity:
+  lifecycle_methods:
+    - Awake
+    - Start
+    - Update
+    - FixedUpdate
+    - OnDestroy
+  coroutines: true
+  serialization: "Unity_Serialization"
+  multithreading: "Jobs_System"

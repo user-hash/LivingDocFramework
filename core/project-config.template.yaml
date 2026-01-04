@@ -1,0 +1,245 @@
+# Living Documentation Framework - Project Configuration Template
+# Copy this file to your project root as 'living-doc-config.yaml'
+# Customize for your specific project
+
+# =============================================================================
+# PROJECT BASICS
+# =============================================================================
+project:
+  name: "MyProject"  # Your project name
+  language: "python"  # python, javascript, go, rust, csharp, java
+  main_branch: "main"  # or "master"
+
+# =============================================================================
+# VERSION DETECTION
+# Where is your project version defined?
+# =============================================================================
+version:
+  file: "__init__.py"  # Language-specific default loaded from core/languages/*.yaml
+  pattern: '__version__\s*=\s*"([0-9.]+)"'  # Regex to extract version
+
+  # Examples for other languages:
+  # JavaScript: "package.json" with pattern '"version":\s*"([0-9.]+)"'
+  # Go: "version.go" with pattern 'const Version = "([0-9.]+)"'
+  # Rust: "Cargo.toml" with pattern 'version\s*=\s*"([0-9.]+)"'
+  # C#: "Config.cs" with pattern 'public const string VERSION = "([0-9.]+)"'
+
+# =============================================================================
+# CODE STRUCTURE
+# =============================================================================
+code:
+  root: "src/"  # Root directory for source code
+  extensions: ["py"]  # File extensions to track (loaded from language profile)
+  exclude:
+    - "__pycache__/**"
+    - "venv/**"
+    - ".venv/**"
+    - "node_modules/**"  # Add based on your ecosystem
+    - "vendor/**"
+    - "build/**"
+    - "dist/**"
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  pattern: "**/test_*.py"  # Glob pattern for test files
+  extensions: ["py"]  # Test file extensions
+  frameworks:
+    - pytest  # Your test framework
+
+# =============================================================================
+# SUBSYSTEMS
+# Define your project's major subsystems for grouping documentation
+# Each subsystem can have its own bug patterns, invariants, etc.
+# =============================================================================
+subsystems:
+  - name: "api"
+    description: "REST API endpoints and handlers"
+    file_patterns:
+      - "**/api/**"
+      - "**/views.py"
+      - "**/endpoints/**"
+    docs:
+      - "API_ARCHITECTURE.md"
+      - "INVARIANTS.md#api"
+    tier_default: "B"  # Default tier for files in this subsystem
+
+  - name: "database"
+    description: "Database models and migrations"
+    file_patterns:
+      - "**/db/**"
+      - "**/models/**"
+      - "**/migrations/**"
+    docs:
+      - "DATABASE_ARCHITECTURE.md"
+      - "INVARIANTS.md#database"
+    tier_default: "A"  # Database is critical
+
+  - name: "auth"
+    description: "Authentication and authorization"
+    file_patterns:
+      - "**/auth/**"
+      - "**/authentication/**"
+    docs:
+      - "AUTH_ARCHITECTURE.md"
+      - "INVARIANTS.md#security"
+    tier_default: "A"  # Security is critical
+
+  # Add more subsystems as needed:
+  # - name: "ui"
+  # - name: "background_jobs"
+  # - name: "integrations"
+  # etc.
+
+# =============================================================================
+# TIERING OVERRIDES
+# Customize auto-tiering rules for your project
+# =============================================================================
+tiering:
+  tier_a:
+    # Files matching these patterns are CRITICAL (blocking enforcement)
+    patterns:
+      - "**/config.py"
+      - "**/settings.py"
+      - "**/database/*.py"
+      - "**/*Manager.py"
+    keywords:
+      - "# CRITICAL"
+      - "# INVARIANT"
+      - "# SECURITY"
+    min_references: 10  # Auto-tier to A if 10+ files import it
+
+  tier_b:
+    # Files matching these patterns are IMPORTANT (warning enforcement)
+    patterns:
+      - "**/api/**/*.py"
+      - "**/services/**/*.py"
+    min_references: 5
+
+# =============================================================================
+# DOCUMENTATION REQUIREMENTS
+# =============================================================================
+documentation:
+  # Tier A files must cite which invariants they respect
+  tier_a_citation_required: true
+
+  # Changelog must be updated on every commit
+  changelog_required: true
+
+  # Maximum age before docs are considered stale
+  staleness_threshold: "7d"  # 7 days
+
+  # Auto-generate CODE_DOC_MAP entries for new files
+  auto_map_new_files: true
+
+# =============================================================================
+# DASHBOARD CUSTOMIZATION
+# =============================================================================
+dashboard:
+  output_dir: ".claude/dashboard"
+  history_retention: "all"  # or "90d", "1y", etc.
+
+  # Custom metrics to track
+  custom_metrics:
+    - name: "test_coverage"
+      source_file: "coverage.json"
+      pattern: '"coverage":\s*([0-9.]+)'
+      dashboard: true
+
+    # - name: "performance_score"
+    #   source_file: "benchmark-results.json"
+    #   pattern: '"score":\s*([0-9.]+)'
+    #   dashboard: true
+
+# =============================================================================
+# GIT HOOKS
+# =============================================================================
+hooks:
+  # Pre-commit checks
+  pre_commit:
+    - check: "tier_a_citation"
+      enabled: true
+      blocking: true  # Block commit if violated
+
+    - check: "changelog_updated"
+      enabled: true
+      blocking: true
+
+    - check: "blast_radius"
+      enabled: true
+      blocking: false  # Just warn
+      threshold: 5  # Warn if > 5 files changed
+
+  # Post-commit actions
+  post_commit:
+    - action: "update_dashboard"
+      enabled: true
+
+    - action: "calculate_confidence"
+      enabled: true
+
+# =============================================================================
+# AGENT PROTOCOL
+# =============================================================================
+agents:
+  # Require agents to read these files before making changes
+  required_reading:
+    - "CODE_DOC_MAP.md"
+    - "INVARIANTS.md"
+    - "AGENT_PROTOCOL.md"
+
+  # Require agents to update these files when appropriate
+  required_updates:
+    on_bug_fix:
+      - "BUG_TRACKER.md"
+      - "BUG_PATTERNS.md"
+      - "CHANGELOG.md"
+
+    on_new_feature:
+      - "GOLDEN_PATHS.md"
+      - "CHANGELOG.md"
+      - "CODE_DOC_MAP.md"
+
+    on_tier_a_edit:
+      - "INVARIANTS.md"
+
+# =============================================================================
+# CONFIDENCE SCORING
+# Adjust weights based on what matters most to your project
+# =============================================================================
+confidence:
+  weights:
+    documentation_coverage: 0.30  # 30%
+    pattern_prevention: 0.25      # 25%
+    invariant_compliance: 0.25    # 25%
+    freshness: 0.15               # 15%
+    test_coverage: 0.05           # 5%
+
+  thresholds:
+    excellent: 90  # 90%+ = excellent
+    good: 75       # 75-89% = good
+    acceptable: 60 # 60-74% = acceptable
+    poor: 60       # <60% = needs improvement
+
+# =============================================================================
+# INTEGRATIONS (Optional)
+# =============================================================================
+integrations:
+  # GitHub
+  github:
+    enabled: false
+    # repo: "username/repo"
+    # auto_link_issues: true
+
+  # Jira
+  jira:
+    enabled: false
+    # server: "https://yourcompany.atlassian.net"
+    # project_key: "PROJ"
+
+  # Slack
+  slack:
+    enabled: false
+    # webhook_url: "https://hooks.slack.com/services/..."
+    # notify_on_stale: true

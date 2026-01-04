@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "invariant.schema.json",
+  "title": "Invariant",
+  "description": "Schema for safety invariants in INVARIANTS.md",
+  "type": "object",
+  "required": ["id", "rule", "rationale", "violation_example"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^INV-[A-Z]+-[0-9]{3}$",
+      "description": "Unique invariant ID (INV-AUDIO-001, INV-NET-002, etc.)"
+    },
+    "rule": {
+      "type": "string",
+      "minLength": 10,
+      "description": "The invariant rule statement"
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Why this invariant exists"
+    },
+    "system": {
+      "type": "string",
+      "enum": [
+        "audio",
+        "network",
+        "ui",
+        "state",
+        "persistence",
+        "security",
+        "performance",
+        "multiplayer",
+        "recording",
+        "general"
+      ],
+      "description": "Which system this invariant applies to"
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["critical", "high", "medium"],
+      "description": "Severity if violated"
+    },
+    "violation_example": {
+      "type": "string",
+      "description": "Example of code that violates this invariant"
+    },
+    "correct_example": {
+      "type": "string",
+      "description": "Example of code that follows this invariant"
+    },
+    "linked_tests": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Test files/methods that verify this invariant"
+    },
+    "linked_patterns": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^PATTERN-[0-9]{3}$"
+      },
+      "description": "Bug patterns this invariant prevents"
+    },
+    "affected_files": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Files where this invariant must be followed"
+    },
+    "citation_required": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether edits to affected files must cite this invariant"
+    },
+    "automated_check": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["grep", "roslyn", "custom"] },
+        "pattern": { "type": "string" },
+        "script": { "type": "string" }
+      },
+      "description": "Automated check configuration"
+    }
+  }
+}

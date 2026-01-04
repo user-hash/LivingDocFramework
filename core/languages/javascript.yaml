@@ -1,0 +1,125 @@
+# JavaScript/TypeScript Language Profile for Living Documentation Framework
+
+language: javascript
+display_name: "JavaScript/TypeScript"
+
+# Version detection
+version:
+  files:
+    - "package.json"
+  patterns:
+    - '"version":\s*"([0-9.]+)"'  # package.json version field
+
+# Code file patterns
+code:
+  extensions: ["js", "jsx", "ts", "tsx", "mjs", "cjs"]
+  root: "src/"  # Default - override in project-config.yaml
+  exclude:
+    - "node_modules/**"
+    - "dist/**"
+    - "build/**"
+    - "coverage/**"
+    - "*.min.js"
+    - "bundle.js"
+
+# Test file patterns
+tests:
+  extensions: ["js", "ts", "jsx", "tsx"]
+  patterns:
+    - "**/*.test.js"
+    - "**/*.test.ts"
+    - "**/*.spec.js"
+    - "**/*.spec.ts"
+    - "**/__tests__/**/*.js"
+    - "**/__tests__/**/*.ts"
+  frameworks:
+    - jest
+    - mocha
+    - jasmine
+    - vitest
+
+# Tiering keywords specific to JavaScript/TypeScript
+tiering:
+  tier_a_keywords:
+    - "// CRITICAL"
+    - "// INVARIANT"
+    - "// SECURITY"
+    - "@critical"
+    - "config"
+    - "database"
+    - "auth"
+  tier_a_patterns:
+    - "**/config/**/*.{js,ts}"
+    - "**/*.config.{js,ts}"
+    - "**/server.{js,ts}"
+    - "**/app.{js,ts}"
+    - "**/database/**/*.{js,ts}"
+    - "**/*Manager.{js,ts}"
+    - "**/middleware/**/*.{js,ts}"
+
+# Common subsystems in JavaScript projects
+subsystems:
+  - name: "api"
+    patterns: ["**/api/**", "**/routes/**", "**/controllers/**"]
+    docs: ["API_ARCHITECTURE.md"]
+  - name: "database"
+    patterns: ["**/db/**", "**/models/**", "**/migrations/**"]
+    docs: ["DATABASE_ARCHITECTURE.md"]
+  - name: "auth"
+    patterns: ["**/auth/**", "**/authentication/**"]
+    docs: ["AUTH_ARCHITECTURE.md"]
+  - name: "ui"
+    patterns: ["**/components/**", "**/pages/**", "**/views/**"]
+    docs: ["UI_ARCHITECTURE.md"]
+  - name: "state"
+    patterns: ["**/store/**", "**/redux/**", "**/context/**"]
+    docs: ["STATE_MANAGEMENT.md"]
+
+# Documentation conventions
+docs:
+  style: "jsdoc"  # JSDoc standard
+  required_for_public: true  # Public APIs should be documented
+  tools:
+    - jsdoc
+    - typedoc
+    - documentation.js
+
+# Linting and code quality
+quality:
+  linters:
+    - eslint
+    - tslint
+    - prettier
+  config_files:
+    - ".eslintrc.js"
+    - ".eslintrc.json"
+    - "tsconfig.json"
+    - ".prettierrc"
+
+# Common architecture patterns
+patterns:
+  frontend_frameworks:
+    - React
+    - Vue
+    - Angular
+    - Svelte
+  backend_frameworks:
+    - Express
+    - Koa
+    - Fastify
+    - NestJS
+  fullstack_frameworks:
+    - Next.js
+    - Nuxt.js
+    - Remix
+
+# Dependencies
+dependencies:
+  file: "package.json"
+  lock_file: "package-lock.json"  # or yarn.lock, pnpm-lock.yaml
+
+# TypeScript specific
+typescript:
+  config: "tsconfig.json"
+  strict_mode_recommended: true
+  type_definitions: "@types/*"

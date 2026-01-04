@@ -1,0 +1,50 @@
+#!/bin/bash
+# Living Documentation Framework - Commit-Msg Hook
+# Validates commit message format
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Get project root
+PROJECT_ROOT=$(git rev-parse --show-toplevel)
+
+# Load configuration
+FRAMEWORK_HOOKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+FRAMEWORK_ROOT="$(cd "$FRAMEWORK_HOOKS_DIR/.." && pwd)"
+
+if [ -f "$FRAMEWORK_ROOT/core/load-config.sh" ]; then
+    source "$FRAMEWORK_ROOT/core/load-config.sh"
+else
+    # If config not found, skip validation
+    exit 0
+fi
+
+# Skip validation for merge commits
+if echo "$COMMIT_MSG" | grep -q "^Merge"; then
+    exit 0
+fi
+
+# Check for conventional commit format: type: description
+# Common types: feat, fix, docs, refactor, test, chore, style, perf
+if ! echo "$COMMIT_MSG" | grep -qE "^(feat|fix|docs|refactor|test|chore|style|perf|ci|build|revert)(\(.+\))?:"; then
+    echo "❌ ERROR: Invalid commit message format"
+    echo ""
+    echo "Commit message should follow conventional commits format:"
+    echo "  <type>: <description>"
+    echo ""
+    echo "Examples:"
+    echo "  feat: Add user authentication"
+    echo "  fix: Resolve memory leak in cache"
+    echo "  docs: Update API documentation"
+    echo "  refactor: Simplify database query logic"
+    echo ""
+    echo "Valid types: feat, fix, docs, refactor, test, chore, style, perf, ci, build, revert"
+    echo ""
+    echo "Your message:"
+    echo "  $COMMIT_MSG"
+    echo ""
+    exit 1
+fi
+
+# Success
+exit 0

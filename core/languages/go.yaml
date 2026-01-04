@@ -1,0 +1,111 @@
+# Go Language Profile for Living Documentation Framework
+
+language: go
+display_name: "Go"
+
+# Version detection
+version:
+  files:
+    - "version.go"
+    - "main.go"
+  patterns:
+    - 'const\s+Version\s*=\s*"([0-9.]+)"'  # const Version = "1.2.3"
+    - 'var\s+Version\s*=\s*"([0-9.]+)"'  # var Version = "1.2.3"
+
+# Code file patterns
+code:
+  extensions: ["go"]
+  root: "./"  # Go projects typically at root
+  exclude:
+    - "vendor/**"
+    - "*.pb.go"  # Generated protobuf files
+    - "*_test.go"  # Test files
+
+# Test file patterns
+tests:
+  extensions: ["go"]
+  patterns:
+    - "**/*_test.go"  # Go standard test convention
+  frameworks:
+    - testing  # Standard library
+    - testify  # Popular assertion library
+
+# Tiering keywords specific to Go
+tiering:
+  tier_a_keywords:
+    - "// CRITICAL"
+    - "// INVARIANT"
+    - "// SECURITY"
+    - "// THREAD-SAFE"
+    - "config"
+    - "database"
+    - "auth"
+  tier_a_patterns:
+    - "**/config/*.go"
+    - "**/database/*.go"
+    - "**/auth/*.go"
+    - "**/*_manager.go"
+    - "**/server.go"
+    - "**/main.go"
+
+# Common subsystems in Go projects
+subsystems:
+  - name: "api"
+    patterns: ["**/api/**", "**/handlers/**", "**/routes/**"]
+    docs: ["API_ARCHITECTURE.md"]
+  - name: "database"
+    patterns: ["**/db/**", "**/models/**", "**/repository/**"]
+    docs: ["DATABASE_ARCHITECTURE.md"]
+  - name: "auth"
+    patterns: ["**/auth/**", "**/middleware/auth*.go"]
+    docs: ["AUTH_ARCHITECTURE.md"]
+  - name: "grpc"
+    patterns: ["**/grpc/**", "**/*.pb.go"]
+    docs: ["GRPC_ARCHITECTURE.md"]
+
+# Documentation conventions
+docs:
+  style: "godoc"  # Go standard documentation
+  required_for_public: true  # Exported types/functions must be documented
+  tools:
+    - godoc
+    - pkgsite
+
+# Linting and code quality
+quality:
+  linters:
+    - golint
+    - golangci-lint
+    - staticcheck
+  config_files:
+    - ".golangci.yml"
+  formatters:
+    - gofmt
+    - goimports
+
+# Common architecture patterns
+patterns:
+  web_frameworks:
+    - gin
+    - echo
+    - fiber
+    - chi
+  rpc_frameworks:
+    - grpc
+    - twirp
+  database:
+    - gorm
+    - sqlx
+    - ent
+
+# Dependencies
+dependencies:
+  file: "go.mod"
+  lock_file: "go.sum"
+
+# Go-specific conventions
+conventions:
+  package_naming: "lowercase_single_word"
+  error_handling: "explicit_returns"
+  concurrency: "goroutines_channels"
+  interfaces: "small_focused_interfaces"

@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "decision.schema.json",
+  "title": "Architecture Decision Record",
+  "description": "Schema for ADRs in docs/decisions/",
+  "type": "object",
+  "required": ["id", "title", "status", "context", "decision", "consequences"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^ADR-[0-9]{4}$",
+      "description": "Unique ADR number (ADR-0001, ADR-0002, etc.)"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 100,
+      "description": "Brief descriptive title"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "accepted", "deprecated", "superseded"],
+      "description": "Current status of this decision"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of decision"
+    },
+    "deciders": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Who made this decision"
+    },
+    "context": {
+      "type": "string",
+      "minLength": 50,
+      "description": "What is the issue we're addressing?"
+    },
+    "decision": {
+      "type": "string",
+      "minLength": 50,
+      "description": "What is the change we're proposing/doing?"
+    },
+    "consequences": {
+      "type": "object",
+      "properties": {
+        "positive": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Good outcomes"
+        },
+        "negative": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Bad outcomes or trade-offs"
+        },
+        "neutral": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Neither good nor bad"
+        }
+      },
+      "required": ["positive"]
+    },
+    "alternatives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "option": { "type": "string" },
+          "pros": { "type": "array", "items": { "type": "string" } },
+          "cons": { "type": "array", "items": { "type": "string" } },
+          "rejected_reason": { "type": "string" }
+        }
+      },
+      "description": "Alternatives considered"
+    },
+    "supersedes": {
+      "type": "string",
+      "pattern": "^ADR-[0-9]{4}$",
+      "description": "ADR this supersedes"
+    },
+    "superseded_by": {
+      "type": "string",
+      "pattern": "^ADR-[0-9]{4}$",
+      "description": "ADR that supersedes this"
+    },
+    "related_adrs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^ADR-[0-9]{4}$"
+      },
+      "description": "Related ADRs"
+    },
+    "implementation": {
+      "type": "object",
+      "properties": {
+        "files": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Files implementing this decision"
+        },
+        "commits": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Commits implementing this decision"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["not-started", "in-progress", "complete", "partial"]
+        }
+      }
+    }
+  }
+}

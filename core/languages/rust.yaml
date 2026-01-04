@@ -1,0 +1,110 @@
+# Rust Language Profile for Living Documentation Framework
+
+language: rust
+display_name: "Rust"
+
+# Version detection
+version:
+  files:
+    - "Cargo.toml"
+  patterns:
+    - 'version\s*=\s*"([0-9.]+)"'  # version = "1.2.3"
+
+# Code file patterns
+code:
+  extensions: ["rs"]
+  root: "src/"
+  exclude:
+    - "target/**"
+    - "**/*.rlib"
+    - "**/*.so"
+
+# Test file patterns
+tests:
+  extensions: ["rs"]
+  patterns:
+    - "**/tests/**/*.rs"  # Integration tests
+    - "**/*_test.rs"
+  # Note: Rust also supports inline tests with #[test]
+  frameworks:
+    - cargo_test  # Built-in
+
+# Tiering keywords specific to Rust
+tiering:
+  tier_a_keywords:
+    - "// CRITICAL"
+    - "// INVARIANT"
+    - "// SECURITY"
+    - "// UNSAFE"
+    - "unsafe"  # Any use of unsafe code
+    - "config"
+    - "database"
+  tier_a_patterns:
+    - "**/config.rs"
+    - "**/lib.rs"
+    - "**/main.rs"
+    - "**/database/**/*.rs"
+    - "**/*_manager.rs"
+    - "**/*unsafe*.rs"
+
+# Common subsystems in Rust projects
+subsystems:
+  - name: "api"
+    patterns: ["**/api/**", "**/handlers/**", "**/routes/**"]
+    docs: ["API_ARCHITECTURE.md"]
+  - name: "database"
+    patterns: ["**/db/**", "**/models/**"]
+    docs: ["DATABASE_ARCHITECTURE.md"]
+  - name: "auth"
+    patterns: ["**/auth/**"]
+    docs: ["AUTH_ARCHITECTURE.md"]
+  - name: "unsafe"
+    patterns: ["**/unsafe/**", "**/*unsafe*.rs"]
+    docs: ["UNSAFE_CODE.md"]
+
+# Documentation conventions
+docs:
+  style: "rustdoc"  # Rust standard documentation
+  required_for_public: true  # Public items should be documented
+  tools:
+    - rustdoc
+    - cargo_doc
+
+# Linting and code quality
+quality:
+  linters:
+    - clippy
+    - rustfmt
+  config_files:
+    - "clippy.toml"
+    - "rustfmt.toml"
+  safety_checks:
+    - miri  # Unsafe code checker
+
+# Common architecture patterns
+patterns:
+  web_frameworks:
+    - actix-web
+    - rocket
+    - axum
+    - warp
+  async_runtime:
+    - tokio
+    - async-std
+  database:
+    - diesel
+    - sqlx
+    - sea-orm
+
+# Dependencies
+dependencies:
+  file: "Cargo.toml"
+  lock_file: "Cargo.lock"
+
+# Rust-specific conventions
+conventions:
+  ownership: "strict_borrow_checker"
+  error_handling: "result_option_types"
+  concurrency: "fearless_concurrency"
+  memory_safety: "no_garbage_collector"
+  unsafe_code: "minimal_documented"

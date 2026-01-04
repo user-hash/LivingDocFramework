@@ -1,0 +1,115 @@
+# Python Language Profile for Living Documentation Framework
+
+language: python
+display_name: "Python"
+
+# Version detection
+version:
+  # Common locations for version strings in Python projects
+  files:
+    - "__init__.py"
+    - "setup.py"
+    - "pyproject.toml"
+    - "_version.py"
+    - "__about__.py"
+  patterns:
+    - '__version__\s*=\s*["\']([0-9.]+)["\']'  # __version__ = "1.2.3"
+    - 'version\s*=\s*["\']([0-9.]+)["\']'  # version = "1.2.3"
+    - 'VERSION\s*=\s*["\']([0-9.]+)["\']'  # VERSION = "1.2.3"
+
+# Code file patterns
+code:
+  extensions: ["py"]
+  root: "src/"  # Default - override in project-config.yaml
+  exclude:
+    - "__pycache__/**"
+    - "*.pyc"
+    - ".venv/**"
+    - "venv/**"
+    - ".pytest_cache/**"
+    - "*.egg-info/**"
+
+# Test file patterns
+tests:
+  extensions: ["py"]
+  patterns:
+    - "**/test_*.py"  # pytest convention
+    - "**/*_test.py"  # Alternative convention
+    - "**/tests/**/*.py"
+  frameworks:
+    - pytest
+    - unittest
+    - nose
+
+# Tiering keywords specific to Python
+tiering:
+  tier_a_keywords:
+    - "# CRITICAL"
+    - "# INVARIANT"
+    - "# SECURITY"
+    - "# THREAD-SAFE"
+    - "@critical"
+    - "settings.py"
+    - "config.py"
+  tier_a_patterns:
+    - "**/config.py"
+    - "**/settings.py"
+    - "**/database/*.py"
+    - "**/*Manager.py"
+    - "**/core/*.py"
+    - "**/models.py"
+
+# Common subsystems in Python projects
+subsystems:
+  - name: "api"
+    patterns: ["**/api/**", "**/views.py", "**/endpoints/**"]
+    docs: ["API_ARCHITECTURE.md"]
+  - name: "database"
+    patterns: ["**/db/**", "**/models/**", "**/migrations/**"]
+    docs: ["DATABASE_ARCHITECTURE.md"]
+  - name: "auth"
+    patterns: ["**/auth/**", "**/authentication/**"]
+    docs: ["AUTH_ARCHITECTURE.md"]
+  - name: "celery"
+    patterns: ["**/tasks/**", "**/celery.py"]
+    docs: ["BACKGROUND_JOBS.md"]
+
+# Documentation conventions
+docs:
+  style: "google"  # Google, NumPy, or reStructuredText
+  required_for_public: true  # Public functions must have docstrings
+  tools:
+    - sphinx
+    - mkdocs
+    - pdoc
+
+# Linting and code quality
+quality:
+  linters:
+    - pylint
+    - flake8
+    - black
+    - mypy
+  config_files:
+    - "pyproject.toml"
+    - ".flake8"
+    - "mypy.ini"
+
+# Common architecture patterns
+patterns:
+  web_frameworks:
+    - Django
+    - Flask
+    - FastAPI
+  async_frameworks:
+    - asyncio
+    - aiohttp
+  orm_frameworks:
+    - SQLAlchemy
+    - Django ORM
+    - Tortoise ORM
+
+# Dependencies
+dependencies:
+  file: "requirements.txt"  # or pyproject.toml, setup.py
+  lock_file: "requirements-lock.txt"  # or poetry.lock, Pipfile.lock
