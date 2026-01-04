@@ -1,6 +1,6 @@
 # Living Documentation Framework
 
-**Version:** v1.0.0 | **Status:** Production Ready | **License:** MIT
+**Version:** v1.0.0 | **Status:** Production Ready | **License:** GNU AGPL v3
 
 > A self-aware codebase that knows its own architecture, remembers its mistakes, and enforces its own rules.
 
