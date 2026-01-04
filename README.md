@@ -216,6 +216,45 @@ This isn't just documentation you write once. It's a **living system that grows 
 
 **This is why the framework works**: Every code change forces documentation updates. Updated docs mean the architecture map is always current. Current maps mean the next agent session starts with perfect context. Perfect context means better code changes. Better changes loop back.
 
+### ⚠️ The Loop Isn't Fully Closed Yet (Help Wanted)
+
+**Honest reality**: The loop above assumes agents follow protocols. They often don't.
+
+```
+The Problem:
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Protocol  │────▶│   AI Agent  │────▶│   Ignores   │
+│   Says...   │     │   Receives  │     │   Protocol  │
+└─────────────┘     └─────────────┘     └─────────────┘
+                                              │
+                                              ▼
+                                        Loop Breaks
+```
+
+**Current safeguards:**
+- **Git hooks** catch missing docs at commit time (hard block)
+- **Fingerprint system** tracks agent compliance across sessions
+- **Confidence decay** makes staleness visible
+- **Proof-of-compliance** sections required in agent reports
+
+**What still breaks:**
+- Agents skip reading docs before making changes
+- Agents update docs superficially (checkbox compliance)
+- Sub-agents spawned without protocol context
+- No way to verify agent actually loaded context
+
+**🔧 We need better solutions. Ideas from contributors:**
+
+| Idea | Status | Contributor Welcome? |
+|------|--------|---------------------|
+| Pre-change verification hooks | Concept | ✅ Yes |
+| Agent context fingerprinting | Working prototype | ✅ Help improve |
+| Mandatory context loading proof | Concept | ✅ Yes |
+| Protocol injection for sub-agents | Partial | ✅ Yes |
+| Runtime compliance monitoring | Not started | ✅ Yes |
+
+**If you have ideas for closing this loop, we want to hear them.** See [Contributing](#contributing) or open a Discussion.
+
 **Other tools break this loop:**
 - MCP: Context can drift from reality (no enforcement)
 - RALPH: Memory is session-specific, not git-synced
@@ -816,6 +855,37 @@ $LDF_BUG_TRACKER              # Configured doc path
 - [ ] Automated test suite
 - [ ] CI/CD integration examples
 - [ ] Web-based dashboard viewer
+
+---
+
+## Contributing
+
+We're actively looking for contributors, especially for **closing the agent compliance loop**.
+
+### High-Priority Areas
+
+| Area | Problem | Skills Needed |
+|------|---------|---------------|
+| **Agent Compliance** | AI agents don't always follow protocols | Prompt engineering, hooks |
+| **Fingerprint System** | Track agent behavior across sessions | Python, data structures |
+| **Pre-change Hooks** | Verify context was loaded before changes | Shell, git hooks |
+| **Sub-agent Protocol Injection** | Ensure spawned agents inherit governance | Prompt engineering |
+| **Dashboard Extraction** | Generalize from Nebulae | Shell, Chart.js |
+
+### How to Contribute
+
+1. **Open an Issue** — Describe your idea or the problem you're solving
+2. **Join Discussions** — Share approaches, especially for agent compliance
+3. **Submit PRs** — Follow the existing patterns in the codebase
+
+### We Especially Want to Hear From You If...
+
+- You've built systems that successfully constrain AI agent behavior
+- You have ideas for verifying agents actually loaded context (not just claimed to)
+- You've worked on multi-agent orchestration with governance
+- You have experience with git hooks for complex validation
+
+**The hardest unsolved problem**: How do you *prove* an AI agent read and understood documentation before making changes?
 
 ---
 
