@@ -78,8 +78,6 @@ Documents automatically group by system tags:
 
 ## Dashboard
 
-![Dashboard Preview](docs/images/dashboard-preview.png)
-
 **Real-time metrics**:
 - System confidence % (calculated automatically)
 - Bug severity distribution (P0/P1/P2/P3)
@@ -176,14 +174,12 @@ After changes: UPDATE affected docs, include proof
 
 | Document | Description |
 |----------|-------------|
-| [SETUP.md](docs/SETUP.md) | Installation & configuration |
-| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | System design & components |
-| [SCHEMAS.md](docs/SCHEMAS.md) | Schema & template reference |
-| [DASHBOARD.md](docs/DASHBOARD.md) | Dashboard configuration |
-| [HOOKS.md](docs/HOOKS.md) | Git hook system |
-| [AGENTS.md](docs/AGENTS.md) | AI agent protocols |
-| [WORKFLOWS.md](docs/WORKFLOWS.md) | Slash command reference |
-| [BEST_PRACTICES.md](docs/BEST_PRACTICES.md) | Lessons learned |
+| [SETUP.md](SETUP.md) | Installation & configuration |
+| [Hooks README](hooks/README.md) | Git hook system |
+| [Agent Protocol](protocols/AGENT_PROTOCOL.md) | AI agent protocols |
+| [Commands README](commands/README.md) | Slash command reference |
+| [Tools README](tools/README.md) | Tool documentation & extraction guide |
+| [Examples](examples/) | Sample project configurations |
 
 ---
 
