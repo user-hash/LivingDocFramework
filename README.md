@@ -1,172 +1,214 @@
 # Living Documentation Framework
 
-**AI-Powered, Schema-Driven Documentation System for Software Projects**
+**Version:** v1.0.0 | **Status:** Production Ready | **License:** MIT
 
-> Extracted from [Nebulae](https://github.com/user-hash/Nebulae) - A 181K-line Unity project managed entirely with AI assistance
+> Documentation that enforces its own correctness.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](CHANGELOG.md)
-[![Status](https://img.shields.io/badge/status-production--ready-brightgreen.svg)]()
+A governance layer for AI-assisted software development where understanding, intent, and architecture persist across sessions, agents, and team changes.
 
 ---
 
-## What is This?
+## The 30-Second Version
 
-Living Documentation Framework (LDF) is a **production-tested system** that keeps your documentation automatically synchronized with your code through AI-powered agents, git hooks, and dynamic dashboards.
+**Problem:** AI agents lose context between sessions. Bugs reappear. Documentation drifts. Critical files get broken.
 
-**Born from real need**: Managing 181,000 lines across 284 files with 64 bug patterns, 36 invariants, and 93% system confidence.
+**Solution:** This framework makes documentation *enforceable*. If code changes, docs must change too — or the commit is blocked.
+
+```
+Code change without doc update? → Blocked.
+Tier A file edited without invariant citation? → Blocked.
+Bug fixed without pattern documented? → Warning.
+```
+
+**Result:** 93% system confidence maintained across 6 months and 181K lines of code.
 
 ---
 
-## Key Features
+## Why Not Just Use MCP / RALPH / Context Files?
 
-✅ **Schema-Driven** - Zero hardcoding, configure everything in YAML
-✅ **Auto-Discovery** - New files automatically categorized and mapped
-✅ **Group Organization** - Subsystems get dedicated doc ecosystems (e.g., MP has 17 docs)
-✅ **Interactive Dashboard** - Grafana-style HTML with historical metrics tracking
-✅ **Git Hook Enforcement** - Automatic validation at commit time
-✅ **AI Agent Protocols** - Ensure AI agents maintain docs
-✅ **Session Context** - Fast session loading with memory packs
-✅ **Release Gates** - Automated quality checks before shipping
+| Approach | What It Does | Limitation |
+|----------|--------------|------------|
+| **MCP Servers** | Connect AI to external tools/data | No enforcement. AI can ignore context. |
+| **RALPH / Memory Systems** | Store conversation history | Memory without governance. No blocking. |
+| **Context Files (.claude, AGENTS.md)** | Provide static context to AI | Read-only. No validation. Drifts silently. |
+| **Living Documentation** | **Enforce documentation as code** | Requires initial setup investment |
+
+### The Key Difference
+
+Other tools operate at the **prompt level** — they give AI more context.
+
+This framework operates at the **commit level** — it prevents bad changes from entering the codebase.
+
+```
+MCP/RALPH: "Here's context, please use it" (advisory)
+Living Docs: "You cannot commit without updating docs" (enforced)
+```
+
+### Why This Matters
+
+- **Session-resistant**: Context survives session boundaries because it's in git, not memory
+- **Agent-resistant**: Works regardless of which AI model or version you use
+- **Turnover-resistant**: New team members (human or AI) inherit documented decisions
+- **Drift-resistant**: Stale documentation automatically degrades confidence scores
+
+---
+
+## What This Framework Does
+
+### Treats Understanding as a First-Class Artifact
+
+| Instead of... | This framework creates... |
+|---------------|--------------------------|
+| Bugs that reappear | **Bug Patterns** — documented anti-patterns with detection rules |
+| Tribal knowledge | **Invariants** — codified safety rules that block violations |
+| "Why did we do this?" | **Decisions** — recorded rationale with context |
+| Fragile critical files | **Tier A Protection** — enforced review for core code |
+| Stale documentation | **Confidence Scoring** — measurable documentation health |
+
+### Enforces at Commit Time
+
+```bash
+# What happens when you commit:
+
+✓ Check: Are Tier A files documented?
+✓ Check: Is CHANGELOG updated?
+✓ Check: Do invariants have citations?
+⚠ Warn: Blast radius > 5 files
+✗ Block: Missing required documentation
+```
+
+---
+
+## Who This Is For
+
+### Solo Developers
+- Stop re-debugging the same issues
+- Build a knowledge base that compounds over time
+- AI assistants become more effective with documented context
+
+### Teams
+- Onboard new developers (human or AI) faster
+- Reduce "why did we do this?" questions
+- Enforce consistency without constant code review
+
+### Enterprises
+- Auditable documentation trail
+- Measurable system health metrics
+- Governance that scales with codebase size
+
+### AI-Heavy Workflows
+- Multi-agent systems maintain coherence
+- Context persists across session boundaries
+- Agents cite invariants, not just code
+
+---
+
+## What's Included
+
+### Core System (17 files)
+- **4 JSON Schemas**: Patterns, golden paths, invariants, decisions
+- **4 Markdown Templates**: Structured documentation formats
+- **2 Manifests**: `manifest.yaml`, `doc-system.yaml`
+- **5 Language Profiles**: Python, JavaScript, Go, Rust, C#
+- **Configuration Loaders**: Shell + Python
+
+### Automation
+- **`calculate_confidence.py`**: Exponential-decay health scoring
+- **14 additional tools**: Documented with extraction guide
+
+### Git Hooks
+- **`pre-commit`**: Documentation enforcement
+- **`post-commit`**: Auto-updates
+- **`commit-msg`**: Message validation
+- **`install.sh`**: One-command setup
+
+### Protocols
+- **`AGENT_PROTOCOL.md`**: Mandatory AI compliance rules
+- **Slash commands**: `/living-docs`, `/bug-fix`, `/code-review`
 
 ---
 
 ## Quick Start
 
 ```bash
-# Clone the framework
-git clone https://github.com/user/living-doc-framework.git
-cd your-project
+# 1. Add to your project
+git submodule add https://github.com/YOUR_USERNAME/LivingDocFramework.git
 
-# Initialize (copies framework into .living-docs/)
-./living-doc-framework/install.sh
+# 2. Configure
+cp LivingDocFramework/core/project-config.template.yaml living-doc-config.yaml
+# Edit living-doc-config.yaml for your project
 
-# Configure for your project
-edit .living-docs/core/manifest.yaml
+# 3. Install hooks
+./LivingDocFramework/hooks/install.sh
 
-# Generate dashboard
-.living-docs/tools/dashboard.sh
+# 4. Initialize documentation
+mkdir -p docs
+touch CHANGELOG.md BUG_TRACKER.md
+cp LivingDocFramework/core/templates/bug-patterns.template.md BUG_PATTERNS.md
+touch docs/INVARIANTS.md docs/GOLDEN_PATHS.md docs/DECISIONS.md docs/CODE_DOC_MAP.md
 
-# Open dashboard
-open .living-docs/dashboard/index.html
+# 5. Check health
+python3 LivingDocFramework/tools/calculate_confidence.py
 ```
 
----
-
-## What It Manages
-
-### Document Categories (Auto-Discovered)
-
-| Category | Purpose | Example |
-|----------|---------|---------|
-| **Patterns** | Bug patterns & anti-patterns | "PATTERN-001: Race in peer registration" |
-| **Invariants** | Safety rules that must never break | "INV-1.1: Never lock() in audio thread" |
-| **Golden Paths** | Best practices & recommended approaches | "GP-001: Use Monitor.TryEnter for audio" |
-| **Decisions** | Architecture Decision Records (ADRs) | "ADR-012: Partial class organization" |
-| **Bugs** | Current bug tracking with severity | P0/P1/P2/P3 classification |
-| **Code Map** | File-to-documentation mappings | Links code files to their docs |
-
-### Auto-Grouping by Subsystem
-
-Documents automatically group by system tags:
-- **Multiplayer**: 24 patterns, 8 invariants, 4 ADRs
-- **Audio**: 12 patterns, 6 invariants, 2 ADRs
-- **UI**: 8 patterns, 4 invariants, 1 ADR
-- **Threading**: 6 patterns, 10 invariants, 1 ADR
+See [SETUP.md](SETUP.md) for detailed configuration.
 
 ---
 
-## Dashboard
+## Key Features
 
-**Real-time metrics**:
-- System confidence % (calculated automatically)
-- Bug severity distribution (P0/P1/P2/P3)
-- Pattern count by system
-- Documentation coverage
-- Historical trends
-
-**Charts**:
-- Multi-metric health over time
-- Pattern distribution (doughnut)
-- Bug severity breakdown (doughnut)
-- Subsystem confidence (radar)
-- Coverage progress (line)
-
----
-
-## How It Works
-
-### 1. Schema-Driven Configuration
-
-Everything configured in `manifest.yaml`:
+### 1. Language-Agnostic
+Works with Python, JavaScript, Go, Rust, C#, or any language. Configuration uses placeholders — no hardcoded paths.
 
 ```yaml
-categories:
-  patterns:
-    subcategories:
-      - name: "multiplayer"
-        pattern: '\*\*System:\*\*.*Multiplayer'
-      - name: "audio"
-        pattern: '\*\*System:\*\*.*Audio'
-
-  auto_mapping:
-    rules:
-      - file_pattern: "**/Multiplayer/**"
-        docs:
-          - "MULTIPLAYER_ARCHITECTURE.md"
-          - "INVARIANTS.md#7"
+project:
+  name: "MyProject"
+  language: "python"
+code:
+  root: "src/"
+  extensions: ["py"]
 ```
 
-### 2. Auto-Discovery
+### 2. Automatic Enforcement
+Git hooks block commits that violate documentation rules:
+- Tier A files require invariant citations
+- Code changes require CHANGELOG updates
+- Blast-radius warnings for large changes
 
-```bash
-# System scans for:
-# - New files → Auto-suggests tier (A/B/C/D)
-# - New patterns → Auto-categorizes by system tag
-# - New sections → Auto-maps to architecture docs
-```
+### 3. AI Agent Compliance
+Agents are treated as contributors, not exceptions:
+- Must read required docs before changes
+- Must update docs after changes
+- Must cite invariants for critical files
+- Must provide proof-of-compliance in reports
 
-### 3. Git Hook Enforcement
+### 4. Confidence Scoring
+Measurable health signal using exponential decay:
+- Bug severity (P0–P3)
+- Documentation coverage and staleness
+- Tier A file protection
+- Test coverage and bug resolution rate
 
-```bash
-# Pre-commit checks:
-# ✓ Tier A files have documentation
-# ✓ Version numbers match across files
-# ✓ No orphaned doc entries
-# ✓ Agent reports include compliance proof
-```
-
-### 4. AI Agent Compliance
-
-```markdown
-## Agent Protocol (MANDATORY)
-Before changes: READ CODE_DOC_MAP.md, INVARIANTS.md
-After changes: UPDATE affected docs, include proof
-
-## Proof of Compliance
-- [ ] Read docs before changes
-- [ ] Updated affected docs
-- [ ] No drift introduced
-```
+### 5. Scalable Organization
+Subsystems maintain their own documentation:
+- Multiplayer subsystem → 17 specialized docs
+- Audio subsystem → 8 specialized docs
+- No monolithic documentation blob
 
 ---
 
-## Real-World Results
+## Proven in Production
 
-**From Nebulae Project**:
+Extracted from the **Nebulae project**:
 
-| Metric | Value | Change |
-|--------|-------|--------|
-| System Confidence | 93% | +43% |
-| Documentation Coverage | 96% (273/284 files) | +96% |
-| Bug Patterns Documented | 64 | +64 |
-| Invariants Codified | 36 | +36 |
-| Stale Documentation | 0 files | -15 |
-
-**Time Savings**:
-- Doc updates: Manual (2 hours) → Automatic (<1 minute)
-- Context loading: Reading (30 min) → Memory pack (30 seconds)
-- Bug categorization: Manual → Auto-discovered by system tag
+| Metric | Value |
+|--------|-------|
+| Lines of Code | 181,048 |
+| Script Files | 284 |
+| Bug Patterns Documented | 64 |
+| Enforced Invariants | 36 |
+| System Confidence | 93% |
+| Production Use | 6+ months |
 
 ---
 
@@ -176,83 +218,43 @@ After changes: UPDATE affected docs, include proof
 |----------|-------------|
 | [SETUP.md](SETUP.md) | Installation & configuration |
 | [Hooks README](hooks/README.md) | Git hook system |
-| [Agent Protocol](protocols/AGENT_PROTOCOL.md) | AI agent protocols |
+| [Agent Protocol](protocols/AGENT_PROTOCOL.md) | AI agent compliance rules |
 | [Commands README](commands/README.md) | Slash command reference |
-| [Tools README](tools/README.md) | Tool documentation & extraction guide |
+| [Tools README](tools/README.md) | Tool documentation & extraction |
 | [Examples](examples/) | Sample project configurations |
-
----
-
-## Language Support
-
-**Tested**:
-- ✅ C# (Unity) - Nebulae project
-- ✅ Python - Example included
-- ✅ JavaScript/TypeScript - Example included
-
-**Easy to adapt**:
-- Go, Rust, Java, C++, Swift, Kotlin
-- Any language with version files and doc comments
 
 ---
 
 ## Requirements
 
-- **Git** (for hooks)
-- **Bash** 4.0+ (for tools)
-- **Python** 3.8+ (optional, for confidence calculator & doc-engine)
-- **Chart.js** 4.4.1+ (bundled in dashboard HTML)
+**Minimum:** Git, Bash 4.0+, Python 3.8+
+
+**Recommended:** jq, yq, AI coding assistant
 
 ---
 
-## Examples
+## Roadmap
 
-### Python Project
-
-```bash
-cd your-python-project
-./living-doc-framework/install.sh --language python
-
-# manifest.yaml auto-configures:
-# - version_file: __init__.py
-# - code_root: src/
-# - version_pattern: __version__ = "([0-9.]+)"
-```
-
-### JavaScript/TypeScript Project
-
-```bash
-cd your-js-project
-./living-doc-framework/install.sh --language javascript
-
-# manifest.yaml auto-configures:
-# - version_file: package.json
-# - code_root: src/
-# - version_pattern: "version": "([0-9.]+)"
-```
-
----
-
-## Contributing
-
-Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
+- [ ] Extract remaining 13 tools
+- [ ] JavaScript/TypeScript example
+- [ ] Go example
+- [ ] Automated test suite
+- [ ] CI/CD integration examples
+- [ ] Web-based dashboard viewer
 
 ---
 
 ## License
 
-MIT License - See [LICENSE](LICENSE)
+MIT License — see [LICENSE](LICENSE)
 
 ---
 
 ## Acknowledgments
 
-**Original Project**: [Nebulae - Producer Journey](https://github.com/user-hash/Nebulae)
-- 6 months of AI-assisted development
-- 181,000 lines of Unity C# code
-- Living proof that AI + Human collaboration scales
-
-**Powered by**: [Claude](https://claude.ai) by Anthropic
+- **Nebulae Project** — original source (181K LOC Unity project)
+- **Claude AI** — development partner
+- **Living Documentation community** — inspiration and feedback
 
 ---
 
@@ -263,4 +265,4 @@ MIT License - See [LICENSE](LICENSE)
 
 ---
 
-**Transform your codebase into a living, self-documenting organism.** 🌱
+*Transform scattered context into enforced understanding.*
