@@ -126,6 +126,163 @@ After 6 months on Nebulae (181K LOC):
 
 ---
 
+## Advanced Reasoning Through Enforced Context
+
+One of the most important outcomes isn't enforcement itself — it's the **quality of reasoning** it enables.
+
+### From Local Fixes to System-Level Understanding
+
+**Without enforced documentation**, AI agents typically:
+- Search locally for symptoms
+- Apply shallow pattern matching
+- Fix surface-level issues
+- Reintroduce bugs elsewhere
+- Require multiple retries and rework cycles
+
+**With Living Documentation**, agents are required to:
+- Load the current system map (CODE_DOC_MAP)
+- Read invariants before touching critical files
+- Check known bug patterns before proposing fixes
+- Understand *why* the system is structured this way, not just *how*
+
+This shifts bug fixing from:
+```
+"Find where it breaks" → "Understand how the system flows and where it is allowed to change"
+```
+
+### Flow-Aware Bug Fixing
+
+Because the framework encodes architectural boundaries, data flow assumptions, known failure modes, and historical decisions — agents no longer guess where to look.
+
+They **know**:
+- Which subsystems interact
+- Which files are high-risk
+- Which invariants must not be violated
+- Which patterns indicate deeper issues
+
+**Result: Targeted investigation instead of exploratory guessing.**
+
+### Measurable Improvements
+
+After introducing enforced context:
+
+| Metric | Improvement |
+|--------|-------------|
+| Time to detect complex bugs | ⬇️ Decreased |
+| Time to fix cross-subsystem bugs | ⬇️ Significantly reduced |
+| Rework cycles | ⬇️ Reduced |
+| Bug recurrence | ⬇️ Decreased |
+| Token usage per successful fix | ⬇️ Lower |
+
+**Why?** Less time rediscovering system intent. Less time fixing the wrong thing. Less time retrying incomplete solutions.
+
+### Why This Saves Tokens
+
+AI inefficiency comes from: missing context, wrong search space, repeated clarification loops, fixing symptoms instead of causes.
+
+Living Documentation **constrains the search space upfront**:
+- Start with the correct mental model
+- Eliminate invalid solution paths early
+- Avoid violating known constraints
+- Produce fewer but higher-quality iterations
+
+### Advanced Bugs Benefit Most
+
+The biggest gains are in bugs that are:
+- Cross-cutting
+- Timing-related
+- State-dependent
+- Architectural (not syntax-level)
+
+These require reasoning about **flow**, not just code. Because the framework encodes flow explicitly, agents reason at the level a senior engineer would — without relying on memory or chance.
+
+### The Key Insight
+
+```
+The framework doesn't make AI "smarter".
+It makes reasoning cheaper, faster, and more reliable.
+```
+
+By eliminating ambiguity, preserving intent, and enforcing architectural truth — fixes stick, and both human and AI productivity increase.
+
+---
+
+## The Signals We Collect (Hidden Power)
+
+The framework collects structured signals that enable far more than metrics:
+
+### Structural Signals
+- File → Doc mapping (CODE_DOC_MAP)
+- Tier-A classification
+- Subsystem boundaries
+- ADR ownership
+- Golden paths coverage
+
+### Risk Signals
+- Bug patterns (with categories)
+- Severity distribution (P0–P3)
+- Blast radius
+- Unmapped Tier-A files
+- Staleness
+
+### Temporal Signals
+- Versioned history
+- Confidence deltas
+- Bug resolution velocity
+- Protection growth over time
+
+### Behavioral Signals
+- What breaks often
+- What changes together
+- Where agents/humans forget docs
+- Where fixes don't stick
+
+**This is enough to move from "metrics" → "intelligence."**
+
+---
+
+## Code Intelligence Vision (Roadmap)
+
+We're building toward a **Code Intelligence Map** — a navigable semantic space where code, docs, bugs, and decisions live together.
+
+### Phase 1: Map (Current)
+- ✅ Code-to-doc mapping
+- ✅ Bug pattern documentation
+- ✅ Confidence scoring
+- ✅ Dashboard metrics
+
+### Phase 2: Explore (Planned)
+- 🔮 **Bug Landscape Explorer** — bugs clustered by category, subsystem, root cause
+- 🔮 **Subsystem Health Contracts** — min confidence, max P0/P1, required invariants
+- 🔮 **Documentation ROI Detector** — which docs prevent bugs vs dead weight
+
+### Phase 3: Predict (Planned)
+- 🔮 **Risk Forecasting** — "This file has 78% chance of regression if edited"
+- 🔮 **Change Impact Simulator** — "If this ships, expected confidence delta is..."
+- 🔮 **"Next Break" Prediction** — based on patterns and historical data
+
+### Phase 4: Govern (Planned)
+- 🔮 **Agent Effectiveness Scoring** — track agent compliance, bug recurrence, token efficiency
+- 🔮 **Knowledge Loss Detector** — flag subsystems with high concentration risk
+- 🔮 **Automated Release Gates** — block releases based on health contracts
+
+### The Vision
+
+```
+Not just "Living Documentation"
+→ A system that measures and governs understanding.
+```
+
+Nodes: Files, Subsystems, Bug Patterns, Invariants, ADRs, Golden Paths
+Edges: "violates", "depends on", "protected by", "frequently breaks with"
+
+Click a subsystem → see open bugs, confidence, most violated invariants
+Click a file → see known patterns, ADRs that justify it, historical blast radius
+
+**This is where we're going.**
+
+---
+
 ## System Architecture
 
 ![System Architecture](docs/images/architecture-overview.png)
