@@ -27,7 +27,8 @@ This is a minimal example showing how to integrate the Living Documentation Fram
 4. **Initialize docs**:
    ```bash
    mkdir -p docs
-   touch CHANGELOG.md BUG_TRACKER.md BUG_PATTERNS.md
+   touch CHANGELOG.md BUG_TRACKER.md
+   cp LivingDocFramework/core/templates/bug-patterns.template.md BUG_PATTERNS.md
    touch docs/INVARIANTS.md docs/GOLDEN_PATHS.md docs/DECISIONS.md docs/CODE_DOC_MAP.md
    ```
 
