@@ -904,7 +904,7 @@ We're actively looking for contributors, especially for **closing the agent comp
 
 ## License
 
-MIT License — see [LICENSE](LICENSE)
+AGPL v3 [LICENSE](LICENSE)
 
 ---
 
