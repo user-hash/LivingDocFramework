@@ -46,6 +46,18 @@ The AI doesn't need to remember — the codebase remembers for it.
 
 ---
 
+## What This Framework Is NOT
+
+To set expectations clearly:
+
+- ❌ **Not a replacement for code review** — It reduces careless changes, but human judgment still matters.
+- ❌ **Not runtime enforcement** — All guarantees are at commit time, not runtime.
+- ❌ **Not an AI framework or model wrapper** — Works with any AI assistant, or none at all.
+- ❌ **Not a silver bullet for bad engineering** — It raises the floor, not the ceiling.
+- ❌ **Not automatic documentation generation** — Humans and agents must still think. The system enforces correctness, not content quality.
+
+---
+
 ## The 30-Second Version
 
 **Problem:** AI agents lose context between sessions. Bugs reappear. Documentation drifts. Critical files get broken.
@@ -295,12 +307,14 @@ Click a file → see known patterns, ADRs that justify it, historical blast radi
 
 | Core Document | Purpose | Updated When |
 |--------------|---------|--------------|
-| `CLAUDE.md` | Project memory | Major changes |
+| `CLAUDE.md`* | Project memory | Major changes |
 | `CODE_DOC_MAP.md` | File cross-reference | New file → add entry |
 | `INVARIANTS.md` | Safety rules | Config change → update |
 | `BUG_PATTERNS.md` | Anti-patterns | Bug fix → document |
 | `GOLDEN_PATHS.md` | Best practices | New pattern → add |
 | `DECISIONS.md` | Architecture decisions | Arch decision → new ADR |
+
+*\*`CLAUDE.md` is a legacy filename from the original project. It is model-agnostic and can be renamed (e.g., `PROJECT_CONTEXT.md`).*
 
 ### Dashboard Metrics
 
@@ -476,9 +490,36 @@ Extracted from the **Nebulae project**:
 | System Confidence | 93% |
 | Production Use | 6+ months |
 
+> **Note**: Nebulae serves as a reference implementation. The framework itself is project-agnostic and has no dependency on Nebulae-specific tooling or structure.
+
 ### Key Benefits & ROI
 
 ![Key Benefits and ROI](docs/images/Key%20benefits,%20ROI.png)
+
+---
+
+## Minimal Adoption Path
+
+You don't need to adopt everything at once.
+
+**Start with just these three files:**
+1. `CODE_DOC_MAP.md` — map files to their documentation
+2. `BUG_PATTERNS.md` — document bugs as you fix them
+3. Pre-commit hook for doc updates
+
+**This alone:**
+- Prevents repeat bugs
+- Forces context loading before changes
+- Improves AI reasoning quality
+
+Invariants, confidence scoring, golden paths, and dashboards can be added incrementally as you see value.
+
+```bash
+# Minimal setup (5 minutes)
+touch CODE_DOC_MAP.md BUG_PATTERNS.md
+cp LivingDocFramework/hooks/pre-commit .git/hooks/
+chmod +x .git/hooks/pre-commit
+```
 
 ---
 
