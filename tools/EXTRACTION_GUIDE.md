@@ -10,7 +10,7 @@ This guide explains how to extract the remaining tools from the Nebulae project.
 - **Generalizations applied**:
   - Uses `config.py` for all file paths
   - Replaces `.cs` extension matching with `config.code_extensions`
-  - Uses `config.find_code_files()` instead of hardcoded `find Assets -name "*.cs"`
+  - Uses `config.find_code_files()` instead of hardcoded path/extension patterns
   - Algorithm unchanged (universal)
 
 ## 📋 Remaining Tools to Extract
@@ -24,8 +24,8 @@ This guide explains how to extract the remaining tools from the Nebulae project.
 source "$(dirname "$0")/../core/load-config.sh"
 
 # Replace hardcoded paths
-- find Assets -name "*.cs" → ldf_find_code
-- BeatGridConfig.cs version extraction → use $LDF_VERSION_FILE + $LDF_VERSION_PATTERN
+- find [code_root] -name "*.[ext]" → ldf_find_code
+- Version file extraction → use $LDF_VERSION_FILE + $LDF_VERSION_PATTERN
 - CHANGELOG.md → $LDF_CHANGELOG
 - BUG_PATTERNS.md → $LDF_BUG_PATTERNS
 - BUG_TRACKER.md → $LDF_BUG_TRACKER
@@ -53,7 +53,7 @@ TIER_A_KEYWORDS=(
 )
 
 # File finding
-find "$LDF_CODE_ROOT" -name "*.$LDF_CODE_EXT"  # Not hardcoded *.cs
+find "$LDF_CODE_ROOT" -name "*.$LDF_CODE_EXT"  # Uses config, not hardcoded
 
 # Doc path references
 echo "Updating $LDF_CODE_DOC_MAP"  # Not hardcoded CODE_DOC_MAP.md
@@ -193,10 +193,10 @@ if __name__ == '__main__':
 
 ## Quick Reference: Replacements
 
-| Hardcoded (Nebulae) | Generalized (Framework) |
-|---------------------|-------------------------|
-| `find Assets -name "*.cs"` | `ldf_find_code` (shell) or `config.find_code_files()` (Python) |
-| `BeatGridConfig.cs` | `$LDF_VERSION_FILE` or `config.version_file` |
+| Hardcoded (Original) | Generalized (Framework) |
+|----------------------|-------------------------|
+| `find [root] -name "*.[ext]"` | `ldf_find_code` (shell) or `config.find_code_files()` (Python) |
+| `[ProjectConfig].cs` | `$LDF_VERSION_FILE` or `config.version_file` |
 | `CHANGELOG.md` | `$LDF_CHANGELOG` or `config.changelog_path` |
 | `BUG_PATTERNS.md` | `$LDF_BUG_PATTERNS` or `config.bug_patterns_path` |
 | `BUG_TRACKER.md` | `$LDF_BUG_TRACKER` or `config.bug_tracker_path` |
