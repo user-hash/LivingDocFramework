@@ -2,9 +2,47 @@
 
 **Version:** v1.0.0 | **Status:** Production Ready | **License:** MIT
 
-> Documentation that enforces its own correctness.
+> A self-aware codebase that knows its own architecture, remembers its mistakes, and enforces its own rules.
 
-A governance layer for AI-assisted software development where understanding, intent, and architecture persist across sessions, agents, and team changes.
+---
+
+## The Big Idea
+
+**This is not a documentation tool. It's externalized cognition for software projects.**
+
+Traditional development relies on knowledge that lives in people's heads — architecture decisions, bug patterns, "don't touch that file" warnings, why we did things a certain way. When people leave (or AI sessions end), that knowledge is lost.
+
+This framework makes your **project self-aware**:
+
+| The project knows... | How |
+|---------------------|-----|
+| Its own architecture | `CODE_DOC_MAP.md` — every file mapped to its docs |
+| Its own rules | `INVARIANTS.md` — safety rules that block violations |
+| Its own mistakes | `BUG_PATTERNS.md` — documented anti-patterns with detection |
+| Its own decisions | `DECISIONS.md` — rationale preserved with context |
+| Its own health | Confidence scoring — measurable, not vibes |
+| Its own critical points | Tier A files — protected from casual edits |
+
+**The knowledge lives in the repo, not in anyone's head** — human or AI.
+
+---
+
+## Why This Matters Now
+
+AI-assisted development has a fundamental problem: **AI agents are stateless**.
+
+- Sessions end, context is lost
+- New session, same bugs reintroduced
+- Model upgrades, learned patterns forgotten
+- Team changes, tribal knowledge evaporates
+
+Other tools try to solve this by giving AI more context (MCP, RALPH, context files). But context without enforcement is just suggestions that can be ignored.
+
+**This framework enforces at the commit level.** The project itself blocks changes that violate its documented understanding.
+
+```
+The AI doesn't need to remember — the codebase remembers for it.
+```
 
 ---
 
@@ -50,6 +88,41 @@ Living Docs: "You cannot commit without updating docs" (enforced)
 - **Agent-resistant**: Works regardless of which AI model or version you use
 - **Turnover-resistant**: New team members (human or AI) inherit documented decisions
 - **Drift-resistant**: Stale documentation automatically degrades confidence scores
+
+---
+
+## A Cognitive System That Builds Itself
+
+This isn't just documentation you write once. It's a **living system that grows with your project**:
+
+### The Feedback Loop
+
+```
+Bug discovered → Document pattern → Detection rule added → Future bugs caught
+     ↓                                                            ↓
+Decision made → Record rationale → New dev reads it → Understands why
+     ↓                                                            ↓
+File edited → Map updated → AI knows what docs to read → Better changes
+```
+
+### What Gets Captured
+
+Every time you work, the system learns:
+
+- **Fix a bug?** → Pattern documented, detection grep added, future instances flagged
+- **Make an architectural choice?** → Decision recorded, alternatives noted, rationale preserved
+- **Touch a critical file?** → Invariant cited, blast radius calculated, change validated
+- **Ship a release?** → Confidence scored, gates checked, health measured
+
+### The Compound Effect
+
+After 6 months on Nebulae (181K LOC):
+- 64 bug patterns = 64 mistakes that won't repeat
+- 36 invariants = 36 rules that can't be violated
+- 284 mapped files = every file knows its documentation
+- 93% confidence = measurable, not "feels okay"
+
+**The longer you use it, the smarter your codebase becomes.**
 
 ---
 
