@@ -1,8 +1,24 @@
 # Living Documentation Framework
 
-**Version:** v1.0.0 | **Status:** Production Ready | **License:** MIT
+**Version:** v1.0.0 | **Status:** Production Ready | **License:** GNU AGPL v3
 
 > A self-aware codebase that knows its own architecture, remembers its mistakes, and enforces its own rules.
+
+---
+
+## Visual Overview
+
+<p align="center">
+  <img src="docs/images/overview.png" alt="Dashboard Overview" width="800">
+</p>
+
+<p align="center">
+  <img src="docs/images/trends.png" alt="Dashboard Trends" width="800">
+</p>
+
+<p align="center">
+  <img src="docs/images/timeseries.png" alt="Timeseries Analysis" width="800">
+</p>
 
 ---
 
@@ -453,13 +469,17 @@ Click a file → see known patterns, ADRs that justify it, historical blast radi
 
 ## System Architecture
 
-![System Architecture](docs/images/architecture-overview.png)
+<p align="center">
+  <img src="docs/images/architecture.png" alt="System Architecture" width="800">
+</p>
 
 The architecture is designed around one principle: **every change must update the knowledge base, so the next session starts smarter.**
 
 ### The Closed Feedback Loop
 
-![Feedback Loop](docs/images/feedback-loop.png)
+<p align="center">
+  <img src="docs/images/feedback-loop.png" alt="Feedback Loop" width="700">
+</p>
 
 **Why this matters for prompt quality:**
 - Git hooks ensure docs stay synchronized with code
@@ -483,9 +503,17 @@ The architecture is designed around one principle: **every change must update th
 
 ### Dashboard Metrics
 
-![Dashboard Overview](docs/images/dashboard-overview.png)
+<p align="center">
+  <img src="docs/images/overview.png" alt="Dashboard Overview" width="800">
+</p>
 
-![Dashboard Trends](docs/images/dashboard-trends.png)
+<p align="center">
+  <img src="docs/images/trends.png" alt="Dashboard Trends" width="800">
+</p>
+
+<p align="center">
+  <img src="docs/images/bug-tracker.png" alt="Bug Tracker" width="800">
+</p>
 
 | Metric | What It Measures |
 |--------|------------------|
@@ -659,7 +687,9 @@ Extracted from the **Nebulae project**:
 
 ### Key Benefits & ROI
 
-![Key Benefits and ROI](docs/images/Key%20benefits,%20ROI.png)
+<p align="center">
+  <img src="docs/images/Key%20benefits,%20ROI.png" alt="Key Benefits and ROI" width="800">
+</p>
 
 ---
 
@@ -904,7 +934,7 @@ We're actively looking for contributors, especially for **closing the agent comp
 
 ## License
 
-MIT License — see [LICENSE](LICENSE)
+AGPL v3 [LICENSE](LICENSE)
 
 ---
 
