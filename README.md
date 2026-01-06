@@ -9,15 +9,15 @@
 ## Visual Overview
 
 <p align="center">
-  <img src="docs/images/overview.png" alt="Dashboard Overview" width="800">
+  <img src="docs/images/publish/Overview.png" alt="Dashboard Overview" width="800">
 </p>
 
 <p align="center">
-  <img src="docs/images/trends.png" alt="Dashboard Trends" width="800">
+  <img src="docs/images/publish/Trends.png" alt="Dashboard Trends" width="800">
 </p>
 
 <p align="center">
-  <img src="docs/images/timeseries.png" alt="Timeseries Analysis" width="800">
+  <img src="docs/images/publish/Timeseries.png" alt="Timeseries Analysis" width="800">
 </p>
 
 ---
@@ -470,7 +470,7 @@ Click a file → see known patterns, ADRs that justify it, historical blast radi
 ## System Architecture
 
 <p align="center">
-  <img src="docs/images/architecture.png" alt="System Architecture" width="800">
+  <img src="docs/images/publish/Architecture.png" alt="System Architecture" width="800">
 </p>
 
 The architecture is designed around one principle: **every change must update the knowledge base, so the next session starts smarter.**
@@ -478,7 +478,7 @@ The architecture is designed around one principle: **every change must update th
 ### The Closed Feedback Loop
 
 <p align="center">
-  <img src="docs/images/feedback-loop.png" alt="Feedback Loop" width="700">
+  <img src="docs/images/publish/Loop.png" alt="Feedback Loop" width="800">
 </p>
 
 **Why this matters for prompt quality:**
@@ -504,15 +504,15 @@ The architecture is designed around one principle: **every change must update th
 ### Dashboard Metrics
 
 <p align="center">
-  <img src="docs/images/overview.png" alt="Dashboard Overview" width="800">
+  <img src="docs/images/publish/Overview.png" alt="Dashboard Overview" width="800">
 </p>
 
 <p align="center">
-  <img src="docs/images/trends.png" alt="Dashboard Trends" width="800">
+  <img src="docs/images/publish/Trends.png" alt="Dashboard Trends" width="800">
 </p>
 
 <p align="center">
-  <img src="docs/images/bug-tracker.png" alt="Bug Tracker" width="800">
+  <img src="docs/images/publish/BugTracker.png" alt="Bug Tracker" width="800">
 </p>
 
 | Metric | What It Measures |
@@ -688,7 +688,7 @@ Extracted from the **Nebulae project**:
 ### Key Benefits & ROI
 
 <p align="center">
-  <img src="docs/images/Key%20benefits,%20ROI.png" alt="Key Benefits and ROI" width="800">
+  <img src="docs/images/publish/ROI.png" alt="Key Benefits and ROI" width="800">
 </p>
 
 ---
