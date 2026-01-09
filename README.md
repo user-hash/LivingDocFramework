@@ -11,14 +11,17 @@
 <p align="center">
   <img src="docs/images/publish/Overview.png" alt="Dashboard Overview" width="800">
 </p>
+<p align="center"><em>Overview — Real-time project confidence, subsystem health, bug severity distribution, and penalty breakdown at a glance</em></p>
 
 <p align="center">
   <img src="docs/images/publish/Trends.png" alt="Dashboard Trends" width="800">
 </p>
+<p align="center"><em>Trends — Multi-metric history showing confidence trajectory, protection growth, coverage progress, and bug resolution over time</em></p>
 
 <p align="center">
-  <img src="docs/images/publish/Timeseries.png" alt="Timeseries Analysis" width="800">
+  <img src="docs/images/publish/ControlPlane.png" alt="Governance Control Plane" width="800">
 </p>
+<p align="center"><em>Control Plane — The governance flow from session start through enforcement gates to confidence scoring</em></p>
 
 ---
 
@@ -470,16 +473,18 @@ Click a file → see known patterns, ADRs that justify it, historical blast radi
 ## System Architecture
 
 <p align="center">
-  <img src="docs/images/publish/Architecture.png" alt="System Architecture" width="800">
+  <img src="docs/images/publish/ControlPlane.png" alt="Governance Control Plane" width="800">
 </p>
+<p align="center"><em>Governance Control Plane — Shows how session context flows through triggers, enforcement gates, and generates outputs including confidence scores</em></p>
 
 The architecture is designed around one principle: **every change must update the knowledge base, so the next session starts smarter.**
 
-### The Closed Feedback Loop
+### Documentation Structure
 
 <p align="center">
-  <img src="docs/images/publish/Loop.png" alt="Feedback Loop" width="800">
+  <img src="docs/images/publish/DocTree.png" alt="Documentation Tree Structure" width="800">
 </p>
+<p align="center"><em>Documentation Tree — Bug patterns, invariants, code maps, golden paths, and ADR decisions organized by category with file coverage by tier</em></p>
 
 **Why this matters for prompt quality:**
 - Git hooks ensure docs stay synchronized with code
@@ -506,14 +511,17 @@ The architecture is designed around one principle: **every change must update th
 <p align="center">
   <img src="docs/images/publish/Overview.png" alt="Dashboard Overview" width="800">
 </p>
-
-<p align="center">
-  <img src="docs/images/publish/Trends.png" alt="Dashboard Trends" width="800">
-</p>
+<p align="center"><em>Overview — Confidence scoring with penalty breakdown, subsystem health bars, and severity/pattern distribution charts</em></p>
 
 <p align="center">
   <img src="docs/images/publish/BugTracker.png" alt="Bug Tracker" width="800">
 </p>
+<p align="center"><em>Bug Tracker — Filterable bug list with GitHub issue sync, category breakdown, and resolution status by subsystem</em></p>
+
+<p align="center">
+  <img src="docs/images/publish/Timeseries.png" alt="Timeseries Analysis" width="800">
+</p>
+<p align="center"><em>Timeseries — Bug metrics over time with trend indicators, codebase growth tracking, and fix velocity analysis</em></p>
 
 | Metric | What It Measures |
 |--------|------------------|
