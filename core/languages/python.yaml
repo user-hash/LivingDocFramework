@@ -13,9 +13,11 @@ version:
     - "_version.py"
     - "__about__.py"
   patterns:
-    - '__version__\s*=\s*["\']([0-9.]+)["\']'  # __version__ = "1.2.3"
-    - 'version\s*=\s*["\']([0-9.]+)["\']'  # version = "1.2.3"
-    - 'VERSION\s*=\s*["\']([0-9.]+)["\']'  # VERSION = "1.2.3"
+  - 'version\s*=\s*"''["'']' # version = "1.2.3"
+  - 'version\s*=\s*"''["'']' # version = "1.2.3"
+  - 'VERSION\s*=\s*"''["'']' # VERSION = "1.2.3"
+
+
 
 # Code file patterns
 code:
