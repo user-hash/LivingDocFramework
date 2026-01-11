@@ -1,12 +1,52 @@
 # Living Documentation Framework
 
-**Version:** v1.1.0 | **Status:** Production Ready | **License:** GNU AGPL v3
+**Version:** v1.2.0 | **Status:** Production Ready | **License:** GNU AGPL v3
 
 > A self-aware codebase that knows its own architecture, remembers its mistakes, and enforces its own rules.
 
 ---
 
 ## Changelog
+
+### v1.2.0 (2026-01-11)
+**Major Update: Config-Driven Semantic Graph System**
+
+- **NEW: Schema Configuration Templates** ([schemas/README.md](schemas/README.md))
+  - 6 JSON schema templates for complete graph customization
+  - Node types, edge types, tiers, categories, discovery passes, regex patterns
+  - Zero hardcoding - everything via JSON config tables
+  - Copy templates to your project and customize
+
+- **NEW: ConfigLoader Module** ([tools/devmemory/config_loader.py](tools/devmemory/config_loader.py))
+  - Dynamic configuration loading with caching
+  - Automatic project root detection
+  - Tier classification (A/B/C/D) for files
+  - Category/system classification (9 categories)
+  - Validation and error handling
+
+- **UPDATED: 16-Pass Discovery Algorithm** (was 15)
+  - Structured data, markdown refs, code citations
+  - Test inference, system membership, golden path followers
+  - Code dependencies, inheritance, interfaces, namespaces
+  - Partial classes, versions, GitHub links, test files
+
+**Why These Changes:**
+
+The semantic graph system now uses **ZERO hardcoded values**. Every node type, edge type, tier definition, category, and regex pattern is loaded from JSON configuration files. This enables:
+- Easy customization for any project
+- Dashboard auto-configuration from schema
+- Portable, reusable graph definitions
+- Clear separation between framework and project-specific data
+
+**Schema Files:**
+| Template | Purpose |
+|----------|---------|
+| `node-types.template.json` | 12 node types (file, bug, version, pattern, etc.) |
+| `edge-types.template.json` | 6 edge types (fixed_in, depends_on, cites, etc.) |
+| `tiers.template.json` | Risk classification (A/B/C/D) |
+| `categories.template.json` | System categories (Audio, Multiplayer, etc.) |
+| `discovery-passes.template.json` | 16 discovery passes with confidence levels |
+| `regex-patterns.template.json` | Centralized regex patterns |
 
 ### v1.1.0 (2026-01-11)
 **Major Update: Claude Code 2.1.0 Support**
@@ -26,7 +66,7 @@
   - Event-driven cognitive memory system
   - 27 event types with strict schema validation
   - Session persistence and context inheritance
-  - Semantic graph with 15-pass discovery
+  - Semantic graph with 16-pass discovery (config-driven)
   - Artifact management with LRU caching
 
 - **NEW: 2-Layer Confidence Scoring** ([core/CONFIDENCE.md](core/CONFIDENCE.md))
@@ -765,17 +805,25 @@ The architecture is designed around one principle: **every change must update th
 
 ## What's Included
 
-### Core System (17 files)
+### Core System (23+ files)
 - **4 JSON Schemas**: Patterns, golden paths, invariants, decisions
 - **4 Markdown Templates**: Structured documentation formats
 - **2 Manifests**: `manifest.yaml`, `doc-system.yaml`
 - **5 Language Profiles**: Python, JavaScript, Go, Rust, C#
 - **Configuration Loaders**: Shell + Python
+- **6 Graph Schema Templates** (NEW in v1.2.0):
+  - `node-types.template.json` - Define entity types for your graph
+  - `edge-types.template.json` - Define relationship types
+  - `tiers.template.json` - File risk classification (A/B/C/D)
+  - `categories.template.json` - System/subsystem groupings
+  - `discovery-passes.template.json` - 16 passes with confidence levels
+  - `regex-patterns.template.json` - Centralized parsing patterns
 
 ### Automation Tools
 - **`confidence_engine.py`**: Advanced exponential-decay confidence scoring (VERIFIED)
 - **`github_sync.py`**: GitHub Issues ↔ local JSON sync (PARTIAL - import verified)
 - **`devmemory/`**: Cognitive session memory module
+  - `config_loader.py`: Dynamic JSON configuration loader (NEW in v1.2.0)
   - `session_memory.py`: Session state persistence (VERIFIED)
   - `event_stream.py`: Cognitive event logging (PARTIAL)
   - `wiring.py`: Component integration (PARTIAL)
@@ -819,6 +867,30 @@ python3 LivingDocFramework/tools/calculate_confidence.py
 ```
 
 See [SETUP.md](SETUP.md) for detailed configuration.
+
+### Optional: Configure Semantic Graph (v1.2.0+)
+
+For advanced codebase mapping with the semantic graph system:
+
+```bash
+# 1. Copy schema templates
+mkdir -p .claude/devmemory/schema
+cp LivingDocFramework/schemas/*.template.json .claude/devmemory/schema/
+
+# 2. Rename templates (remove .template suffix)
+cd .claude/devmemory/schema
+for f in *.template.json; do mv "$f" "${f%.template.json}.json"; done
+
+# 3. Customize for your project:
+#    - Add your critical files to tiers.json Tier A
+#    - Add your subsystems to categories.json
+#    - Adjust regex patterns for your naming conventions
+
+# 4. Run graph discovery
+python .claude/tools/devmemory/graph_builder.py discover
+```
+
+The ConfigLoader module automatically loads all configuration from these JSON files - zero hardcoding required.
 
 ---
 
