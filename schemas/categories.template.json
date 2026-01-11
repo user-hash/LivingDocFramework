@@ -1,0 +1,42 @@
+{
+  "version": "1.0.0",
+  "description": "System/category classifications for codebase organization. Add your subsystems.",
+  "categories": [
+    {
+      "id": "Core",
+      "label": "Core",
+      "color": "#4a9eff",
+      "path_patterns": ["/core/", "/src/core/"],
+      "keywords": ["Core", "Base", "Foundation"]
+    },
+    {
+      "id": "API",
+      "label": "API",
+      "color": "#a55eea",
+      "path_patterns": ["/api/", "/endpoints/"],
+      "keywords": ["API", "Endpoint", "Route"]
+    },
+    {
+      "id": "UI",
+      "label": "UI",
+      "color": "#81ecec",
+      "path_patterns": ["/ui/", "/components/", "/views/"],
+      "keywords": ["View", "Component", "Screen"]
+    },
+    {
+      "id": "Data",
+      "label": "Data",
+      "color": "#26de81",
+      "path_patterns": ["/data/", "/models/", "/db/"],
+      "keywords": ["Model", "Entity", "Repository"]
+    },
+    {
+      "id": "General",
+      "label": "General",
+      "color": "#dfe6e9",
+      "path_patterns": [],
+      "keywords": [],
+      "is_default": true
+    }
+  ]
+}

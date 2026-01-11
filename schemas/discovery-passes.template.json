@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "description": "Discovery pass configurations for semantic graph building. Enable/disable as needed.",
+  "passes": [
+    { "id": 1, "name": "structured_data", "confidence": 1.0, "enabled": true, "description": "Load from JSON data files (bugs, fingerprints)" },
+    { "id": 2, "name": "markdown_refs", "confidence": 0.95, "enabled": true, "description": "Parse doc cross-references (INV, PATTERN, ADR)" },
+    { "id": 3, "name": "code_citations", "confidence": 0.85, "enabled": true, "description": "Find references in code comments" },
+    { "id": 4, "name": "test_inference", "confidence": 0.70, "enabled": true, "description": "Infer test relationships from naming" },
+    { "id": 5, "name": "cleanup", "confidence": 1.0, "enabled": true, "description": "Remove malformed nodes, detect stale files" },
+    { "id": 6, "name": "code_dependencies", "confidence": 0.95, "enabled": true, "description": "Parse import/using statements" },
+    { "id": 7, "name": "inheritance", "confidence": 0.95, "enabled": true, "description": "Detect class inheritance" },
+    { "id": 8, "name": "interfaces", "confidence": 0.95, "enabled": true, "description": "Detect interface implementations" }
+  ]
+}
