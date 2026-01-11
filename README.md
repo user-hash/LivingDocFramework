@@ -18,11 +18,6 @@
 </p>
 <p align="center"><em>Trends — Multi-metric history showing confidence trajectory, protection growth, coverage progress, and bug resolution over time</em></p>
 
-<p align="center">
-  <img src="docs/images/publish/ControlPlane.png" alt="Governance Control Plane" width="800">
-</p>
-<p align="center"><em>Control Plane — The governance flow from session start through enforcement gates to confidence scoring</em></p>
-
 ---
 
 ## The Big Idea
@@ -99,6 +94,146 @@ To set expectations clearly:
    ```
 
 **Result:** 93% system confidence maintained across 6 months and 181K lines of code.
+
+---
+
+## Session Workflow: From Start to Finish
+
+The framework provides a complete session lifecycle that ensures context is never lost between development sessions.
+
+### The Complete Lifecycle
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          SESSION LIFECYCLE                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  SESSION START                                                       │   │
+│  │  ═══════════════                                                     │   │
+│  │                                                                      │   │
+│  │  1. GIT SYNC         → Fetch latest, check branch status             │   │
+│  │  2. LOAD VERSION     → Read current version from CHANGELOG.md        │   │
+│  │  3. CALCULATE SCORE  → Run confidence engine, get project health     │   │
+│  │  4. RESTORE CONTEXT  → Load previous session state (if exists)       │   │
+│  │  5. SHOW ACTIVITY    → Display recent commits, changes, open bugs    │   │
+│  │                                                                      │   │
+│  │  Output: Session ID, version, confidence %, previous session info    │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                        │
+│                                    ▼                                        │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  DURING SESSION                                                      │   │
+│  │  ══════════════                                                      │   │
+│  │                                                                      │   │
+│  │  • DevMemory tracks all file modifications automatically             │   │
+│  │  • Cognitive events logged (edits, agent spawns, fixes)              │   │
+│  │  • Confidence recalculated on significant changes                    │   │
+│  │  • Context maintained for spawned agents                             │   │
+│  │  • Git hooks enforce documentation updates                           │   │
+│  │                                                                      │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                        │
+│                                    ▼                                        │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  SESSION END                                                         │   │
+│  │  ═══════════                                                         │   │
+│  │                                                                      │   │
+│  │  1. SAVE STATE       → Persist session data for next session         │   │
+│  │  2. RECORD CHANGES   → Log all files modified during session         │   │
+│  │  3. FINAL SCORE      → Calculate ending confidence score             │   │
+│  │  4. GIT COMMIT       → Commit changes with proper messages           │   │
+│  │  5. CREATE HANDOFF   → Generate context summary for next session     │   │
+│  │                                                                      │   │
+│  │  Output: Session summary, confidence delta, files changed count      │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### How to Start a Session
+
+**Option 1: Manual Command**
+```bash
+# From your project root
+python tools/confidence_engine.py session-start
+```
+
+Output:
+```json
+{
+  "status": "started",
+  "session_id": "S-a1b2c3d4e5f6",
+  "version": "1.2.3",
+  "branch": "main",
+  "previous_session": {
+    "session_id": "S-previous123",
+    "confidence": 87.5,
+    "files_modified": 12
+  },
+  "confidence": 89.2
+}
+```
+
+**Option 2: Automatic via Claude Code Hooks**
+
+Add to `.claude/settings.json`:
+```json
+{
+  "hooks": {
+    "SessionStart": [{
+      "matcher": "",
+      "hooks": [{
+        "type": "command",
+        "command": "python tools/confidence_engine.py session-start"
+      }]
+    }]
+  }
+}
+```
+
+This runs automatically when Claude Code starts, ensuring you always begin with fresh context.
+
+**Option 3: Slash Command**
+
+Use the `/session-start` command (see `commands/session-start.md`).
+
+### How to End a Session
+
+```bash
+python tools/confidence_engine.py session-end
+```
+
+This saves:
+- Session duration and timestamps
+- All files modified during the session
+- Confidence score at start vs end
+- Context summary for next session handoff
+
+### What Gets Preserved Between Sessions
+
+| Data | Purpose | Example |
+|------|---------|---------|
+| **Session ID** | Track session continuity | `S-a1b2c3d4e5f6` |
+| **Version** | Track version at start/end | `1.2.3` → `1.2.4` |
+| **Confidence** | Measure improvement | `87.5%` → `89.2%` |
+| **Files Modified** | Know what changed | `["src/auth.py", "tests/test_auth.py"]` |
+| **Agents Spawned** | Track sub-agent activity | 3 agents, 2 completed |
+| **Events Count** | Activity metric | 47 cognitive events |
+
+### Why This Matters
+
+**Without session management:**
+- Each session starts from zero
+- Previous work context lost
+- Same bugs rediscovered
+- No continuity tracking
+
+**With session management:**
+- Resume where you left off
+- Know what was worked on
+- Track confidence trends
+- Seamless handoff between sessions
 
 ---
 
@@ -509,11 +644,6 @@ The architecture is designed around one principle: **every change must update th
 ### Dashboard Metrics
 
 <p align="center">
-  <img src="docs/images/publish/Overview.png" alt="Dashboard Overview" width="800">
-</p>
-<p align="center"><em>Overview — Confidence scoring with penalty breakdown, subsystem health bars, and severity/pattern distribution charts</em></p>
-
-<p align="center">
   <img src="docs/images/publish/BugTracker.png" alt="Bug Tracker" width="800">
 </p>
 <p align="center"><em>Bug Tracker — Filterable bug list with GitHub issue sync, category breakdown, and resolution status by subsystem</em></p>
@@ -640,83 +770,6 @@ python3 LivingDocFramework/tools/calculate_confidence.py
 ```
 
 See [SETUP.md](SETUP.md) for detailed configuration.
-
----
-
-## Session Workflow
-
-The framework provides a complete session lifecycle for AI-assisted development:
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                     SESSION LIFECYCLE                           │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  SESSION START                                                  │
-│  ─────────────                                                  │
-│  1. Git sync (fetch latest)                                     │
-│  2. Load version from CHANGELOG.md                              │
-│  3. Calculate confidence score                                  │
-│  4. Restore previous session context                            │
-│  5. Show recent activity                                        │
-│                                                                 │
-│  DURING SESSION                                                 │
-│  ──────────────                                                 │
-│  • Track file modifications                                     │
-│  • Log cognitive events                                         │
-│  • Update confidence on changes                                 │
-│  • Maintain context for agents                                  │
-│                                                                 │
-│  SESSION END                                                    │
-│  ───────────                                                    │
-│  1. Save session state                                          │
-│  2. Record files modified                                       │
-│  3. Store final confidence                                      │
-│  4. Commit and push changes                                     │
-│  5. Create handoff context for next session                     │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Using Session Commands
-
-**Manual invocation:**
-```bash
-# Start session
-python tools/confidence_engine.py session-start
-
-# End session
-python tools/confidence_engine.py session-end
-```
-
-**Automatic via Claude Code hooks:**
-
-Add to `.claude/settings.json`:
-```json
-{
-  "hooks": {
-    "SessionStart": [{
-      "matcher": "",
-      "hooks": [{
-        "type": "command",
-        "command": "python tools/confidence_engine.py session-start"
-      }]
-    }]
-  }
-}
-```
-
-See `examples/settings.json` for a complete hooks template.
-
-### What Gets Preserved Between Sessions
-
-| Data | Purpose |
-|------|---------|
-| Session ID | Track continuity |
-| Version at start/end | Track progress |
-| Confidence trajectory | Measure improvement |
-| Files modified | Know what changed |
-| Previous session summary | Context for next session |
 
 ---
 
