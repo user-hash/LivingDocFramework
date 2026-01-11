@@ -28,6 +28,15 @@ from datetime import datetime
 from typing import Dict, Any, Optional, List
 
 
+# Handle imports for both module and direct execution
+try:
+    from .session_memory import SessionMemory
+    from .event_stream import emit_event, emit_version_bump
+except ImportError:
+    from session_memory import SessionMemory
+    from event_stream import emit_event, emit_version_bump
+
+
 def wire_session_start(
     version: Optional[str] = None,
     branch: Optional[str] = None,
@@ -51,8 +60,6 @@ def wire_session_start(
 
     Status: VERIFIED
     """
-    from .session_memory import SessionMemory
-    from .event_stream import emit_event
 
     session = SessionMemory()
     result = {
@@ -125,8 +132,6 @@ def wire_session_end() -> Dict[str, Any]:
 
     Status: VERIFIED
     """
-    from .session_memory import SessionMemory
-    from .event_stream import emit_event
 
     session = SessionMemory()
     summary = session.get_summary()
@@ -153,8 +158,6 @@ def wire_version_change(
 
     Status: VERIFIED
     """
-    from .session_memory import SessionMemory
-    from .event_stream import emit_version_bump
 
     session = SessionMemory()
     if session.is_initialized():
