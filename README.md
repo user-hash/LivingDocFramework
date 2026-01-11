@@ -1,12 +1,13 @@
 # Living Documentation Framework
 
 **Version:** v1.2.0 | **Status:** Production Ready | **License:** GNU AGPL v3
- **🎉 Discord is live!** [Join the community](https://discord.gg/PggEsgXv)
+
  
 > A self-aware codebase that knows its own architecture, remembers its mistakes, and enforces its own rules.
 
 ---
-
+ **🎉 Discord is live!** [Join the community](https://discord.gg/PggEsgXv)
+ 
 ## Changelog
 
 ### v1.2.0 (2026-01-11)
