@@ -11,6 +11,7 @@
 ## Changelog
 
 ### v1.2.0 (2026-01-11)
+****Discord Group Living Doc Framework: *🎉 Discord is live!** [Join the community](https://discord.gg/PggEsgXv)**
 **Major Update: Config-Driven Semantic Graph System**
 
 - **NEW: Schema Configuration Templates** ([schemas/README.md](schemas/README.md))
