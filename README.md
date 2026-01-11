@@ -1,6 +1,6 @@
 # Living Documentation Framework
 
-**Version:** v1.0.0 | **Status:** Production Ready | **License:** GNU AGPL v3
+**Version:** v1.0.1 | **Status:** Production Ready | **License:** GNU AGPL v3
 
 > A self-aware codebase that knows its own architecture, remembers its mistakes, and enforces its own rules.
 
@@ -593,9 +593,15 @@ The architecture is designed around one principle: **every change must update th
 - **5 Language Profiles**: Python, JavaScript, Go, Rust, C#
 - **Configuration Loaders**: Shell + Python
 
-### Automation
-- **`calculate_confidence.py`**: Exponential-decay health scoring
-- **14 additional tools**: Documented with extraction guide
+### Automation Tools
+- **`confidence_engine.py`**: Advanced exponential-decay confidence scoring (VERIFIED)
+- **`github_sync.py`**: GitHub Issues ↔ local JSON sync (PARTIAL - import verified)
+- **`devmemory/`**: Cognitive session memory module
+  - `session_memory.py`: Session state persistence (VERIFIED)
+  - `event_stream.py`: Cognitive event logging (PARTIAL)
+  - `wiring.py`: Component integration (PARTIAL)
+- **`calculate_confidence.py`**: Legacy confidence calculator
+- **See [TOOLS_STATUS.md](tools/TOOLS_STATUS.md)** for detailed status of each feature
 
 ### Git Hooks
 - **`pre-commit`**: Documentation enforcement
@@ -795,17 +801,25 @@ This framework raises the floor, not the ceiling. It makes careless mistakes har
 
 ### What's Fully Extracted (Ready to Use)
 
-| Tool | Purpose | Lines |
-|------|---------|-------|
-| `calculate_confidence.py` | Exponential-decay confidence scoring | 465 |
-| `config.py` | Python configuration loader | 220 |
-| `load-config.sh` | Shell configuration loader | ~200 |
-| `hooks/pre-commit` | Block commits without doc updates | 136 |
-| `hooks/post-commit` | Auto-update triggers | ~30 |
-| `hooks/commit-msg` | Message validation | ~50 |
-| `hooks/install.sh` | One-command hook setup | ~50 |
-| `protocols/AGENT_PROTOCOL.md` | AI agent compliance rules | — |
-| `commands/living-docs.md` | Slash command for context loading | — |
+| Tool | Purpose | Status |
+|------|---------|--------|
+| `confidence_engine.py` | Advanced confidence scoring with config | ✅ VERIFIED |
+| `github_sync.py` | GitHub Issues ↔ local JSON sync | 🔧 PARTIAL |
+| `devmemory/session_memory.py` | Session state persistence | ✅ VERIFIED |
+| `devmemory/event_stream.py` | Cognitive event logging | 🔧 PARTIAL |
+| `devmemory/wiring.py` | Component integration | 🔧 PARTIAL |
+| `calculate_confidence.py` | Legacy confidence calculator | ✅ Available |
+| `config.py` | Python configuration loader | ✅ Available |
+| `load-config.sh` | Shell configuration loader | ✅ Available |
+| `hooks/pre-commit` | Block commits without doc updates | ✅ Available |
+| `hooks/post-commit` | Auto-update triggers | ✅ Available |
+| `hooks/commit-msg` | Message validation | ✅ Available |
+| `hooks/install.sh` | One-command hook setup | ✅ Available |
+| `protocols/AGENT_PROTOCOL.md` | AI agent compliance rules | ✅ Available |
+
+**Status Legend:** ✅ VERIFIED = Production tested | 🔧 PARTIAL = Core features work, some experimental
+
+See **[TOOLS_STATUS.md](tools/TOOLS_STATUS.md)** for detailed feature-by-feature status.
 
 All tools use the central config system — **no hardcoded paths**.
 
@@ -885,6 +899,7 @@ $LDF_BUG_TRACKER              # Configured doc path
 | [Agent Protocol](protocols/AGENT_PROTOCOL.md) | AI agent compliance rules |
 | [Commands README](commands/README.md) | Slash command reference |
 | [Tools README](tools/README.md) | Tool documentation & extraction |
+| [Tools Status](tools/TOOLS_STATUS.md) | **What works vs what doesn't** |
 | [Examples](examples/) | Sample project configurations |
 
 ---
