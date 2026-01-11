@@ -1,8 +1,57 @@
 # Living Documentation Framework
 
-**Version:** v1.0.1 | **Status:** Production Ready | **License:** GNU AGPL v3
+**Version:** v1.1.0 | **Status:** Production Ready | **License:** GNU AGPL v3
 
 > A self-aware codebase that knows its own architecture, remembers its mistakes, and enforces its own rules.
+
+---
+
+## Changelog
+
+### v1.1.0 (2026-01-11)
+**Major Update: Claude Code 2.1.0 Support**
+
+- **NEW: CC 2.1.0 Skill-Scoped Hooks** ([hooks/CC-2.1.0-HOOKS.md](hooks/CC-2.1.0-HOOKS.md))
+  - Frontmatter-based hook definitions in skill files
+  - PreToolUse, PostToolUse, Stop lifecycle stages
+  - Matcher patterns for tool-specific hooks
+  - Self-contained, portable skill definitions
+
+- **NEW: Hook Lifecycle Documentation** ([hooks/LIFECYCLE.md](hooks/LIFECYCLE.md))
+  - Complete 4-stage lifecycle: SessionStart → PreToolUse → PostToolUse → Stop
+  - Timing diagrams and execution order
+  - Debugging guide for hook issues
+
+- **NEW: DevMemory Architecture** ([core/DEVMEMORY.md](core/DEVMEMORY.md))
+  - Event-driven cognitive memory system
+  - 27 event types with strict schema validation
+  - Session persistence and context inheritance
+  - Semantic graph with 15-pass discovery
+  - Artifact management with LRU caching
+
+- **NEW: 2-Layer Confidence Scoring** ([core/CONFIDENCE.md](core/CONFIDENCE.md))
+  - Code Health (60%): Runtime risk factors
+  - Knowledge Health (40%): Cognitive coverage
+  - Explainable AI with factor breakdown
+  - Trend analysis and alerts
+
+**Why These Changes:**
+
+These patterns evolved from 900+ versions of real-world AI-assisted development on a 175K-line codebase. The key insight: **AI sessions are stateless, but codebases shouldn't be.**
+
+The CC 2.1.0 hook system enables skills to define their own behavior without polluting global configuration. DevMemory provides persistent cognitive context that survives session boundaries. The 2-layer confidence scoring gives objective, explainable health metrics instead of vibes.
+
+Together, these enable **continuous memory** for AI-assisted development:
+- Sessions end, but context is preserved
+- Patterns discovered once are never forgotten
+- Health is measured, not guessed
+- Skills are self-documenting and portable
+
+### v1.0.1 (2026-01-10)
+- Initial public release
+- Core documentation structure
+- Basic hook templates
+- Manifest system
 
 ---
 

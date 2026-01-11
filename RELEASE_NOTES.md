@@ -1,4 +1,72 @@
-# Living Documentation Framework v1.0.0 - Release Notes
+# Living Documentation Framework - Release Notes
+
+---
+
+## v1.1.0 - Claude Code 2.1.0 Support
+
+**Release Date**: 2026-01-11
+**Status**: Production Ready
+**Based On**: Nebulae Project (v0.916.36)
+
+### New Features
+
+#### CC 2.1.0 Skill-Scoped Hooks
+Skills can now define their own hooks via YAML frontmatter, without modifying global configuration:
+
+```yaml
+---
+name: bug-fix
+hooks:
+  PreToolUse:
+    - matcher: "Edit"
+      hooks:
+        - type: command
+          command: "python handler.py pre-edit"
+---
+```
+
+**New Files:**
+- `hooks/CC-2.1.0-HOOKS.md` - Comprehensive guide to frontmatter hooks
+- `hooks/LIFECYCLE.md` - 4-stage hook lifecycle documentation
+
+#### DevMemory: Cognitive Development Memory
+Event-driven memory system that persists context across AI sessions:
+
+- 27 strict event types with schema validation
+- Session tracking with context inheritance
+- 15-pass semantic graph discovery
+- Artifact management with LRU caching
+
+**New Files:**
+- `core/DEVMEMORY.md` - Architecture documentation
+
+#### 2-Layer Confidence Scoring
+Objective, explainable health metrics:
+
+- Code Health (60%): Runtime risk factors
+- Knowledge Health (40%): Cognitive coverage
+- Trend analysis with alerts
+
+**New Files:**
+- `core/CONFIDENCE.md` - Methodology documentation
+
+### Why This Update
+
+These patterns emerged from 900+ versions of real-world AI-assisted development. The core insight: AI sessions are stateless, but project knowledge shouldn't be lost between sessions.
+
+The CC 2.1.0 hook system makes skills self-contained and portable. DevMemory provides persistent memory across sessions. Confidence scoring replaces "vibes" with objective metrics.
+
+---
+
+## v1.0.1 - Initial Public Release
+
+**Release Date**: 2026-01-10
+**Status**: Production Ready
+**Extracted From**: Nebulae Project (v0.913+)
+
+---
+
+## v1.0.0 - Foundation Release
 
 **Release Date**: 2026-01-04
 **Status**: Production Ready
@@ -6,7 +74,7 @@
 
 ---
 
-## 🎉 What's Included
+## What's Included (v1.0.0)
 
 ### Core System (17 files)
 - ✅ 4 JSON schemas (pattern, golden-path, invariant, decision)
