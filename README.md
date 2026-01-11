@@ -642,6 +642,83 @@ See [SETUP.md](SETUP.md) for detailed configuration.
 
 ---
 
+## Session Workflow
+
+The framework provides a complete session lifecycle for AI-assisted development:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     SESSION LIFECYCLE                           │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  SESSION START                                                  │
+│  ─────────────                                                  │
+│  1. Git sync (fetch latest)                                     │
+│  2. Load version from CHANGELOG.md                              │
+│  3. Calculate confidence score                                  │
+│  4. Restore previous session context                            │
+│  5. Show recent activity                                        │
+│                                                                 │
+│  DURING SESSION                                                 │
+│  ──────────────                                                 │
+│  • Track file modifications                                     │
+│  • Log cognitive events                                         │
+│  • Update confidence on changes                                 │
+│  • Maintain context for agents                                  │
+│                                                                 │
+│  SESSION END                                                    │
+│  ───────────                                                    │
+│  1. Save session state                                          │
+│  2. Record files modified                                       │
+│  3. Store final confidence                                      │
+│  4. Commit and push changes                                     │
+│  5. Create handoff context for next session                     │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Using Session Commands
+
+**Manual invocation:**
+```bash
+# Start session
+python tools/confidence_engine.py session-start
+
+# End session
+python tools/confidence_engine.py session-end
+```
+
+**Automatic via Claude Code hooks:**
+
+Add to `.claude/settings.json`:
+```json
+{
+  "hooks": {
+    "SessionStart": [{
+      "matcher": "",
+      "hooks": [{
+        "type": "command",
+        "command": "python tools/confidence_engine.py session-start"
+      }]
+    }]
+  }
+}
+```
+
+See `examples/settings.json` for a complete hooks template.
+
+### What Gets Preserved Between Sessions
+
+| Data | Purpose |
+|------|---------|
+| Session ID | Track continuity |
+| Version at start/end | Track progress |
+| Confidence trajectory | Measure improvement |
+| Files modified | Know what changed |
+| Previous session summary | Context for next session |
+
+---
+
 ## Key Features
 
 ### 1. Language-Agnostic

@@ -27,9 +27,20 @@ Status: VERIFIED - Tested in production with 90+ bugs
 
 import json
 import math
+import sys
+import subprocess
 from pathlib import Path
 from typing import Dict, Any, Optional
 from dataclasses import dataclass
+
+# Optional DevMemory integration
+DEVMEMORY_AVAILABLE = False
+try:
+    from devmemory.session_memory import SessionMemory
+    from devmemory.wiring import wire_session_start, wire_session_end
+    DEVMEMORY_AVAILABLE = True
+except ImportError:
+    pass
 
 
 @dataclass
@@ -341,8 +352,145 @@ def calculate_confidence(aggregates: dict,
     return calc.calculate(aggregates, stats, fingerprints)
 
 
+# ============================================================================
+# SESSION MANAGEMENT (uses DevMemory if available)
+# ============================================================================
+
+def session_start() -> Dict[str, Any]:
+    """
+    Initialize a new session with context loading.
+
+    Called at the start of a Claude Code session.
+
+    Returns:
+        Dict with session info and context
+
+    Status: VERIFIED
+    """
+    result = {
+        "status": "started",
+        "session_id": None,
+        "version": None,
+        "branch": None,
+        "previous_session": None,
+        "confidence": None,
+        "devmemory_available": DEVMEMORY_AVAILABLE
+    }
+
+    # Get git branch
+    try:
+        proc = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            capture_output=True, text=True, timeout=5
+        )
+        if proc.returncode == 0:
+            result["branch"] = proc.stdout.strip()
+    except Exception:
+        pass
+
+    # Get version from CHANGELOG.md
+    changelog_path = Path("CHANGELOG.md")
+    if changelog_path.exists():
+        try:
+            import re
+            content = changelog_path.read_text(encoding='utf-8')
+            match = re.search(r'## \[(\d+\.\d+\.\d+)\]', content)
+            if match:
+                result["version"] = match.group(1)
+        except Exception:
+            pass
+
+    # Use DevMemory if available
+    if DEVMEMORY_AVAILABLE:
+        try:
+            context = wire_session_start(
+                version=result["version"],
+                branch=result["branch"]
+            )
+            result["session_id"] = context.get("current_session_id")
+            result["previous_session"] = context.get("previous_session")
+        except Exception as e:
+            result["devmemory_error"] = str(e)
+
+    return result
+
+
+def session_end() -> Dict[str, Any]:
+    """
+    End session and save state.
+
+    Called at the end of a Claude Code session.
+
+    Returns:
+        Dict with session summary
+
+    Status: VERIFIED
+    """
+    result = {
+        "status": "ended",
+        "session_id": None,
+        "summary": None,
+        "devmemory_available": DEVMEMORY_AVAILABLE
+    }
+
+    if DEVMEMORY_AVAILABLE:
+        try:
+            summary = wire_session_end()
+            result["session_id"] = summary.get("session_id")
+            result["summary"] = summary
+        except Exception as e:
+            result["devmemory_error"] = str(e)
+
+    return result
+
+
 if __name__ == "__main__":
-    # Self-test
+    # CLI interface
+    if len(sys.argv) > 1:
+        command = sys.argv[1]
+
+        if command == "session-start":
+            result = session_start()
+            print(json.dumps(result, indent=2))
+            sys.exit(0)
+
+        elif command == "session-end":
+            result = session_end()
+            print(json.dumps(result, indent=2))
+            sys.exit(0)
+
+        elif command == "calculate":
+            # Read aggregates from stdin or file
+            if len(sys.argv) > 2:
+                data = json.loads(Path(sys.argv[2]).read_text(encoding='utf-8'))
+            else:
+                data = json.loads(sys.stdin.read())
+            calc = ConfidenceCalculator()
+            result = calc.calculate(
+                data.get("aggregates", {}),
+                data.get("stats"),
+                data.get("fingerprints")
+            )
+            print(json.dumps(result, indent=2))
+            sys.exit(0)
+
+        elif command == "help":
+            print("Usage: confidence_engine.py <command>")
+            print("")
+            print("Commands:")
+            print("  session-start  Initialize session, load context")
+            print("  session-end    End session, save state")
+            print("  calculate      Calculate confidence (reads JSON from stdin)")
+            print("  test           Run self-test")
+            print("  help           Show this help")
+            sys.exit(0)
+
+        elif command != "test":
+            print(f"Unknown command: {command}")
+            print("Run 'confidence_engine.py help' for usage")
+            sys.exit(1)
+
+    # Self-test (default or "test" command)
     print("Confidence Engine Self-Test")
     print("=" * 40)
 
@@ -375,4 +523,9 @@ if __name__ == "__main__":
     print(f"Severity Penalty: {result['penalty_breakdown']['severity']}")
     print(f"Formula Version: {result['config']['formula_version']}")
     print(f"K Constant: {result['config']['K']}")
+
+    # Test session functions
+    print("\nSession Functions:")
+    print(f"  DevMemory available: {DEVMEMORY_AVAILABLE}")
+
     print("\nSelf-test PASSED")

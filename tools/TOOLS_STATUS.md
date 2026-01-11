@@ -24,6 +24,7 @@ This document provides honest status information about each tool in the Living D
 **Status:** ✅ **VERIFIED**
 
 Calculates project confidence score using exponential decay formula.
+Also provides session management commands for Claude Code integration.
 
 | Feature | Status | Notes |
 |---------|--------|-------|
@@ -31,8 +32,19 @@ Calculates project confidence score using exponential decay formula.
 | Config loading | ✅ VERIFIED | Falls back to defaults if no config |
 | Penalty breakdown | ✅ VERIFIED | All components calculated correctly |
 | Subsystem scores | ⚠️ EXPERIMENTAL | Works but less tested |
+| session-start | ✅ VERIFIED | Initializes session, loads context |
+| session-end | ✅ VERIFIED | Saves session state |
 
-**Dependencies:** None (standalone)
+**CLI Commands:**
+```bash
+python confidence_engine.py session-start  # Initialize session
+python confidence_engine.py session-end    # End session
+python confidence_engine.py calculate      # Calculate confidence (stdin)
+python confidence_engine.py test           # Run self-test
+python confidence_engine.py help           # Show help
+```
+
+**Dependencies:** Optional: devmemory module (for full session tracking)
 
 ---
 
