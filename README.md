@@ -629,8 +629,9 @@ cp LivingDocFramework/core/project-config.template.yaml living-doc-config.yaml
 ./LivingDocFramework/hooks/install.sh
 
 # 4. Initialize documentation
-mkdir -p docs
-touch CHANGELOG.md BUG_TRACKER.md
+mkdir -p docs .claude/dashboard
+cp LivingDocFramework/core/templates/changelog.template.md CHANGELOG.md
+cp LivingDocFramework/core/templates/bug-tracker.template.md BUG_TRACKER.md
 cp LivingDocFramework/core/templates/bug-patterns.template.md BUG_PATTERNS.md
 touch docs/INVARIANTS.md docs/GOLDEN_PATHS.md docs/DECISIONS.md docs/CODE_DOC_MAP.md
 

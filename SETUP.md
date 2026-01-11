@@ -55,13 +55,20 @@ version:
 # Create required directories
 mkdir -p docs .claude/dashboard
 
-# Create required files (you can copy templates as starting points)
-touch CHANGELOG.md BUG_TRACKER.md
+# Create required files from templates
+cp LivingDocFramework/core/templates/changelog.template.md CHANGELOG.md
+cp LivingDocFramework/core/templates/bug-tracker.template.md BUG_TRACKER.md
 cp LivingDocFramework/core/templates/bug-patterns.template.md BUG_PATTERNS.md
 touch docs/INVARIANTS.md docs/GOLDEN_PATHS.md docs/DECISIONS.md docs/CODE_DOC_MAP.md
 ```
 
-> **Tip**: See `core/templates/` for templates of all documentation files.
+> **Tip**: See `core/templates/` for templates of all documentation files:
+> - `changelog.template.md` - Version tracking
+> - `bug-tracker.template.md` - Bug management
+> - `bug-patterns.template.md` - Anti-pattern documentation
+> - `invariant.template.md` - Safety rules
+> - `golden-path.template.md` - Proven patterns
+> - `decision.template.md` - Architecture decisions
 
 ### 4. Install Git Hooks
 
