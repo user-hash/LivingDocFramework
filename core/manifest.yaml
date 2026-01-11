@@ -256,7 +256,7 @@ hooks:
     - action: load_context
       files: [CURRENT_WORK.md, CLAUDE.md]
     - action: version_check
-      compare: [local, origin/{{MAIN_BRANCH}}]
+      compare: [local, "origin/{{MAIN_BRANCH}}"]
     - action: staleness_check
       max_age: "7d"
 
