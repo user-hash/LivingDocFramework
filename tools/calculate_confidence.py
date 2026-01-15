@@ -16,13 +16,11 @@ Usage:
     python tools/calculate_confidence.py --update     # Update history.json
 """
 
-import os
 import sys
 import json
 import math
 import re
-import subprocess
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Optional, Any
 
@@ -77,7 +75,7 @@ def get_severity_counts(config) -> Dict[str, int]:
                 counts['p2'] += int(row[2])
                 counts['p3'] += int(row[3])
 
-    except Exception as e:
+    except (OSError, IOError, UnicodeDecodeError) as e:
         print(f"Warning: Could not read {bug_tracker.name}: {e}", file=sys.stderr)
 
     return counts
@@ -101,7 +99,7 @@ def get_bug_resolution_metrics(config) -> Dict[str, int]:
             metrics['bugs_total'] = int(total_match.group(1).replace(',', ''))
         if fixed_match:
             metrics['bugs_fixed'] = int(fixed_match.group(1).replace(',', ''))
-    except Exception as e:
+    except (OSError, IOError, UnicodeDecodeError) as e:
         print(f"Warning: Could not read {bug_tracker.name}: {e}", file=sys.stderr)
 
     return metrics
@@ -135,17 +133,66 @@ def get_doc_coverage_metrics(config) -> Dict[str, int]:
             tier_a_files = set(re.findall(rf'`([^`]+\.{ext})`', tier_a_section.group(0)))
             # For now, assume all Tier-A are documented if they appear
             metrics['tier_a_unmapped'] = 0
-    except Exception as e:
+    except (OSError, IOError, UnicodeDecodeError) as e:
         print(f"Warning: Could not read CODE_DOC_MAP.md: {e}", file=sys.stderr)
 
     return metrics
 
 
 def get_staleness_metrics(config) -> Dict[str, Any]:
-    """Check for staleness - placeholder for now."""
-    # TODO: Implement staleness detection
-    # For now, return default values
-    metrics = {'stale_count': 0, 'avg_staleness': 0, 'tier_a_stale_count': 0}
+    """Check documentation staleness based on file modification times.
+
+    Staleness is measured as days since last modification.
+    A document is considered "stale" if it hasn't been updated in 30+ days.
+    Tier-A documents have a stricter threshold of 21 days.
+
+    Returns:
+        Dict with stale_count, avg_staleness (days), and tier_a_stale_count
+    """
+    metrics = {'stale_count': 0, 'avg_staleness': 0.0, 'tier_a_stale_count': 0}
+
+    # Documentation files to check
+    doc_files = [
+        (config.invariants_path, True),      # Tier A
+        (config.code_doc_map_path, True),    # Tier A
+        (config.bug_patterns_path, False),   # Tier B
+        (config.golden_paths_path, False),   # Tier B
+        (config.decisions_path, False),      # Tier B
+        (config.changelog_path, False),      # Tier B
+    ]
+
+    now = datetime.now(timezone.utc)
+    staleness_days = []
+    stale_threshold = 30  # days
+    tier_a_threshold = 21  # days - stricter for critical docs
+
+    for doc_path, is_tier_a in doc_files:
+        if not doc_path.exists():
+            continue
+
+        try:
+            # Get file modification time
+            mtime = doc_path.stat().st_mtime
+            mod_time = datetime.fromtimestamp(mtime, tz=timezone.utc)
+            days_old = (now - mod_time).days
+            staleness_days.append(days_old)
+
+            # Check if stale
+            if days_old >= stale_threshold:
+                metrics['stale_count'] += 1
+
+            # Check Tier-A staleness (stricter threshold)
+            if is_tier_a and days_old >= tier_a_threshold:
+                metrics['tier_a_stale_count'] += 1
+
+        except (OSError, IOError):
+            # Skip files we can't stat
+            continue
+
+    # Calculate average staleness
+    if staleness_days:
+        metrics['avg_staleness'] = sum(staleness_days) / len(staleness_days)
+
     return metrics
 
 
@@ -160,7 +207,7 @@ def get_test_metrics(config) -> Dict[str, int]:
         # Find test files
         test_files = config.find_test_files()
         metrics['tests_count'] = len(test_files)
-    except Exception as e:
+    except (OSError, IOError) as e:
         print(f"Warning: Could not count files: {e}", file=sys.stderr)
 
     return metrics
@@ -179,7 +226,7 @@ def get_previous_score(config) -> Optional[float]:
         history = data.get('history', [])
         if history:
             return history[-1].get('confidence')
-    except Exception as e:
+    except (OSError, IOError, json.JSONDecodeError, KeyError, TypeError) as e:
         print(f"Warning: Could not read history.json: {e}", file=sys.stderr)
 
     return None
@@ -455,7 +502,7 @@ def main():
 
             if not json_mode:
                 print(f"Updated history.json with score: {result['score']}")
-        except Exception as e:
+        except (OSError, IOError, json.JSONDecodeError, KeyError, TypeError) as e:
             print(f"Error updating history.json: {e}", file=sys.stderr)
 
     return 0

@@ -1,0 +1,9 @@
+# Living Documentation Framework - Python Dependencies
+# Install with: pip install -r requirements.txt
+
+# Required: YAML configuration parsing
+PyYAML>=6.0,<7.0
+
+# Development dependencies (optional)
+# pytest>=7.0  # For running tests
+# pytest-cov>=4.0  # For coverage reports

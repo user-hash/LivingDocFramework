@@ -95,7 +95,30 @@ cd examples/js-project
 
 ### Automated Testing
 
-(TODO: Add automated tests)
+Run the test suite with pytest:
+
+```bash
+# Install test dependencies
+pip install -r requirements.txt
+pip install pytest
+
+# Run all tests
+pytest
+
+# Run with verbose output
+pytest -v
+
+# Run specific test file
+pytest tests/test_config.py
+pytest tests/test_calculate_confidence.py
+
+# Run with coverage (requires pytest-cov)
+pytest --cov=core --cov=tools
+```
+
+Tests are located in the `tests/` directory:
+- `test_config.py` - Configuration loader tests
+- `test_calculate_confidence.py` - Confidence scoring tests
 
 ## Adding Language Support
 
