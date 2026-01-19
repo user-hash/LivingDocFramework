@@ -41,29 +41,55 @@ if [ ! -f "$CONFIG_FILE" ]; then
     return 0 2>/dev/null || exit 0
 fi
 
-# Parse YAML (simple grep-based parser)
+# Parse YAML (improved grep-based parser)
+# Handles flexible indentation and section-aware field extraction
 parse_yaml() {
     local file="$1"
 
-    local proj_name=$(grep "^  name:" "$file" | sed 's/.*name: *"\?\([^"]*\)"\?.*/\1/' | tr -d '\n')
+    # Helper: extract value from "key: value" or "key: "value""
+    extract_value() {
+        sed 's/.*: *"\?\([^"]*\)"\?.*/\1/' | tr -d '\n\r'
+    }
+
+    # Helper: get field value from a specific section
+    # Usage: get_section_field "section:" "field:" file
+    get_section_field() {
+        local section="$1"
+        local field="$2"
+        local file="$3"
+        # Find section, then get first matching field after it (before next section)
+        awk -v section="$section" -v field="$field" '
+            $0 ~ "^"section { in_section=1; next }
+            in_section && /^[a-z]/ { in_section=0 }
+            in_section && $0 ~ "^  "field {
+                gsub(/.*: *"?/, ""); gsub(/"? *$/, ""); print; exit
+            }
+        ' "$file"
+    }
+
+    # Project section (unique fields - simple grep works)
+    local proj_name=$(grep -E "^  name:" "$file" | head -1 | extract_value)
     [ -n "$proj_name" ] && export LDF_PROJECT_NAME="$proj_name"
 
-    local lang=$(grep "^  language:" "$file" | sed 's/.*language: *"\?\([^"]*\)"\?.*/\1/' | tr -d '\n')
+    local lang=$(grep -E "^  language:" "$file" | extract_value)
     [ -n "$lang" ] && export LDF_LANGUAGE="$lang"
 
-    local branch=$(grep "^  main_branch:" "$file" | sed 's/.*main_branch: *"\?\([^"]*\)"\?.*/\1/' | tr -d '\n')
+    local branch=$(grep -E "^  main_branch:" "$file" | extract_value)
     [ -n "$branch" ] && export LDF_MAIN_BRANCH="$branch"
 
-    local ver_file=$(grep "^  file:" "$file" | head -1 | sed 's/.*file: *"\?\([^"]*\)"\?.*/\1/' | tr -d '\n')
+    # Version section - use section-aware extraction
+    local ver_file=$(get_section_field "version:" "file:" "$file")
     [ -n "$ver_file" ] && export LDF_VERSION_FILE="$ver_file"
 
-    local ver_pattern=$(grep "^  pattern:" "$file" | head -1 | sed 's/.*pattern: *"\?\([^"]*\)"\?.*/\1/' | tr -d '\n')
+    local ver_pattern=$(get_section_field "version:" "pattern:" "$file")
     [ -n "$ver_pattern" ] && export LDF_VERSION_PATTERN="$ver_pattern"
 
-    local code_root=$(grep "^  root:" "$file" | head -1 | sed 's/.*root: *"\?\([^"]*\)"\?.*/\1/' | tr -d '\n')
+    # Code section
+    local code_root=$(get_section_field "code:" "root:" "$file")
     [ -n "$code_root" ] && export LDF_CODE_ROOT="$code_root"
 
-    local test_pattern=$(grep "^  pattern:" "$file" | tail -1 | sed 's/.*pattern: *"\?\([^"]*\)"\?.*/\1/' | tr -d '\n')
+    # Tests section
+    local test_pattern=$(get_section_field "tests:" "pattern:" "$file")
     [ -n "$test_pattern" ] && export LDF_TEST_PATTERN="$test_pattern"
 }
 

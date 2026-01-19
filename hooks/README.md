@@ -121,14 +121,54 @@ hooks:
       enabled: false
 ```
 
+## CODE_DOC_MAP Format Requirements
+
+Entries in CODE_DOC_MAP.md **must** follow these rules for Tier-A detection to work:
+
+### 1. Use Repo-Relative Paths
+
+Paths must be relative to the project root, not basenames:
+
+```markdown
+| `src/api/auth.py` | TIER A | Authentication |     ← CORRECT
+| `auth.py` | TIER A | Authentication |              ← WRONG (ambiguous)
+```
+
+**Why?** Basenames like `auth.py` or `Utils.cs` could match multiple files across subsystems. Repo-relative paths ensure deterministic matching.
+
+### 2. Use Backticks Around Paths
+
+The hook uses fixed-string grep matching on `` `path` `` format:
+
+```markdown
+| `src/api/auth.py` | TIER A | Authentication |     ← CORRECT (detected)
+| src/api/auth.py | TIER A | Authentication |       ← WRONG (not detected)
+```
+
+**Why?** Backticks provide unambiguous delimiters for grep matching and are standard markdown code formatting.
+
+### 3. Include "TIER A" on the Same Line
+
+The Tier A token must appear on the same line as the file path:
+
+```markdown
+| `src/api/auth.py` | TIER A | Authentication |     ← CORRECT
+
+## Tier A Files                                      ← Section header alone won't work
+| `src/api/auth.py` | Critical | Authentication |   ← WRONG (no TIER A on this line)
+```
+
+---
+
 ## Known Limitations
 
-### YAML Parser
-The config loader uses a simple grep-based YAML parser (when `yq` is not installed). It expects:
-- Exactly 2 spaces of indentation
-- Standard field ordering
+### YAML Parser (Fallback)
 
-For complex configurations, install `yq` for robust parsing:
+When `yq` is not installed, the config loader uses a section-aware grep/awk parser. It handles most configurations correctly but expects:
+- 2-space indentation for nested fields
+- Standard YAML structure
+
+For complex configurations, install `yq` for fully robust parsing:
 ```bash
 # macOS
 brew install yq
@@ -137,21 +177,6 @@ brew install yq
 sudo apt install yq  # or snap install yq
 ```
 
-### Code Extension Matching
-The pre-commit hook supports multiple extensions via `$LDF_CODE_EXTS` (comma-separated, e.g., `js,ts,jsx,tsx`). Language profiles set this automatically.
+### Multi-Extension Support
 
-### Path Format in CODE_DOC_MAP
-Entries **must** use:
-1. **Repo-relative paths** (e.g., `src/api/auth.py`, not just `auth.py`)
-2. **Backticks around the path** for markdown table format
-
-```markdown
-# CORRECT - backticks and full path
-| `src/api/auth.py` | TIER A | Authentication |
-
-# WRONG - no backticks (won't be detected)
-| src/api/auth.py | TIER A | Authentication |
-
-# WRONG - basename only (ambiguous)
-| `auth.py` | TIER A | Authentication |
-```
+The pre-commit hook supports multiple extensions via `$LDF_CODE_EXTS` (comma-separated, e.g., `js,ts,jsx,tsx`). Language profiles set this automatically based on the configured language.
