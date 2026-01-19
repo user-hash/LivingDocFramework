@@ -12,11 +12,17 @@ A complete Python project example with:
 
 See [python-project/README.md](python-project/README.md)
 
-### 2. Incident Example
-A real-world example showing how the framework prevents bugs:
-- Actual incident from production
+### 2. Sample Workflow
+A real-world example showing how the framework enables fast, accurate fixes:
+- Scenario that led to a documented pattern
 - Invariant that prevents recurrence
 - Bug pattern documentation
+- **External review workflow** - how reviewers use docs for quick fixes
+
+See [sample_workflow/README.md](sample_workflow/README.md)
+
+### 3. Incident Example (Legacy)
+The original incident example. Kept for reference.
 
 See [incident_example/README.md](incident_example/README.md)
 

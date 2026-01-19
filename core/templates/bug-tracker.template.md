@@ -34,19 +34,6 @@ Description of the bug.
 
 ---
 
-## Statistics
-
-| Metric | Count |
-|--------|-------|
-| Total Found | 0 |
-| Total Fixed | 0 |
-| Open (P0) | 0 |
-| Open (P1) | 0 |
-| Open (P2) | 0 |
-| Open (P3) | 0 |
-
----
-
 <!--
 Bug Lifecycle:
 1. open - Bug discovered and reported
@@ -60,5 +47,5 @@ Priority Levels:
 - P3: Low - Minor issue, cosmetic
 
 This file integrates with:
-- github_sync.py: Syncs with GitHub Issues
+- github_sync.py: Syncs with GitHub Issues (EXPERIMENTAL)
 -->

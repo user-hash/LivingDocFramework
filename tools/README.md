@@ -6,14 +6,16 @@ This directory contains automation tools for the Living Documentation system.
 
 ## Available Tools
 
-### github_sync.py
+### github_sync.py (EXPERIMENTAL)
+
+> **Status: EXPERIMENTAL** - Import feature works, export/sync features are untested.
 
 GitHub Issues synchronization with local JSON.
 
 ```bash
-python tools/github_sync.py import   # GitHub -> local
-python tools/github_sync.py export   # local -> GitHub
-python tools/github_sync.py sync     # Bidirectional
+python tools/github_sync.py import   # GitHub -> local (WORKING)
+python tools/github_sync.py export   # local -> GitHub (EXPERIMENTAL)
+python tools/github_sync.py sync     # Bidirectional (EXPERIMENTAL)
 ```
 
 **Requires:** GitHub CLI (`gh`) installed and authenticated
@@ -24,7 +26,7 @@ python tools/github_sync.py sync     # Bidirectional
 
 All tools use a unified configuration system:
 
-### For Shell Scripts
+### For Shell Scripts (PROVEN)
 
 ```bash
 # Source the configuration loader
@@ -39,7 +41,9 @@ echo "Code root: $LDF_CODE_ROOT"
 ldf_find_code "$LDF_CODE_ROOT" | wc -l
 ```
 
-### For Python Scripts
+### For Python Scripts (EXPERIMENTAL)
+
+> **Note:** Python config module (`core/config.py`) is experimental.
 
 ```python
 #!/usr/bin/env python3
@@ -66,7 +70,7 @@ source "$SCRIPT_DIR/../core/load-config.sh"
 echo "Analyzing $LDF_PROJECT_NAME ($LDF_LANGUAGE)"
 ```
 
-### Python Script Template
+### Python Script Template (EXPERIMENTAL)
 
 ```python
 #!/usr/bin/env python3
@@ -85,6 +89,19 @@ def main():
 if __name__ == '__main__':
     main()
 ```
+
+---
+
+## Feature Status
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Shell config loader | PROVEN | Used in production |
+| Pre-commit hooks | PROVEN | Used in production |
+| Version checking | PROVEN | Used in production |
+| GitHub sync import | WORKING | Tested with GitHub CLI |
+| GitHub sync export | EXPERIMENTAL | Needs testing |
+| Python config module | EXPERIMENTAL | Needs implementation |
 
 ---
 

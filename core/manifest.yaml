@@ -1,6 +1,12 @@
 # Living Documentation Manifest v1.0
 # Dynamic, scalable documentation system for AI-assisted development
 # This file is the single source of truth for all documentation configuration
+#
+# WHY THIS MATTERS:
+# By mapping code to explicit bug patterns, invariants, and decisions,
+# AI agents receive the correct architectural context upfront. This enables
+# accurate analysis and fixes on first contact with large codebases, cutting
+# debugging and review time from days to hours without repeated prompting.
 
 version: "1.0"
 project: "{{PROJECT_NAME}}"  # Configure in project-config.yaml
@@ -8,6 +14,12 @@ project: "{{PROJECT_NAME}}"  # Configure in project-config.yaml
 # =============================================================================
 # DOCUMENT TYPES
 # Each type defines a category of documentation with its own schema and behavior
+#
+# SCALABILITY NOTE (EXPERIMENTAL):
+# Document types can use either single-file or multi-file (subfolder) paths:
+#   - Single file: path: "BUG_PATTERNS.md"
+#   - Multi-file:  path: "docs/bug-patterns/" + pattern: "*.md"
+# Multi-file support is EXPERIMENTAL - use single files for stability.
 # =============================================================================
 document_types:
 
@@ -17,7 +29,12 @@ document_types:
     name: "Bug Patterns"
     description: "Anti-patterns, bug signatures, and lessons learned"
     tier: B
+    # Single file (stable):
     path: "BUG_PATTERNS.md"
+    # EXPERIMENTAL - Multi-file subfolder support:
+    # path: "docs/bug-patterns/"
+    # pattern: "*.md"
+    # organize_by: "subsystem"  # Split by subsystem
     schema: "schemas/pattern.schema.json"
     template: "templates/pattern.template.md"
     triggers:
@@ -39,7 +56,11 @@ document_types:
     name: "Golden Paths"
     description: "Best practices and recommended implementation patterns"
     tier: B
+    # Single file (stable):
     path: "docs/GOLDEN_PATHS.md"
+    # EXPERIMENTAL - Multi-file subfolder support:
+    # path: "docs/golden-paths/"
+    # pattern: "*.md"
     schema: "schemas/golden-path.schema.json"
     template: "templates/golden-path.template.md"
     triggers:
@@ -60,7 +81,11 @@ document_types:
     name: "Invariants"
     description: "Safety rules that must never be violated"
     tier: A  # CRITICAL - Must be cited when editing related code
+    # Single file (stable):
     path: "docs/INVARIANTS.md"
+    # EXPERIMENTAL - Multi-file subfolder support:
+    # path: "docs/invariants/"
+    # pattern: "*.md"
     schema: "schemas/invariant.schema.json"
     template: "templates/invariant.template.md"
     triggers:
@@ -82,6 +107,7 @@ document_types:
     name: "Decisions (ADR)"
     description: "Architecture Decision Records"
     tier: B
+    # Multi-file (PROVEN - this pattern works):
     path: "docs/decisions/"
     pattern: "ADR-*.md"
     schema: "schemas/decision.schema.json"
@@ -105,7 +131,11 @@ document_types:
     name: "Code-Doc Map"
     description: "Maps code files to their documentation"
     tier: C
+    # Single file (stable):
     path: "CODE_DOC_MAP.md"
+    # EXPERIMENTAL - Multi-file subfolder support:
+    # path: "docs/code-maps/"
+    # pattern: "*.md"
     triggers:
       - new_file
       - file_rename
@@ -217,6 +247,11 @@ discovery:
   paths:
     - "docs/**/*.md"
     - "*.md"
+    # EXPERIMENTAL - subfolder discovery:
+    # - "docs/bug-patterns/**/*.md"
+    # - "docs/golden-paths/**/*.md"
+    # - "docs/invariants/**/*.md"
+    # - "docs/code-maps/**/*.md"
   exclude:
     - "node_modules/**"
     - ".git/**"

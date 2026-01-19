@@ -8,6 +8,12 @@
 
 ---
 
+## Why This Matters
+
+By mapping code to explicit bug patterns, invariants, and decisions, AI agents receive the correct architectural context upfront. This enables accurate analysis and fixes on first contact with large codebases, cutting debugging and review time from days to hours without repeated prompting.
+
+---
+
 ## What It Does
 
 - Maps code files to documentation
@@ -105,7 +111,7 @@ See [docs/CONFIG.md](docs/CONFIG.md) for full reference.
 - [Configuration Reference](docs/CONFIG.md) — Full YAML options
 - [Git Hooks](hooks/README.md) — Customization
 - [Agent Protocol](protocols/AGENT_PROTOCOL.md) — AI agent compliance rules
-- [Example: Real Incident](examples/incident_example/) — How the system prevents bugs
+- [Sample Workflow](examples/sample_workflow/) — How reviewers use docs for fast fixes
 
 ---
 
@@ -123,6 +129,14 @@ Extracted from the **Nebulae project** (181K LOC, 6+ months production use):
 
 - Git
 - Bash 4.0+ (Git Bash on Windows)
+
+---
+
+## Community
+
+Join our Discord for questions, feedback, and discussion:
+
+**[Discord Server](https://discord.gg/ygYAAeccTW)**
 
 ---
 

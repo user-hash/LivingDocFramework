@@ -6,6 +6,14 @@ version: "1.0"
 auto_discovery: true
 
 # =============================================================================
+# WHY THIS MATTERS
+# By mapping code to explicit bug patterns, invariants, and decisions,
+# AI agents receive the correct architectural context upfront. This enables
+# accurate analysis and fixes on first contact with large codebases, cutting
+# debugging and review time from days to hours without repeated prompting.
+# =============================================================================
+
+# =============================================================================
 # DOCUMENT CATEGORIES - Add new categories here, system auto-discovers
 # =============================================================================
 categories:
@@ -13,89 +21,41 @@ categories:
     name: "Bug Tracking"
     files:
       - "BUG_TRACKER.md"
-    metrics:
-      - name: "sev_p0"
-        pattern: '"P0":\s*(\d+)'
-        weight: 10
-      - name: "sev_p1"
-        pattern: '"P1":\s*(\d+)'
-        weight: 3
-      - name: "sev_p2"
-        pattern: '"P2":\s*(\d+)'
-        weight: 1
-      - name: "sev_p3"
-        pattern: '"P3":\s*(\d+)'
-        weight: 0.05  # Low priority/improvements
-      - name: "bugs_open"
-        pattern: 'bugs_open:\s*(\d+)'
-      - name: "bugs_fixed"
-        pattern: 'bugs_fixed:\s*(\d+)'
+    # Configure bug tracking in project-config.yaml
 
   patterns:
     name: "Bug Patterns"
     files:
       - "BUG_PATTERNS.md"
-    metrics:
-      - name: "patterns_total"
-        pattern: '### PATTERN-(\d+)'
-        count: true
-    subcategories:
-      # Define your project's subsystems here
-      # Examples: multiplayer, audio, ui, thread, database, api, etc.
-      - name: "multiplayer"
-        pattern: '\*\*System:\*\*.*Multiplayer'
-      - name: "audio"
-        pattern: '\*\*System:\*\*.*Audio'
-      - name: "ui"
-        pattern: '\*\*System:\*\*.*UI'
-      - name: "thread"
-        pattern: '\*\*System:\*\*.*Thread'
-      - name: "tooling"
-        pattern: '\*\*System:\*\*.*Tooling'
+    subcategories: []
+    # EXAMPLES - customize for your project:
+    # - name: "api"          # Web services
+    # - name: "database"     # Data layer
+    # - name: "auth"         # Security/authentication
+    # - name: "ui"           # User interface
+    # - name: "networking"   # Network/realtime
 
   invariants:
     name: "Safety Invariants"
     files:
       - "INVARIANTS.md"
-    metrics:
-      - name: "invariants_total"
-        pattern: '### INV-[\d.]+'
-        count: true
-    subcategories:
-      # Group invariants by domain - customize for your project
-      - name: "thread_safety"
-        pattern: '## \d+\. Thread Safety'
-        section_range: true
-      - name: "audio"
-        pattern: '## \d+\. Audio'
-        section_range: true
-      - name: "multiplayer"
-        pattern: '## \d+\. Multiplayer'
-        section_range: true
-      - name: "security"
-        pattern: '## \d+\. Security'
-        section_range: true
-      - name: "performance"
-        pattern: '## \d+\. Performance'
-        section_range: true
+    subcategories: []
+    # EXAMPLES - common invariant categories:
+    # - name: "thread_safety"   # Concurrency rules
+    # - name: "data_integrity"  # Database/state rules
+    # - name: "security"        # Auth/access rules
+    # - name: "performance"     # Resource limits
 
   golden_paths:
     name: "Golden Paths"
     files:
       - "GOLDEN_PATHS.md"
-    metrics:
-      - name: "golden_total"
-        pattern: '### GP-\d+'
-        count: true
+    # Best practices - no subcategories needed by default
 
   decisions:
     name: "Architecture Decisions"
     files:
       - "DECISIONS.md"
-    metrics:
-      - name: "adrs_total"
-        pattern: '### ADR-\d+'
-        count: true
     subcategories:
       - name: "accepted"
         pattern: '\*\*Status:\*\*.*Accepted'
@@ -103,13 +63,6 @@ categories:
         pattern: '\*\*Status:\*\*.*Deprecated'
       - name: "proposed"
         pattern: '\*\*Status:\*\*.*Proposed'
-
-  staleness:
-    name: "Documentation Staleness"
-    computed: true
-    metrics:
-      - name: "stale_count"
-      - name: "avg_staleness"
 
 # =============================================================================
 # FILE TIERING RULES - Auto-tier based on patterns
@@ -121,7 +74,7 @@ tiering:
       name: "Critical"
       enforcement: "blocking"
       patterns:
-        # Examples - customize for your project:
+        # EXAMPLES - customize for your project:
         # Python: "**/config.py", "**/settings.py", "**/database/*.py"
         # JavaScript: "**/config/*.js", "**/*Manager.js", "**/server.js"
         # Go: "**/*config.go", "**/*manager.go", "**/main.go"
@@ -178,37 +131,14 @@ tiering:
 # =============================================================================
 auto_mapping:
   enabled: true
-  rules:
-    # Example: API/Services subsystem
-    - file_pattern: "**/api/**"
-      docs:
-        - "API_ARCHITECTURE.md"
-        - "INVARIANTS.md#api"
-      tests:
-        - "**/tests/**/api*.{{TEST_EXT}}"
-
-    # Example: Database subsystem
-    - file_pattern: "**/database/**"
-      docs:
-        - "DATABASE_ARCHITECTURE.md"
-        - "INVARIANTS.md#database"
-      tests:
-        - "**/tests/**/database*.{{TEST_EXT}}"
-
-    # Example: Core/Engine subsystem
-    - file_pattern: "**/core/**"
-      docs:
-        - "CORE_ARCHITECTURE.md"
-      tests:
-        - "**/tests/**/core*.{{TEST_EXT}}"
-
-    # Example: Authentication subsystem
-    - file_pattern: "**/auth/**"
-      docs:
-        - "AUTH_ARCHITECTURE.md"
-        - "INVARIANTS.md#security"
-      tests:
-        - "**/tests/**/auth*.{{TEST_EXT}}"
+  rules: []
+  # EXAMPLES - define in project-config.yaml:
+  # - file_pattern: "**/api/**"
+  #   docs: ["API_ARCHITECTURE.md", "INVARIANTS.md#api"]
+  # - file_pattern: "**/database/**"
+  #   docs: ["DATABASE_ARCHITECTURE.md"]
+  # - file_pattern: "**/auth/**"
+  #   docs: ["INVARIANTS.md#security"]
 
 # =============================================================================
 # LOOP CLOSURE - Ensure all related files are updated
