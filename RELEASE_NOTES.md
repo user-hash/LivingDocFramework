@@ -39,11 +39,13 @@
 - ✅ Example README with workflow guide
 - ✅ Examples README with contribution guidelines
 
-### Documentation (7 files)
+### Documentation (8 files)
 - ✅ README.md - Project overview
-- ✅ SETUP.md - Installation guide (500+ lines)
+- ✅ docs/INTEGRATION.md - Integration guide
+- ✅ docs/CONFIG.md - Configuration reference
+- ✅ docs/SESSION_PROTOCOL.md - Version sync protocol
 - ✅ CONTRIBUTING.md - Contribution guidelines
-- ✅ LICENSE - MIT license
+- ✅ LICENSE - AGPL v3 license
 - ✅ Tool-specific READMEs
 - ✅ Hook-specific READMEs
 - ✅ Protocol-specific READMEs
@@ -184,7 +186,9 @@ Extracted from Nebulae project with:
 ## 📖 Documentation
 
 - [README.md](README.md) - Overview and features
-- [SETUP.md](SETUP.md) - Complete installation guide
+- [docs/INTEGRATION.md](docs/INTEGRATION.md) - Complete integration guide
+- [docs/CONFIG.md](docs/CONFIG.md) - Configuration reference
+- [docs/SESSION_PROTOCOL.md](docs/SESSION_PROTOCOL.md) - Version sync protocol
 - [CONTRIBUTING.md](CONTRIBUTING.md) - How to contribute
 - [examples/](examples/) - Sample integrations
 - [tools/README.md](tools/README.md) - Tool documentation

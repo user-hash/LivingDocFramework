@@ -194,7 +194,8 @@ To add a slash command:
 All user-facing changes need documentation:
 
 - **README.md**: Overview, features, quick start
-- **SETUP.md**: Installation and configuration
+- **docs/INTEGRATION.md**: Installation and configuration
+- **docs/CONFIG.md**: Configuration reference
 - **tools/README.md**: Tool-specific docs
 - **hooks/README.md**: Hook-specific docs
 - **examples/**: Example projects

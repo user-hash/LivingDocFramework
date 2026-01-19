@@ -78,14 +78,13 @@ code_files = config.find_code_files()
 
 ### Priority 3 - Utilities
 
-8. **session-memory-pack.sh** - Session context packager
-9. **living-docs-sync.sh** - Doc synchronization
-10. **validate-agent-report.sh** - Report validator
-11. **why-diff.sh** - Git diff analyzer
-12. **dashboard-auto.py** - Dashboard automation
-13. **dashboard-server.py** - Local web server
-14. **dashboard.sh** (legacy) - Original dashboard
-15. **auto-mapper.py** - Python doc mapper
+8. **living-docs-sync.sh** - Doc synchronization
+9. **validate-agent-report.sh** - Report validator
+10. **why-diff.sh** - Git diff analyzer
+11. **dashboard-auto.py** - Dashboard automation
+12. **dashboard-server.py** - Local web server
+13. **dashboard.sh** (legacy) - Original dashboard
+14. **auto-mapper.py** - Python doc mapper
 
 ## Generalization Checklist
 
