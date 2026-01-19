@@ -43,17 +43,19 @@ When spawning ANY agent via the Task tool, you MUST include this block:
 
 ### Documentation Requirements
 Before making ANY code change:
-1. READ the relevant section of CODE_DOC_MAP.md
-2. READ docs/INVARIANTS.md if touching Tier A files
+1. READ the relevant CODE_DOC_MAP.md (check `docs/*/CODE_DOC_MAP.md` for doc-sets)
+2. READ the sibling INVARIANTS.md if touching Tier A files
 3. READ the relevant architecture doc (see CODE_DOC_MAP for which doc)
 4. READ docs/DECISIONS.md if the file has an ADR (architectural decisions)
 
 After making ANY code change:
-1. UPDATE docs/INVARIANTS.md if any invariant values changed
-2. UPDATE CODE_DOC_MAP.md if new files created
+1. UPDATE the sibling INVARIANTS.md if any invariant values changed
+2. UPDATE the relevant CODE_DOC_MAP.md if new files created
 3. UPDATE the relevant architecture doc if behavior changed
 4. UPDATE BUG_PATTERNS.md if new pattern discovered
 5. UPDATE docs/DECISIONS.md if making a major architectural choice (add new ADR)
+
+**Doc-Set Rule**: If file is in `docs/{subsystem}/CODE_DOC_MAP.md`, update `docs/{subsystem}/INVARIANTS.md`.
 
 ### Tier A Files (EXTRA SCRUTINY)
 Files in CODE_DOC_MAP.md marked as "TIER A" require INVARIANT CITATION before editing.
@@ -145,6 +147,8 @@ The CODE_DOC_MAP is the **master file-to-doc registry**. When it drifts:
 - New files don't get documented
 - Deleted files clutter the map
 - Agents lose trust in the system
+
+**Doc-Set Note**: With per-subsystem doc-sets, each `docs/{subsystem}/CODE_DOC_MAP.md` owns its files. Update the relevant doc-set, not a global map.
 
 ### Hygiene Rules
 
@@ -247,16 +251,21 @@ Your report MUST end with:
 
 ## Version History
 
-- v2.0 (2026-01-04): Generalized for Living Documentation Framework
+- v2.1 (2025-01-19): Doc-Set Discovery Support
+  - Updated for per-subsystem doc-sets (`docs/*/CODE_DOC_MAP.md`)
+  - Sibling INVARIANTS.md requirement for Tier A files
+  - Doc-set hygiene notes added
+
+- v2.0 (2025-01-04): Generalized for Living Documentation Framework
   - Removed Nebulae-specific file lists
   - Made language-agnostic
   - References CODE_DOC_MAP.md for Tier A files
 
-- v1.1 (2026-01-02): CODE_DOC_MAP Hygiene
+- v1.1 (2025-01-02): CODE_DOC_MAP Hygiene
   - Added new/deleted/renamed file requirements
   - Pre-commit hook enforcement (Check 13)
 
-- v1.0 (2026-01-01): Initial creation
+- v1.0 (2025-01-01): Initial creation
   - Mandatory agent protocol block
   - Enforcement checkpoints
   - Standard templates

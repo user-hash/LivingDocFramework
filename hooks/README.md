@@ -15,9 +15,12 @@ Installs all git hooks into your project's `.git/hooks/` directory.
 Validates documentation requirements before allowing commit.
 
 **Checks**:
-- Tier A files have documentation
+- **Tier A files** require sibling INVARIANTS.md update (doc-set aware)
 - VERSION file matches CHANGELOG
 - Blast radius warning (>5 files changed)
+- Conflict detection (file in multiple CODE_DOC_MAPs)
+
+**Doc-Set Discovery**: The hook automatically scans all `docs/*/CODE_DOC_MAP.md` files. When a Tier A file changes, it requires the **sibling** `INVARIANTS.md` to be updated.
 
 **Configuration** in `living-doc-config.yaml`:
 ```yaml
