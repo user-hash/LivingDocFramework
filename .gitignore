@@ -21,6 +21,3 @@ Thumbs.db
 # Local config
 *.local.json
 *.local.yaml
-
-# DevMemory storage (generated)
-.claude/devmemory/

@@ -1,6 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Living Documentation Framework - Post-Commit Hook
-# Updates dashboard and confidence scores after commit
+# Runs after a successful commit
+
+set -e
 
 # Get project root
 PROJECT_ROOT=$(git rev-parse --show-toplevel)
@@ -11,19 +13,9 @@ FRAMEWORK_ROOT="$(cd "$FRAMEWORK_HOOKS_DIR/.." && pwd)"
 
 if [ -f "$FRAMEWORK_ROOT/core/load-config.sh" ]; then
     source "$FRAMEWORK_ROOT/core/load-config.sh"
-else
-    # Silently exit if config not found
-    exit 0
 fi
 
-# Try to update confidence score
-if [ -f "$FRAMEWORK_ROOT/tools/calculate_confidence.py" ]; then
-    if python3 "$FRAMEWORK_ROOT/tools/calculate_confidence.py" --update > /dev/null 2>&1; then
-        echo "✅ Confidence score updated"
-    fi
-fi
-
-# Note: Dashboard generation can be added here if needed
-# Example: bash "$FRAMEWORK_ROOT/tools/dashboard.sh" > /dev/null 2>&1
+# Post-commit actions can be added here
+# Example: echo "Commit completed for $LDF_PROJECT_NAME"
 
 exit 0

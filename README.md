@@ -13,15 +13,8 @@
 - Maps code files to documentation
 - Documents bugs as reusable prevention patterns
 - Blocks commits that skip documentation updates
-- Measures documentation health (confidence scoring)
 
-**Config-driven**: Paths, extensions, subsystems, tiering, and hook rules are configured in YAML.
-
----
-
-## Advanced (Optional)
-
-For AI-assisted workflows: [Session/Version Protocol](docs/SESSION_PROTOCOL.md)
+**Config-driven**: Paths, extensions, subsystems, and hook rules are configured in YAML.
 
 ---
 
@@ -52,9 +45,6 @@ touch docs/INVARIANTS.md docs/GOLDEN_PATHS.md
 
 # Install hooks (requires Bash - use Git Bash on Windows)
 ./LivingDocFramework/hooks/install.sh
-
-# Verify
-python3 LivingDocFramework/tools/calculate_confidence.py
 ```
 
 ---
@@ -126,7 +116,6 @@ Extracted from the **Nebulae project** (181K LOC, 6+ months production use):
 - 64 bug patterns documented
 - 36 invariants enforced
 - 284 files mapped
-- 93% system confidence maintained
 
 ---
 
@@ -134,18 +123,12 @@ Extracted from the **Nebulae project** (181K LOC, 6+ months production use):
 
 - Git
 - Bash 4.0+ (Git Bash on Windows)
-- Python 3.8+
 
 ---
 
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-High-priority areas:
-- Agent compliance improvements
-- Tool extraction (dashboard, auto-mapper)
-- Additional language examples
 
 ---
 

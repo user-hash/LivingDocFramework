@@ -1,88 +1,52 @@
 # Living Documentation Framework - Examples
 
-Example projects showing how to integrate the framework with different languages and tech stacks.
+This directory contains example projects showing how to integrate the Living Documentation Framework.
 
 ## Available Examples
 
-### python-project/
-**Language**: Python
-**Framework**: Any (Django, Flask, FastAPI)
-**Features**:
-- Complete living-doc-config.yaml
-- pytest integration
-- API subsystem example
-- Database tier A examples
+### 1. Python Project
+A complete Python project example with:
+- Full configuration
+- Directory structure
+- Sample documentation files
 
-**Quick Start**:
+See [python-project/README.md](python-project/README.md)
+
+### 2. Incident Example
+A real-world example showing how the framework prevents bugs:
+- Actual incident from production
+- Invariant that prevents recurrence
+- Bug pattern documentation
+
+See [incident_example/README.md](incident_example/README.md)
+
+## Quick Start with Examples
+
 ```bash
-cd examples/python-project
-./../../hooks/install.sh
-python ../../tools/calculate_confidence.py
+# Copy example config to your project
+cp LivingDocFramework/examples/python-project/living-doc-config.yaml .
+
+# Customize for your project
+nano living-doc-config.yaml
+
+# Install hooks
+./LivingDocFramework/hooks/install.sh
 ```
 
 ## Creating Your Own Example
 
-1. **Copy template**:
-   ```bash
-   cp -r examples/python-project examples/my-project
-   cd examples/my-project
-   ```
-
-2. **Edit config**:
-   ```yaml
-   # living-doc-config.yaml
-   project:
-     name: "My Project"
-     language: "javascript"  # or go, rust, etc.
-   ```
-
-3. **Initialize docs**:
-   ```bash
-   mkdir -p docs
-   touch CHANGELOG.md BUG_TRACKER.md BUG_PATTERNS.md
-   # etc.
-   ```
-
-4. **Install hooks**:
-   ```bash
-   ../../hooks/install.sh
-   ```
-
-## Example Projects To Add
-
-### JavaScript/TypeScript
-- React frontend
-- Node.js backend
-- Next.js fullstack
-
-### Go
-- Microservice with gRPC
-- CLI tool
-- Web API
-
-### Rust
-- Systems programming
-- WebAssembly
-- Actix-web API
-
-### C#/Unity
-- Game project (Nebulae-style)
-- ASP.NET Core API
-- Desktop application
+1. Copy the python-project structure
+2. Modify `living-doc-config.yaml` for your language
+3. Add language-specific patterns
+4. Submit a PR!
 
 ## Contributing Examples
 
-To contribute an example:
+We welcome examples for:
+- JavaScript/TypeScript projects
+- Go projects
+- Rust projects
+- C# projects
+- Multi-language monorepos
 
-1. Create directory: `examples/your-project-name/`
-2. Add `living-doc-config.yaml`
-3. Add `README.md` with setup instructions
-4. Include minimal code structure
-5. Document integration points
-6. Test hooks work correctly
-
-Submit PR with:
-- Example code
-- Configuration
-- README
-- Integration tests
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines.
