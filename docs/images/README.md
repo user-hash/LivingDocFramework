@@ -1,38 +1,35 @@
-# Dashboard & Architecture Screenshots
+# Documentation Images
 
-This directory contains visual documentation from the Nebulae project.
+This directory contains visual documentation for the Living Documentation Framework.
 
-## Available Screenshots
+## Available Images
 
-Save your screenshots here with these names:
+Images are stored in the `publish/` subdirectory:
 
 | Filename | Description |
 |----------|-------------|
-| `architecture-overview.png` | System architecture flow diagram |
-| `feedback-loop.png` | Closed feedback loop visualization |
-| `dashboard-overview.png` | Dashboard main view with metrics |
-| `dashboard-trends.png` | Multi-metric trends over time |
-| `core-documents.png` | Core documents and update triggers |
+| `publish/DocTree.png` | Documentation tree structure (used in README) |
+| `publish/Overview.png` | Dashboard overview with metrics |
+| `publish/Trends.png` | Multi-metric trends over time |
+| `publish/ControlPlane.png` | Governance control plane flow |
+| `publish/BugTracker.png` | Bug tracker interface |
+| `publish/Timeseries.png` | Timeseries analysis view |
+| `publish/ROI.png` | Key benefits and ROI visualization |
+
+## Usage in Markdown
+
+Reference images using relative paths:
+
+```markdown
+![Documentation Structure](docs/images/publish/DocTree.png)
+![Dashboard Overview](docs/images/publish/Overview.png)
+```
 
 ## From Nebulae Project
 
-These screenshots show the Living Documentation system in production:
+These screenshots show the Living Documentation system in production use:
 
-- **88 bug patterns** documented
+- **64 bug patterns** documented
 - **36 invariants** enforced
-- **17 ADRs** recorded
-- **11 golden paths** codified
-- **69-93% confidence** maintained
-
-## Usage in README
-
-Reference images in markdown:
-
-```markdown
-![Architecture Overview](docs/images/architecture-overview.png)
-![Dashboard](docs/images/dashboard-overview.png)
-```
-
-## Note
-
-The ASCII diagrams in the main README provide the same information in text form for environments where images don't render (terminals, some markdown viewers).
+- **284 files** mapped
+- **93% confidence** maintained

@@ -66,7 +66,7 @@ git fetch origin claude/feature-ABC && git reset --hard origin/claude/feature-AB
 
 Output this line:
 ```
-SYNCED: Based on [branch-name] at v0.XXX. Ready to continue.
+SYNCED: Based on [branch-name] at v[X.Y.Z]. Ready to continue.
 ```
 
 ## Version Loading Protocol
@@ -90,6 +90,7 @@ git log --oneline -1             # Show current commit
 **Bash:**
 ```bash
 git fetch origin --tags
+# Note: sort -V requires GNU coreutils. On macOS: brew install coreutils, then use gsort -V
 LATEST=$(git tag -l "v0.*" | sort -V | tail -1)
 git log --oneline claude/some-branch -1  # Check branch base
 # If wrong base:
@@ -101,7 +102,9 @@ git checkout -b claude/some-branch
 **PowerShell:**
 ```powershell
 git fetch origin --tags
-$LATEST = git tag -l "v0.*" | Sort-Object -Property {[version]$_} | Select-Object -Last 1
+# Remove 'v' prefix for version sorting, then re-add it
+$LATEST = git tag -l "v0.*" | ForEach-Object { $_ -replace '^v','' } | Sort-Object -Property {[version]$_} | Select-Object -Last 1
+$LATEST = "v$LATEST"
 git log --oneline claude/some-branch -1
 # If wrong base:
 git checkout $LATEST

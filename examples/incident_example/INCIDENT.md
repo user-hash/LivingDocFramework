@@ -43,7 +43,7 @@ T4: Index out of bounds / desync
 
 This rule is now documented. Any code touching these methods must cite this invariant.
 
-### 2. Bug Pattern (BUG_PATTERNS.md)
+### 2. Bug Pattern (BUG_PATTERN.md)
 
 **PATTERN-MP-024: Unguarded Structural Change**
 

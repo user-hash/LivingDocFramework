@@ -228,7 +228,7 @@ agents:
       - "CODE_DOC_MAP.md"
 
     on_tier_a_edit:
-      - "INVARIANTS.md"
+      - "docs/INVARIANTS.md"
 ```
 
 ## Confidence Section
@@ -248,7 +248,7 @@ confidence:
     excellent: 90    # 90%+ = excellent
     good: 75         # 75-89% = good
     acceptable: 60   # 60-74% = acceptable
-    poor: 60         # <60% = needs improvement
+    # Note: scores below 60% are considered "needs improvement"
 ```
 
 ## Dashboard Section

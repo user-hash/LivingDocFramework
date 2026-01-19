@@ -243,6 +243,20 @@ tests:
   pattern: "**/*_test.go"
 ```
 
+### Rust
+```yaml
+project:
+  language: "rust"
+code:
+  root: "src/"
+  extensions: ["rs"]
+version:
+  file: "Cargo.toml"
+  pattern: 'version\s*=\s*"([0-9.]+)"'
+tests:
+  pattern: "**/tests/**/*.rs"
+```
+
 ### C#
 ```yaml
 project:
