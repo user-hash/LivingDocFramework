@@ -13,7 +13,7 @@ When a bug is reported:
 
 ## How Living Docs Solve This
 
-By mapping code to explicit bug patterns, invariants, and decisions, AI agents receive the correct architectural context upfront. This enables accurate analysis and fixes on first contact with large codebases.
+Mapping code to bug patterns, invariants, and decisions gives reviewers the context they need upfront. Less archaeology, correct fix on first attempt.
 
 ### 1. Code Maps Provide File Context
 

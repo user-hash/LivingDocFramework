@@ -4,7 +4,7 @@ This example shows how the Living Documentation Framework enables fast, accurate
 
 ## Why This Matters
 
-By mapping code to explicit bug patterns, invariants, and decisions, AI agents receive the correct architectural context upfront. This enables accurate analysis and fixes on first contact with large codebases, cutting debugging and review time from days to hours without repeated prompting.
+Mapping code to bug patterns, invariants, and decisions gives reviewers the context they need upfront. Less time digging through history, faster fixes, fewer repeated mistakes.
 
 ## What This Demonstrates
 
