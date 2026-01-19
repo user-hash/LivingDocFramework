@@ -2,7 +2,7 @@
 
 > Documentation that enforces itself through git hooks.
 
-**Disclaimer**: This repository documents a documentation enforcement framework, not a full product. Only features documented here are extracted and production-tested.
+**Disclaimer**: This repository documents a documentation enforcement framework, not a full product. Features documented here are extracted and production-tested.
 
 ![Documentation Structure](docs/images/publish/DocTree.png)
 
