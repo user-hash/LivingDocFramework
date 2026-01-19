@@ -4,6 +4,22 @@
 
 set -e
 
+# =============================================================================
+# BASH VERSION CHECK
+# Associative arrays (declare -A) require Bash 4.0+
+# =============================================================================
+if [ "${BASH_VERSINFO[0]}" -lt 4 ]; then
+    echo "ERROR: Bash 4.0+ required (you have $BASH_VERSION)"
+    echo ""
+    echo "How to fix:"
+    echo "  macOS:   brew install bash"
+    echo "  Windows: Use Git Bash (bundled with Git for Windows)"
+    echo "  Linux:   Usually already 4.0+, check with: bash --version"
+    echo ""
+    echo "Skipping documentation checks (commit allowed)."
+    exit 0
+fi
+
 # Get project root (where .git is)
 PROJECT_ROOT=$(git rev-parse --show-toplevel)
 
@@ -36,6 +52,8 @@ fi
 # Supports: LDF_CODE_EXTS (comma-separated: "js,ts,jsx") or LDF_CODE_EXT (single: "py")
 build_ext_pattern() {
     local exts="${LDF_CODE_EXTS:-$LDF_CODE_EXT}"
+    # Default to "py" if somehow empty (prevents invalid regex)
+    exts="${exts:-py}"
     # Convert "js,ts,jsx" to "js|ts|jsx" for regex alternation
     echo "$exts" | tr ',' '|'
 }

@@ -14,11 +14,12 @@ Installs all git hooks into your project's `.git/hooks/` directory.
 ### pre-commit
 Validates documentation requirements before allowing commit.
 
-**Checks**:
-- **Tier A files** require sibling INVARIANTS.md update (doc-set aware)
-- VERSION file matches CHANGELOG
-- Blast radius warning (>5 files changed)
-- Conflict detection (file in multiple CODE_DOC_MAPs)
+**Checks** (blocking vs warning):
+- **Tier A files** require sibling INVARIANTS.md update (**blocks** commit)
+- **Version mismatch** between version file and CHANGELOG (**blocks** commit)
+- **Conflict detection** - file in multiple CODE_DOC_MAPs (**blocks** commit)
+- **Changelog reminder** - warns if code changed but CHANGELOG not updated (warning only)
+- **Blast radius warning** - warns if >5 files changed (warning only)
 
 **Doc-Set Discovery**: The hook automatically scans all `docs/*/CODE_DOC_MAP.md` files. When a Tier A file changes, it requires the **sibling** `INVARIANTS.md` to be updated.
 
@@ -28,15 +29,15 @@ hooks:
   pre_commit:
     - check: "tier_a_citation"
       enabled: true
-      blocking: true
+      blocking: true      # Blocks commit if INVARIANTS.md not updated
 
     - check: "changelog_updated"
       enabled: true
-      blocking: true
+      blocking: false     # Warning only (doesn't block)
 
     - check: "blast_radius"
       threshold: 5
-      blocking: false
+      blocking: false     # Warning only
 ```
 
 ### post-commit
