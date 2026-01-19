@@ -36,6 +36,19 @@ fi
 # Create hooks directory if needed
 mkdir -p "$GIT_HOOKS_DIR"
 
+# Backup existing hook if present
+backup_hook() {
+    local hook_name="$1"
+    local hook_path="$GIT_HOOKS_DIR/$hook_name"
+
+    if [ -f "$hook_path" ]; then
+        local timestamp=$(date +%Y%m%d_%H%M%S)
+        local backup_path="${hook_path}.bak.${timestamp}"
+        mv "$hook_path" "$backup_path"
+        echo "Backed up existing $hook_name -> ${hook_name}.bak.${timestamp}"
+    fi
+}
+
 # Get relative path to framework
 get_relative_path() {
     local target="$1"
@@ -59,6 +72,11 @@ get_relative_path() {
 }
 
 REL_PATH=$(get_relative_path "$FRAMEWORK_ROOT" "$PROJECT_ROOT")
+
+# Backup existing hooks before overwriting
+backup_hook "pre-commit"
+backup_hook "commit-msg"
+backup_hook "post-commit"
 
 # Create pre-commit hook
 cat > "$GIT_HOOKS_DIR/pre-commit" << EOF

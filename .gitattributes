@@ -12,3 +12,10 @@ core/*.sh text eol=lf
 *.png binary
 *.jpg binary
 *.gif binary
+
+# Exclude from git archive / release downloads
+.git/ export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+.github/ export-ignore
+tmpclaude-* export-ignore
