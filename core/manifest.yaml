@@ -12,14 +12,29 @@ version: "1.0"
 project: "{{PROJECT_NAME}}"  # Configure in project-config.yaml
 
 # =============================================================================
-# DOCUMENT TYPES
-# Each type defines a category of documentation with its own schema and behavior
+# DOCUMENT TYPES - Doc-Set Discovery Model
+# =============================================================================
 #
-# SCALABILITY NOTE (EXPERIMENTAL):
-# Document types can use either single-file or multi-file (subfolder) paths:
-#   - Single file: path: "BUG_PATTERNS.md"
-#   - Multi-file:  path: "docs/bug-patterns/" + pattern: "*.md"
-# Multi-file support is EXPERIMENTAL - use single files for stability.
+# DOC-SET DISCOVERY (PROVEN):
+# A "doc-set" is any folder under docs/ containing CODE_DOC_MAP.md.
+# Each doc-set can have its own INVARIANTS.md, BUG_PATTERNS.md, etc.
+#
+# Example structure:
+#   docs/multiplayer/CODE_DOC_MAP.md  -> defines "multiplayer" doc-set
+#   docs/multiplayer/INVARIANTS.md    -> sibling invariants for this doc-set
+#   docs/audio/CODE_DOC_MAP.md        -> defines "audio" doc-set
+#   docs/audio/INVARIANTS.md          -> sibling invariants
+#
+# Tier-A Enforcement:
+#   When a Tier A file changes, the hook checks which CODE_DOC_MAP.md
+#   lists it (matching TIER A + file on same line), then requires the
+#   sibling INVARIANTS.md to be updated.
+#
+# Path Format:
+#   All CODE_DOC_MAP entries must use repo-relative paths from project root.
+#   Example: `src/Multiplayer/SyncManager.cs` (CORRECT)
+#            `SyncManager.cs` (WRONG - basename only)
+#
 # =============================================================================
 document_types:
 
@@ -129,18 +144,19 @@ document_types:
   code_map:
     id: code_map
     name: "Code-Doc Map"
-    description: "Maps code files to their documentation"
+    description: "Maps code files to their documentation tier"
     tier: C
-    # Single file (stable):
-    path: "CODE_DOC_MAP.md"
-    # EXPERIMENTAL - Multi-file subfolder support:
-    # path: "docs/code-maps/"
-    # pattern: "*.md"
+    # Doc-set discovery: finds all docs/*/CODE_DOC_MAP.md files
+    discovery_pattern: "docs/*/CODE_DOC_MAP.md"
+    # Backward compat: root-level (DEPRECATED - emits warning)
+    fallback_path: "CODE_DOC_MAP.md"
+    template: "templates/code-doc-map.template.md"
     triggers:
       - new_file
       - file_rename
       - major_refactor
-    auto_generate: true
+    # Each doc-set folder containing CODE_DOC_MAP.md defines a doc-set
+    # Pre-commit hook scans all maps for Tier A files
 
   # Changelog
   changelog:
@@ -244,14 +260,18 @@ relationships:
 # =============================================================================
 discovery:
   enabled: true
+  # Doc-set marker: folder containing this file is a doc-set
+  doc_set_marker: "CODE_DOC_MAP.md"
   paths:
     - "docs/**/*.md"
     - "*.md"
-    # EXPERIMENTAL - subfolder discovery:
-    # - "docs/bug-patterns/**/*.md"
-    # - "docs/golden-paths/**/*.md"
-    # - "docs/invariants/**/*.md"
-    # - "docs/code-maps/**/*.md"
+  # Per-subsystem doc-sets (PROVEN):
+  doc_set_paths:
+    - "docs/*/CODE_DOC_MAP.md"    # Each is a doc-set
+    - "docs/*/INVARIANTS.md"       # Sibling for Tier A enforcement
+    - "docs/*/BUG_PATTERNS.md"     # Optional
+    - "docs/*/GOLDEN_PATHS.md"     # Optional
+    - "docs/*/DECISIONS/"          # Optional ADR folder
   exclude:
     - "node_modules/**"
     - ".git/**"

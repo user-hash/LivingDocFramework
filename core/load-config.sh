@@ -134,3 +134,45 @@ ldf_find_tests() {
 
 export -f ldf_find_code 2>/dev/null || true
 export -f ldf_find_tests 2>/dev/null || true
+
+# =============================================================================
+# DOC-SET DISCOVERY HELPERS
+# A "doc-set" is any folder under docs/ containing CODE_DOC_MAP.md
+# =============================================================================
+
+# Find all doc-sets (folders with CODE_DOC_MAP.md)
+ldf_find_doc_sets() {
+    find "$LDF_PROJECT_ROOT/docs" -name "CODE_DOC_MAP.md" -exec dirname {} \; 2>/dev/null
+}
+
+# Safer alternative using while-read pattern (handles spaces in paths)
+ldf_find_doc_sets_safe() {
+    while IFS= read -r map; do
+        dirname "$map"
+    done < <(find "$LDF_PROJECT_ROOT/docs" -name "CODE_DOC_MAP.md" 2>/dev/null)
+}
+
+# Get doc-set name from path (e.g., "docs/multiplayer" -> "multiplayer")
+ldf_doc_set_name() {
+    local path="$1"
+    basename "$path"
+}
+
+# Check if a doc-set exists by name
+ldf_has_doc_set() {
+    local name="$1"
+    [ -f "$LDF_PROJECT_ROOT/docs/$name/CODE_DOC_MAP.md" ]
+}
+
+# List all doc-set names
+ldf_list_doc_sets() {
+    ldf_find_doc_sets | while IFS= read -r path; do
+        basename "$path"
+    done
+}
+
+export -f ldf_find_doc_sets 2>/dev/null || true
+export -f ldf_find_doc_sets_safe 2>/dev/null || true
+export -f ldf_doc_set_name 2>/dev/null || true
+export -f ldf_has_doc_set 2>/dev/null || true
+export -f ldf_list_doc_sets 2>/dev/null || true

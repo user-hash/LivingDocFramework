@@ -96,6 +96,76 @@ subsystems:
 | `docs` | Related documentation files | No |
 | `tier_default` | Default tier (A, B, C) | No |
 
+## Per-Subsystem Documentation (Doc-Sets)
+
+For scaling to large projects, organize documentation by subsystem using **doc-sets**.
+
+### What is a Doc-Set?
+
+A **doc-set** is any folder under `docs/` that contains a `CODE_DOC_MAP.md` file.
+
+```
+docs/
+├── multiplayer/              # This IS a doc-set (has CODE_DOC_MAP.md)
+│   ├── CODE_DOC_MAP.md       # <- Marker file
+│   ├── INVARIANTS.md
+│   └── BUG_PATTERNS.md
+├── audio/                    # This IS a doc-set
+│   ├── CODE_DOC_MAP.md       # <- Marker file
+│   └── INVARIANTS.md
+└── reference/                # This is NOT a doc-set (no CODE_DOC_MAP.md)
+    └── glossary.md
+```
+
+### How Tier-A Enforcement Works
+
+1. You edit a code file
+2. Pre-commit hook searches all `docs/*/CODE_DOC_MAP.md` files
+3. If file is listed as Tier A in a map, hook requires sibling `INVARIANTS.md` update
+4. No pattern matching, no config complexity
+
+### Creating a Doc-Set
+
+```bash
+# Create multiplayer doc-set
+mkdir -p docs/multiplayer
+touch docs/multiplayer/CODE_DOC_MAP.md
+touch docs/multiplayer/INVARIANTS.md
+touch docs/multiplayer/BUG_PATTERNS.md
+```
+
+Then add files to the map with repo-relative paths:
+
+```markdown
+## Tier A (Critical)
+| `src/Multiplayer/SyncManager.cs` | Core sync | INV-MP-001 |
+```
+
+### Path Format Rules
+
+All CODE_DOC_MAP entries **must** use repo-relative paths:
+
+```markdown
+# CORRECT - repo-relative path
+| `src/Multiplayer/SyncManager.cs` | TIER A | Core sync |
+
+# WRONG - basename only (ambiguous)
+| `SyncManager.cs` | TIER A | Core sync |
+```
+
+### No Config Required
+
+Unlike pattern-based approaches, doc-sets require **zero YAML configuration**.
+The folder structure IS the configuration.
+
+### Backward Compatibility
+
+Root-level `CODE_DOC_MAP.md` is supported but deprecated. It will emit a warning:
+```
+Warning: Using deprecated root CODE_DOC_MAP.md
+  -> Migrate to docs/<subsystem>/CODE_DOC_MAP.md
+```
+
 ## Tiering Section
 
 Configure automatic file classification.

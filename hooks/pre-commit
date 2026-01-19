@@ -19,7 +19,7 @@ else
     exit 0
 fi
 
-# Colors for output (check terminal support)
+# Colors for output (check terminal support) - defined early for use in functions
 if [ -t 1 ]; then
     RED='\033[0;31m'
     YELLOW='\033[1;33m'
@@ -31,6 +31,93 @@ else
     GREEN=''
     NC=''
 fi
+
+# =============================================================================
+# DOC-SET DISCOVERY FUNCTIONS
+# A "doc-set" is any folder containing CODE_DOC_MAP.md
+# =============================================================================
+
+# Check if a file is listed as Tier A in any CODE_DOC_MAP.md
+# Returns: path to the CODE_DOC_MAP.md that lists it, or empty
+#
+# MATCHING RULES:
+# 1. Requires TIER A token on the SAME LINE as the file path (prevents false positives)
+# 2. Uses repo-relative paths only (no basename fallback - deterministic matching)
+# 3. Escapes special characters in file path for grep safety
+find_tier_a_map_for_file() {
+    local file="$1"
+    # Escape special regex characters in file path
+    local escaped=$(printf '%s' "$file" | sed 's/[.[\*^$()+?{|]/\\&/g')
+
+    # Use while-read pattern to handle spaces in paths
+    while IFS= read -r map; do
+        # Match: file path AND "TIER A" on the SAME LINE (case-insensitive)
+        if grep -iE "^\|.*\`$escaped\`.*TIER[[:space:]]*A|\`$escaped\`.*TIER[[:space:]]*A|TIER[[:space:]]*A.*\`$escaped\`" "$map" >/dev/null 2>&1; then
+            echo "$map"
+            return 0
+        fi
+    done < <(find "$PROJECT_ROOT/docs" -name "CODE_DOC_MAP.md" 2>/dev/null)
+
+    # Backward compat: root-level CODE_DOC_MAP.md (DEPRECATED - emit warning)
+    if [ -f "$PROJECT_ROOT/CODE_DOC_MAP.md" ]; then
+        if grep -iE "^\|.*\`$escaped\`.*TIER[[:space:]]*A|\`$escaped\`.*TIER[[:space:]]*A|TIER[[:space:]]*A.*\`$escaped\`" "$PROJECT_ROOT/CODE_DOC_MAP.md" >/dev/null 2>&1; then
+            echo -e "${YELLOW}Warning: Using deprecated root CODE_DOC_MAP.md${NC}" >&2
+            echo -e "${YELLOW}  → Migrate to docs/<subsystem>/CODE_DOC_MAP.md${NC}" >&2
+            echo "$PROJECT_ROOT/CODE_DOC_MAP.md"
+            return 0
+        fi
+    fi
+
+    return 1
+}
+
+# Get sibling INVARIANTS.md path for a CODE_DOC_MAP.md
+get_sibling_invariants() {
+    local map="$1"
+    local dir=$(dirname "$map")
+    echo "$dir/INVARIANTS.md"
+}
+
+# Detect file listed in multiple CODE_DOC_MAPs (MUST NOT happen)
+check_tier_a_conflicts() {
+    local file="$1"
+    local escaped=$(printf '%s' "$file" | sed 's/[.[\*^$()+?{|]/\\&/g')
+    local maps_found=0
+    local found_maps=""
+
+    while IFS= read -r map; do
+        if grep -iE "^\|.*\`$escaped\`.*TIER[[:space:]]*A|\`$escaped\`.*TIER[[:space:]]*A|TIER[[:space:]]*A.*\`$escaped\`" "$map" >/dev/null 2>&1; then
+            maps_found=$((maps_found + 1))
+            found_maps="$found_maps $map"
+        fi
+    done < <(find "$PROJECT_ROOT/docs" -name "CODE_DOC_MAP.md" 2>/dev/null)
+
+    if [ "$maps_found" -gt 1 ]; then
+        echo -e "${RED}ERROR: Tier A conflict - file listed in multiple CODE_DOC_MAPs${NC}"
+        echo "   File: $file"
+        echo "   Maps:$found_maps"
+        echo ""
+        echo "   Rule: A code file must belong to exactly ONE doc-set."
+        echo "   Fix: Remove from all but one map, or move to docs/global/CODE_DOC_MAP.md"
+        return 1
+    fi
+    return 0
+}
+
+# Check that sibling INVARIANTS.md exists
+check_invariants_exists() {
+    local invariants_path="$1"
+
+    if [ ! -f "$invariants_path" ]; then
+        echo -e "${RED}ERROR: Required file missing${NC}"
+        echo "   Missing: ${invariants_path#$PROJECT_ROOT/}"
+        echo ""
+        echo "   This doc-set requires INVARIANTS.md for Tier A enforcement."
+        echo "   Create it with: touch ${invariants_path#$PROJECT_ROOT/}"
+        return 1
+    fi
+    return 0
+}
 
 echo -e "${GREEN}Living Documentation - Pre-Commit Validation${NC}"
 echo ""
@@ -75,38 +162,65 @@ if [ "$CODE_CHANGED" -gt 0 ]; then
 fi
 
 # ============================================================================
-# CHECK 3: Tier A File Validation (if CODE_DOC_MAP exists)
+# CHECK 3: Tier A File Validation (Doc-Set Aware)
+# Scans all docs/*/CODE_DOC_MAP.md files and root CODE_DOC_MAP.md (deprecated)
 # ============================================================================
-if [ -f "$PROJECT_ROOT/$LDF_CODE_DOC_MAP" ]; then
-    TIER_A_CHANGED=0
-    while IFS= read -r file; do
-        if echo "$file" | grep -qE "\.$LDF_CODE_EXT$"; then
-            if grep -q "TIER A.*\`$file\`" "$PROJECT_ROOT/$LDF_CODE_DOC_MAP" 2>/dev/null; then
-                TIER_A_CHANGED=$((TIER_A_CHANGED + 1))
-            fi
-        fi
-    done <<< "$CHANGED_FILES"
+TIER_A_ERRORS=0
+declare -A REQUIRED_INVARIANTS  # map path -> 1
 
-    if [ "$TIER_A_CHANGED" -gt 0 ]; then
-        echo -e "${YELLOW}Tier A Files Changed: $TIER_A_CHANGED${NC}"
+while IFS= read -r file; do
+    if [ -z "$file" ]; then continue; fi
 
-        INVARIANTS_UPDATED=$(echo "$CHANGED_FILES" | grep -c "INVARIANTS" || echo "0")
+    # Skip non-code files
+    if ! echo "$file" | grep -qE "\.$LDF_CODE_EXT$"; then continue; fi
 
-        if [ "$INVARIANTS_UPDATED" -eq 0 ]; then
-            echo -e "${RED}ERROR: Tier A files changed but INVARIANTS.md not updated${NC}"
-            echo "   Tier A files are critical and require invariant documentation"
-            echo "   Please:"
-            echo "     1. Read relevant invariants in docs/INVARIANTS.md"
-            echo "     2. Cite which invariants you're respecting"
-            echo "     3. Add new invariants if needed"
-            echo ""
-            echo "   To skip this check (emergency only): git commit --no-verify"
-            exit 1
-        else
-            echo "   INVARIANTS.md updated"
-        fi
-        echo ""
+    # Check for conflicts FIRST (file in multiple maps)
+    if ! check_tier_a_conflicts "$file"; then
+        TIER_A_ERRORS=$((TIER_A_ERRORS + 1))
+        continue
     fi
+
+    # Find which CODE_DOC_MAP.md (if any) lists this file as Tier A
+    tier_a_map=$(find_tier_a_map_for_file "$file")
+
+    if [ -n "$tier_a_map" ]; then
+        # File is Tier A - require sibling INVARIANTS.md update
+        invariants_path=$(get_sibling_invariants "$tier_a_map")
+        rel_invariants="${invariants_path#$PROJECT_ROOT/}"
+        REQUIRED_INVARIANTS["$rel_invariants"]=1
+
+        echo -e "${YELLOW}Tier A: $file${NC}"
+        echo "   Mapped in: ${tier_a_map#$PROJECT_ROOT/}"
+        echo "   Requires:  $rel_invariants"
+    fi
+done <<< "$CHANGED_FILES"
+
+# Check that all required INVARIANTS.md files EXIST and are UPDATED
+for invariants_path in "${!REQUIRED_INVARIANTS[@]}"; do
+    # Step 1: Check file exists (hard fail if missing)
+    if ! check_invariants_exists "$PROJECT_ROOT/$invariants_path"; then
+        TIER_A_ERRORS=$((TIER_A_ERRORS + 1))
+        continue
+    fi
+
+    # Step 2: Check file was updated in this commit
+    if ! echo "$CHANGED_FILES" | grep -q "$invariants_path"; then
+        echo ""
+        echo -e "${RED}ERROR: Tier A file changed but INVARIANTS not updated${NC}"
+        echo "   Missing update: $invariants_path"
+        echo ""
+        echo "   Please:"
+        echo "     1. Read the invariants in $invariants_path"
+        echo "     2. Cite which invariants you're respecting"
+        echo "     3. Add new invariants if needed"
+        echo ""
+        echo "   To skip (emergency only): git commit --no-verify"
+        TIER_A_ERRORS=$((TIER_A_ERRORS + 1))
+    fi
+done
+
+if [ "$TIER_A_ERRORS" -gt 0 ]; then
+    exit 1
 fi
 
 # ============================================================================

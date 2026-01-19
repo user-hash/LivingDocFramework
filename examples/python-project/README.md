@@ -27,7 +27,7 @@ This is a minimal example showing how to integrate the Living Documentation Fram
    touch docs/INVARIANTS.md docs/GOLDEN_PATHS.md
    ```
 
-## Project Structure
+## Project Structure (with Doc-Sets)
 
 ```
 python-example/
@@ -40,12 +40,24 @@ python-example/
 ├── tests/
 │   └── test_*.py
 ├── docs/
-│   ├── INVARIANTS.md
-│   └── GOLDEN_PATHS.md
+│   ├── api/                # API doc-set
+│   │   ├── CODE_DOC_MAP.md # <- Marker file (makes this a doc-set)
+│   │   └── INVARIANTS.md   # API invariants
+│   ├── database/           # Database doc-set
+│   │   ├── CODE_DOC_MAP.md # <- Marker file
+│   │   └── INVARIANTS.md   # Database invariants
+│   └── GOLDEN_PATHS.md     # Global best practices
 ├── CHANGELOG.md
-├── CODE_DOC_MAP.md
 └── BUG_PATTERNS.md
 ```
+
+### Doc-Sets Explained
+
+A **doc-set** is any folder under `docs/` containing `CODE_DOC_MAP.md`.
+Each doc-set has its own `INVARIANTS.md` for Tier A enforcement.
+
+When you edit a Tier A file listed in `docs/api/CODE_DOC_MAP.md`,
+the pre-commit hook requires `docs/api/INVARIANTS.md` to be updated.
 
 ## Usage
 

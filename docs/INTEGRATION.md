@@ -128,28 +128,93 @@ ls living-doc-config.yaml     # Must be in project root
 
 ---
 
-## Scaling Your Documentation
+## Scaling: Small to Large Projects
 
-### Small Project (< 10 files)
+### Small Project (< 20 files)
 
-- `CODE_DOC_MAP.md` — map your files
-- `BUG_PATTERNS.md` — document bugs as you fix them
+Single root-level `CODE_DOC_MAP.md`:
+
+```
+project/
+├── CODE_DOC_MAP.md       # All files mapped here
+├── CHANGELOG.md
+├── BUG_PATTERNS.md
+└── docs/
+    └── INVARIANTS.md     # All invariants
+```
+
+**What you need:**
+- Map your files in `CODE_DOC_MAP.md`
+- Document bugs in `BUG_PATTERNS.md`
 - Pre-commit hook for CHANGELOG enforcement
 
-### Medium Project (10-50 files)
+### Medium Project (20-100 files)
 
-Add:
-- Subsystems in config
-- `INVARIANTS.md` for critical rules
-- Tier A marking for critical files
+Start organizing by subsystem with **doc-sets**:
 
-### Large Project (50+ files)
+```
+project/
+├── CHANGELOG.md
+└── docs/
+    ├── api/
+    │   ├── CODE_DOC_MAP.md    # <- This makes it a doc-set
+    │   └── INVARIANTS.md
+    └── database/
+        ├── CODE_DOC_MAP.md    # <- Another doc-set
+        └── INVARIANTS.md
+```
 
-Add:
-- Per-subsystem architecture docs
-- Full tiering with keywords
-- `GOLDEN_PATHS.md` for patterns
-- `DECISIONS.md` for ADRs
+**What you need:**
+- Create doc-sets for major subsystems
+- Each doc-set has its own `CODE_DOC_MAP.md` and `INVARIANTS.md`
+- Hook automatically finds all doc-sets
+
+### Large Project (100+ files)
+
+Full doc-set structure:
+
+```
+project/
+├── CHANGELOG.md
+└── docs/
+    ├── multiplayer/
+    │   ├── CODE_DOC_MAP.md
+    │   ├── INVARIANTS.md
+    │   ├── BUG_PATTERNS.md
+    │   ├── GOLDEN_PATHS.md
+    │   └── DECISIONS/
+    │       └── ADR-MP-001.md
+    ├── audio/
+    │   ├── CODE_DOC_MAP.md
+    │   └── INVARIANTS.md
+    └── global/
+        ├── CODE_DOC_MAP.md   # Cross-cutting files
+        └── INVARIANTS.md
+```
+
+**Key benefits:**
+- Zero config - folder structure IS the configuration
+- Each subsystem team owns their doc-set
+- Tier A enforcement is automatic per doc-set
+
+### Creating a Doc-Set
+
+```bash
+# Create multiplayer doc-set
+mkdir -p docs/multiplayer
+touch docs/multiplayer/CODE_DOC_MAP.md
+touch docs/multiplayer/INVARIANTS.md
+
+# Add Tier A files to the map
+cat >> docs/multiplayer/CODE_DOC_MAP.md << 'EOF'
+## Tier A (Critical)
+| `src/Multiplayer/SyncManager.cs` | Core sync | INV-MP-001 |
+EOF
+```
+
+**Rule:** A folder containing `CODE_DOC_MAP.md` IS a doc-set. No config needed.
+
+See [CONFIG.md#per-subsystem-documentation-doc-sets](CONFIG.md#per-subsystem-documentation-doc-sets) for details.
 
 ---
 

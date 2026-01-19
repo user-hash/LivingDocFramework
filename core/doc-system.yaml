@@ -172,6 +172,32 @@ loop_closure:
         - "CLAUDE.md"
 
 # =============================================================================
+# DOC-SET DISCOVERY MODEL
+# Enables per-subsystem documentation folders
+# =============================================================================
+doc_sets:
+  # Marker file: folder containing this file IS a doc-set
+  marker_file: "CODE_DOC_MAP.md"
+  # Discovery path for doc-sets
+  discovery_path: "docs/*/"
+
+  # Expected siblings in each doc-set folder
+  expected_files:
+    - "INVARIANTS.md"       # Required for Tier A enforcement
+    - "BUG_PATTERNS.md"     # Optional
+    - "GOLDEN_PATHS.md"     # Optional
+    - "DECISIONS/"          # Optional folder for ADRs (ADR-{id}-NNN.md)
+
+  # Core design principles
+  principles:
+    # 1. CODE_DOC_MAP.md defines a doc-set (no config needed)
+    # 2. Tier-A enforcement is map-driven (sibling INVARIANTS.md)
+    # 3. One doc-set per file (no collisions, use global/ for shared)
+    # 4. Repo-relative paths only (deterministic matching)
+    # 5. Root CODE_DOC_MAP.md deprecated (fallback with warning)
+    # 6. Unlisted files have no requirements
+
+# =============================================================================
 # LANGUAGE PLACEHOLDERS
 # These are replaced based on core/languages/*.yaml or project-config.yaml
 # =============================================================================
