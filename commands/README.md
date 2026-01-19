@@ -76,18 +76,6 @@ Supports placeholders: {{arg1}}, {{arg2}}, etc.
 - Updates BUG_PATTERNS.md
 - Updates BUG_TRACKER.md
 
-### /session-start
-**Purpose**: Initialize session with latest context
-
-**Usage**: `/session-start`
-
-**What it does**:
-- Fetches latest from git
-- Loads CHANGELOG.md
-- Shows recent changes
-- Calculates confidence score
-- Suggests next tasks
-
 ## Creating Custom Commands
 
 ### Basic Command Template
@@ -167,8 +155,6 @@ Invoke with: `/refactor-file src/auth/login.py`
 
 ### Available Commands
 1. ✅ living-docs.md - Doc health check
-2. ✅ session-start.md - Session initialization
-3. ✅ session-end.md - Session cleanup and state saving
 
 ### To Extract from Nebulae
 4. ⏳ bug-fix.md - Structured bug fixing
@@ -211,8 +197,5 @@ claude "/living-docs"
 - ✅ Commands directory structure created
 - ✅ README with usage guide
 - ✅ living-docs.md command available
-- ✅ session-start.md command available
-- ✅ session-end.md command available
-- ✅ Integration with Claude Code (via settings.json hooks)
 
 **Next**: Extract additional commands (bug-fix, code-review) as needed.

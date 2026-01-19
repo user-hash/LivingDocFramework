@@ -33,26 +33,6 @@ python tools/github_sync.py sync     # Bidirectional (EXPERIMENTAL)
 
 **Requires:** GitHub CLI (`gh`) installed and authenticated
 
-### devmemory/ Module
-Cognitive session memory for development sessions.
-
-| Module | Status | Purpose |
-|--------|--------|---------|
-| `session_memory.py` | ✅ VERIFIED | Session state persistence |
-| `event_stream.py` | 🔧 PARTIAL | Cognitive event logging |
-| `wiring.py` | 🔧 PARTIAL | Component integration |
-
-```python
-from devmemory import SessionMemory, emit_event
-
-# Start a session
-session = SessionMemory()
-session.start(version="1.0.0", branch="main")
-
-# Emit events
-emit_event("code.edit", {"file": "app.py"}, "Edited app.py")
-```
-
 ---
 
 ## Configuration System
@@ -128,12 +108,11 @@ code_files = config.find_code_files()
 
 ### Priority 3 - Utilities
 
-7. **session-memory-pack.sh** - Session context packager
-8. **living-docs-sync.sh** - Doc synchronization
-9. **validate-agent-report.sh** - Report validator
-10. **why-diff.sh** - Git diff analyzer
-11. **dashboard-auto.py** - Dashboard automation
-12. **dashboard-server.py** - Local web server
+7. **living-docs-sync.sh** - Doc synchronization
+8. **validate-agent-report.sh** - Report validator
+9. **why-diff.sh** - Git diff analyzer
+10. **dashboard-auto.py** - Dashboard automation
+11. **dashboard-server.py** - Local web server
 
 ---
 
@@ -242,7 +221,6 @@ After extracting each tool:
 - [x] Configuration system created (config.py, load-config.sh)
 - [x] **confidence_engine.py** - Advanced confidence scoring (VERIFIED)
 - [x] **github_sync.py** - GitHub sync (PARTIAL - import verified)
-- [x] **devmemory/** - Session memory module (PARTIAL)
 - [ ] Dashboard generator extracted
 - [ ] Auto-doc-mapper extracted
 - [ ] Remaining utilities extracted

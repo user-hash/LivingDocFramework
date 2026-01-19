@@ -33,14 +33,6 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 from dataclasses import dataclass
 
-# Optional DevMemory integration
-DEVMEMORY_AVAILABLE = False
-try:
-    from devmemory.session_memory import SessionMemory
-    from devmemory.wiring import wire_session_start, wire_session_end
-    DEVMEMORY_AVAILABLE = True
-except ImportError:
-    pass
 
 
 @dataclass
@@ -353,7 +345,7 @@ def calculate_confidence(aggregates: dict,
 
 
 # ============================================================================
-# SESSION MANAGEMENT (uses DevMemory if available)
+# SESSION MANAGEMENT
 # ============================================================================
 
 def session_start() -> Dict[str, Any]:
@@ -369,12 +361,9 @@ def session_start() -> Dict[str, Any]:
     """
     result = {
         "status": "started",
-        "session_id": None,
         "version": None,
         "branch": None,
-        "previous_session": None,
-        "confidence": None,
-        "devmemory_available": DEVMEMORY_AVAILABLE
+        "confidence": None
     }
 
     # Get git branch
@@ -400,18 +389,6 @@ def session_start() -> Dict[str, Any]:
         except Exception:
             pass
 
-    # Use DevMemory if available
-    if DEVMEMORY_AVAILABLE:
-        try:
-            context = wire_session_start(
-                version=result["version"],
-                branch=result["branch"]
-            )
-            result["session_id"] = context.get("current_session_id")
-            result["previous_session"] = context.get("previous_session")
-        except Exception as e:
-            result["devmemory_error"] = str(e)
-
     return result
 
 
@@ -426,22 +403,9 @@ def session_end() -> Dict[str, Any]:
 
     Status: VERIFIED
     """
-    result = {
-        "status": "ended",
-        "session_id": None,
-        "summary": None,
-        "devmemory_available": DEVMEMORY_AVAILABLE
+    return {
+        "status": "ended"
     }
-
-    if DEVMEMORY_AVAILABLE:
-        try:
-            summary = wire_session_end()
-            result["session_id"] = summary.get("session_id")
-            result["summary"] = summary
-        except Exception as e:
-            result["devmemory_error"] = str(e)
-
-    return result
 
 
 if __name__ == "__main__":
@@ -523,9 +487,5 @@ if __name__ == "__main__":
     print(f"Severity Penalty: {result['penalty_breakdown']['severity']}")
     print(f"Formula Version: {result['config']['formula_version']}")
     print(f"K Constant: {result['config']['K']}")
-
-    # Test session functions
-    print("\nSession Functions:")
-    print(f"  DevMemory available: {DEVMEMORY_AVAILABLE}")
 
     print("\nSelf-test PASSED")
