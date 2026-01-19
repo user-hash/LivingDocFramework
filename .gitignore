@@ -21,3 +21,6 @@ Thumbs.db
 # Local config
 *.local.json
 *.local.yaml
+
+# Claude Code temp files
+tmpclaude-*

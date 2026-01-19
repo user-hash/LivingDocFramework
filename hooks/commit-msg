@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Living Documentation Framework - Commit-Msg Hook
 # Validates commit message format
 

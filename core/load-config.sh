@@ -67,15 +67,26 @@ parse_yaml() {
     [ -n "$test_pattern" ] && export LDF_TEST_PATTERN="$test_pattern"
 }
 
+# Helper: get yq value or default (yq returns "null" string for missing keys)
+yq_get() {
+    local result
+    result=$(yq eval "$1" "$CONFIG_FILE" 2>/dev/null)
+    if [ -z "$result" ] || [ "$result" = "null" ]; then
+        echo "$2"
+    else
+        echo "$result"
+    fi
+}
+
 # If yq is available, use it (more robust)
 if command -v yq &>/dev/null; then
-    export LDF_PROJECT_NAME=$(yq eval '.project.name' "$CONFIG_FILE" 2>/dev/null || echo "MyProject")
-    export LDF_LANGUAGE=$(yq eval '.project.language' "$CONFIG_FILE" 2>/dev/null || echo "python")
-    export LDF_MAIN_BRANCH=$(yq eval '.project.main_branch' "$CONFIG_FILE" 2>/dev/null || echo "main")
-    export LDF_VERSION_FILE=$(yq eval '.version.file' "$CONFIG_FILE" 2>/dev/null || echo "__init__.py")
-    export LDF_VERSION_PATTERN=$(yq eval '.version.pattern' "$CONFIG_FILE" 2>/dev/null || echo '__version__\s*=\s*"([0-9.]+)"')
-    export LDF_CODE_ROOT=$(yq eval '.code.root' "$CONFIG_FILE" 2>/dev/null || echo "src/")
-    export LDF_TEST_PATTERN=$(yq eval '.tests.pattern' "$CONFIG_FILE" 2>/dev/null || echo "**/test_*.py")
+    export LDF_PROJECT_NAME=$(yq_get '.project.name' "MyProject")
+    export LDF_LANGUAGE=$(yq_get '.project.language' "python")
+    export LDF_MAIN_BRANCH=$(yq_get '.project.main_branch' "main")
+    export LDF_VERSION_FILE=$(yq_get '.version.file' "__init__.py")
+    export LDF_VERSION_PATTERN=$(yq_get '.version.pattern' '__version__\s*=\s*"([0-9.]+)"')
+    export LDF_CODE_ROOT=$(yq_get '.code.root' "src/")
+    export LDF_TEST_PATTERN=$(yq_get '.tests.pattern' "**/test_*.py")
 else
     parse_yaml "$CONFIG_FILE" ""
 fi
@@ -88,11 +99,14 @@ if [ -n "$LDF_LANGUAGE" ]; then
     if [ -f "$LANG_PROFILE" ]; then
         if command -v yq &>/dev/null; then
             CODE_EXTS=$(yq eval '.code.extensions | join(",")' "$LANG_PROFILE" 2>/dev/null)
-            export LDF_CODE_EXT=$(echo "$CODE_EXTS" | cut -d',' -f1)
-            export LDF_CODE_EXTS="$CODE_EXTS"
+            [ "$CODE_EXTS" = "null" ] && CODE_EXTS=""
         else
-            CODE_EXTS=$(grep "extensions:" "$LANG_PROFILE" | sed 's/.*\[\([^]]*\)\].*/\1/' | tr -d ' "' | tr ',' '\n' | head -1)
-            export LDF_CODE_EXT="$CODE_EXTS"
+            # Extract extensions from YAML array: ["py", "pyw"] -> py,pyw
+            CODE_EXTS=$(grep "extensions:" "$LANG_PROFILE" | sed 's/.*\[\([^]]*\)\].*/\1/' | tr -d ' "')
+        fi
+        if [ -n "$CODE_EXTS" ]; then
+            export LDF_CODE_EXTS="$CODE_EXTS"
+            export LDF_CODE_EXT=$(echo "$CODE_EXTS" | cut -d',' -f1)
         fi
     fi
 fi
@@ -129,7 +143,10 @@ ldf_find_code() {
 
 ldf_find_tests() {
     local root="${1:-$LDF_CODE_ROOT}"
-    find "$root" -path "$LDF_TEST_PATTERN" 2>/dev/null
+    # Note: -name works for simple patterns like "test_*.py"
+    # For complex patterns, users should use their own find/glob
+    local pattern=$(basename "$LDF_TEST_PATTERN")
+    find "$root" -name "$pattern" 2>/dev/null
 }
 
 export -f ldf_find_code 2>/dev/null || true

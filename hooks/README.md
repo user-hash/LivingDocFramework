@@ -120,3 +120,38 @@ hooks:
     - check: "tier_a_citation"
       enabled: false
 ```
+
+## Known Limitations
+
+### YAML Parser
+The config loader uses a simple grep-based YAML parser (when `yq` is not installed). It expects:
+- Exactly 2 spaces of indentation
+- Standard field ordering
+
+For complex configurations, install `yq` for robust parsing:
+```bash
+# macOS
+brew install yq
+
+# Linux
+sudo apt install yq  # or snap install yq
+```
+
+### Code Extension Matching
+The pre-commit hook supports multiple extensions via `$LDF_CODE_EXTS` (comma-separated, e.g., `js,ts,jsx,tsx`). Language profiles set this automatically.
+
+### Path Format in CODE_DOC_MAP
+Entries **must** use:
+1. **Repo-relative paths** (e.g., `src/api/auth.py`, not just `auth.py`)
+2. **Backticks around the path** for markdown table format
+
+```markdown
+# CORRECT - backticks and full path
+| `src/api/auth.py` | TIER A | Authentication |
+
+# WRONG - no backticks (won't be detected)
+| src/api/auth.py | TIER A | Authentication |
+
+# WRONG - basename only (ambiguous)
+| `auth.py` | TIER A | Authentication |
+```

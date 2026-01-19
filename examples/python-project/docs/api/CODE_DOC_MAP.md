@@ -38,4 +38,3 @@ Files requiring documentation awareness:
 ## Related Documentation
 
 - [INVARIANTS.md](./INVARIANTS.md) - API safety rules
-- [../../BUG_PATTERNS.md](../../BUG_PATTERNS.md) - Known issues

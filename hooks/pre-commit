@@ -32,6 +32,15 @@ else
     NC=''
 fi
 
+# Build regex pattern for code file extensions
+# Supports: LDF_CODE_EXTS (comma-separated: "js,ts,jsx") or LDF_CODE_EXT (single: "py")
+build_ext_pattern() {
+    local exts="${LDF_CODE_EXTS:-$LDF_CODE_EXT}"
+    # Convert "js,ts,jsx" to "js|ts|jsx" for regex alternation
+    echo "$exts" | tr ',' '|'
+}
+CODE_EXT_PATTERN=$(build_ext_pattern)
+
 # =============================================================================
 # DOC-SET DISCOVERY FUNCTIONS
 # A "doc-set" is any folder containing CODE_DOC_MAP.md
@@ -130,7 +139,12 @@ if [ -z "$CHANGED_FILES" ]; then
     exit 0
 fi
 
-FILE_COUNT=$(echo "$CHANGED_FILES" | wc -l)
+# Count files (handle empty case - echo "" | wc -l returns 1, not 0)
+if [ -z "$CHANGED_FILES" ]; then
+    FILE_COUNT=0
+else
+    FILE_COUNT=$(echo "$CHANGED_FILES" | wc -l)
+fi
 echo "Files staged: $FILE_COUNT"
 echo ""
 
@@ -148,7 +162,8 @@ fi
 # ============================================================================
 # CHECK 2: Changelog Updated
 # ============================================================================
-CODE_CHANGED=$(echo "$CHANGED_FILES" | grep -E "\.$LDF_CODE_EXT$" | wc -l || echo "0")
+# Match any configured code extension (supports multiple: js,ts,jsx)
+CODE_CHANGED=$(echo "$CHANGED_FILES" | grep -E "\.($CODE_EXT_PATTERN)$" | wc -l || echo "0")
 
 if [ "$CODE_CHANGED" -gt 0 ]; then
     CHANGELOG_UPDATED=$(echo "$CHANGED_FILES" | grep -c "CHANGELOG" || echo "0")
@@ -171,8 +186,8 @@ declare -A REQUIRED_INVARIANTS  # map path -> 1
 while IFS= read -r file; do
     if [ -z "$file" ]; then continue; fi
 
-    # Skip non-code files
-    if ! echo "$file" | grep -qE "\.$LDF_CODE_EXT$"; then continue; fi
+    # Skip non-code files (supports multiple extensions)
+    if ! echo "$file" | grep -qE "\.($CODE_EXT_PATTERN)$"; then continue; fi
 
     # Check for conflicts FIRST (file in multiple maps)
     if ! check_tier_a_conflicts "$file"; then
@@ -204,7 +219,8 @@ for invariants_path in "${!REQUIRED_INVARIANTS[@]}"; do
     fi
 
     # Step 2: Check file was updated in this commit
-    if ! echo "$CHANGED_FILES" | grep -q "$invariants_path"; then
+    # Use -F for fixed-string (paths may contain regex special chars)
+    if ! echo "$CHANGED_FILES" | grep -Fq "$invariants_path"; then
         echo ""
         echo -e "${RED}ERROR: Tier A file changed but INVARIANTS not updated${NC}"
         echo "   Missing update: $invariants_path"
