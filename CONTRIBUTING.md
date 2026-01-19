@@ -50,20 +50,11 @@ mkdir test-project
 cd test-project
 ../hooks/install.sh
 
-# Make changes
-# ... edit files ...
-
-# Test locally
-python3 ../tools/calculate_confidence.py
+# Test hooks
+git add . && git commit -m "test: Test commit"
 ```
 
 ## Code Style
-
-### Python
-- Follow PEP 8
-- Use type hints
-- Docstrings for public functions
-- Max line length: 100
 
 ### Shell Scripts
 - Use `set -e` for error handling
@@ -82,15 +73,9 @@ python3 ../tools/calculate_confidence.py
 
 Test with multiple languages:
 ```bash
-# Test Python
 cd examples/python-project
 ../../hooks/install.sh
-python3 ../../tools/calculate_confidence.py
-
-# Test JavaScript (when example exists)
-cd examples/js-project
-../../hooks/install.sh
-# ... test ...
+git add . && git commit -m "test: Test hooks"
 ```
 
 ### Automated Testing
@@ -98,27 +83,9 @@ cd examples/js-project
 Run the test suite with pytest:
 
 ```bash
-# Install test dependencies
-pip install -r requirements.txt
 pip install pytest
-
-# Run all tests
-pytest
-
-# Run with verbose output
-pytest -v
-
-# Run specific test file
 pytest tests/test_config.py
-pytest tests/test_calculate_confidence.py
-
-# Run with coverage (requires pytest-cov)
-pytest --cov=core --cov=tools
 ```
-
-Tests are located in the `tests/` directory:
-- `test_config.py` - Configuration loader tests
-- `test_calculate_confidence.py` - Confidence scoring tests
 
 ## Adding Language Support
 
@@ -141,35 +108,10 @@ To add a new language profile:
    code:
      extensions: ["ext"]
      root: "src/"
-
-   # ... customize ...
    ```
 
-3. **Test with example**:
-   ```bash
-   mkdir examples/newlang-project
-   # Create example config
-   # Test hooks
-   ```
-
-4. **Update documentation**:
-   - Add to supported languages list
-   - Create example in `examples/`
-   - Document any quirks
-
-## Adding Tools
-
-To add a new automation tool:
-
-1. **Create tool file**: `tools/new-tool.py` or `tools/new-tool.sh`
-2. **Use config system**:
-   ```python
-   from config import get_config
-   config = get_config()
-   ```
-3. **Document in tools/README.md**
-4. **Add usage examples**
-5. **Test with multiple languages**
+3. **Test with example**
+4. **Update documentation**
 
 ## Adding Commands
 
@@ -187,7 +129,6 @@ To add a slash command:
    [Full prompt here]
    ```
 3. **Document in commands/README.md**
-4. **Test command execution**
 
 ## Documentation
 
@@ -196,7 +137,6 @@ All user-facing changes need documentation:
 - **README.md**: Overview, features, quick start
 - **docs/INTEGRATION.md**: Installation and configuration
 - **docs/CONFIG.md**: Configuration reference
-- **tools/README.md**: Tool-specific docs
 - **hooks/README.md**: Hook-specific docs
 - **examples/**: Example projects
 
@@ -215,18 +155,5 @@ All user-facing changes need documentation:
 - Share knowledge
 - Give constructive feedback
 - Credit contributors
-
-## Recognition
-
-Contributors will be:
-- Listed in CONTRIBUTORS.md
-- Credited in release notes
-- Thanked publicly
-
-## Questions?
-
-- Open an issue for questions
-- Join discussions
-- Check existing issues first
 
 Thank you for contributing!
