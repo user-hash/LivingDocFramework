@@ -163,8 +163,20 @@ Built for a 181K LOC codebase where manual discipline stopped working.
 
 External reviewers read the docs first and have full context before touching code. Bug fixes reference linked invariants — no archaeology to understand constraints. Cognitive load drops because the hooks remember what's critical.
 
-64 bug patterns. 36 invariants. 284 mapped files. All enforced at commit time.
+● Speeds up:
+  - Time to detect bugs 
+  - Time to transfer context to new reviewers
+  - Time to fix bugs
+  - Onboarding
+  - Code review (context is upfront)
 
+  Reduces:
+  - Repeated bugs
+  - Knowledge loss when people leave
+  - "Why is this like this?" questions
+  - Cognitive load (hooks remember what's critical, you don't have to)
+  - Documentation drift (enforced, not optional)
+  - Trial and error debugging
 
 ## Documentation
 
