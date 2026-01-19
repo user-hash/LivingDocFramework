@@ -2,6 +2,59 @@
 
 This directory contains automation tools for the Living Documentation system.
 
+---
+
+## Extracted Tools (Ready to Use)
+
+> **See [TOOLS_STATUS.md](TOOLS_STATUS.md) for detailed feature-by-feature status**
+
+### confidence_engine.py ✅ VERIFIED
+Advanced confidence scoring using exponential decay formula.
+
+```bash
+python tools/confidence_engine.py
+# Output: Score, penalty breakdown, and formula details
+```
+
+**Features:**
+- Configurable via JSON config file
+- Saturating severity penalties (first bugs matter most)
+- Fix ratio bonus for high resolution rates
+- Self-test included
+
+### github_sync.py 🔧 PARTIAL
+GitHub Issues ↔ local JSON synchronization.
+
+```bash
+python tools/github_sync.py import   # GitHub → local (VERIFIED)
+python tools/github_sync.py export   # local → GitHub (EXPERIMENTAL)
+python tools/github_sync.py sync     # Bidirectional (EXPERIMENTAL)
+```
+
+**Requires:** GitHub CLI (`gh`) installed and authenticated
+
+### devmemory/ Module
+Cognitive session memory for development sessions.
+
+| Module | Status | Purpose |
+|--------|--------|---------|
+| `session_memory.py` | ✅ VERIFIED | Session state persistence |
+| `event_stream.py` | 🔧 PARTIAL | Cognitive event logging |
+| `wiring.py` | 🔧 PARTIAL | Component integration |
+
+```python
+from devmemory import SessionMemory, emit_event
+
+# Start a session
+session = SessionMemory()
+session.start(version="1.0.0", branch="main")
+
+# Emit events
+emit_event("code.edit", {"file": "app.py"}, "Edited app.py")
+```
+
+---
+
 ## Configuration System
 
 All tools use a unified configuration system:
@@ -39,7 +92,9 @@ print(f"Code root: {config.code_root}")
 code_files = config.find_code_files()
 ```
 
-## Tools to Extract
+---
+
+## Tools Still to Extract
 
 ### Priority 1 - Core Tools
 
@@ -48,43 +103,39 @@ code_files = config.find_code_files()
    - Needs: Load config, replace hardcoded paths
    - Status: ⏳ Pending extraction
 
-2. **calculate_confidence.py** (504 lines)
-   - Confidence score calculator with exponential decay
-   - Needs: Use config.py for paths
-   - Status: ⏳ Pending extraction
-
-3. **auto-doc-mapper.sh** (381 lines)
+2. **auto-doc-mapper.sh** (381 lines)
    - Auto-generate CODE_DOC_MAP entries
    - Needs: Language-agnostic file patterns
    - Status: ⏳ Pending extraction
 
 ### Priority 2 - Supporting Tools
 
-4. **doc-engine.py** (334 lines)
+3. **doc-engine.py** (334 lines)
    - Document processing engine
    - Status: ⏳ Pending extraction
 
-5. **dashboard/generator.py** (305 lines)
+4. **dashboard/generator.py** (305 lines)
    - Python dashboard builder
    - Status: ⏳ Pending extraction
 
-6. **spawn-agent.sh** (200+ lines)
+5. **spawn-agent.sh** (200+ lines)
    - Agent spawning helper
    - Status: ⏳ Pending extraction
 
-7. **track-agent.sh** (200+ lines)
+6. **track-agent.sh** (200+ lines)
    - Agent execution tracker
    - Status: ⏳ Pending extraction
 
 ### Priority 3 - Utilities
 
+7. **session-memory-pack.sh** - Session context packager
 8. **living-docs-sync.sh** - Doc synchronization
 9. **validate-agent-report.sh** - Report validator
 10. **why-diff.sh** - Git diff analyzer
 11. **dashboard-auto.py** - Dashboard automation
 12. **dashboard-server.py** - Local web server
-13. **dashboard.sh** (legacy) - Original dashboard
-14. **auto-mapper.py** - Python doc mapper
+
+---
 
 ## Generalization Checklist
 
@@ -92,12 +143,14 @@ When extracting a tool, ensure:
 
 - [ ] Replace hardcoded paths with config variables
 - [ ] Replace hardcoded extensions (.cs) with `$LDF_CODE_EXT`
-- [ ] Replace Unity-specific paths with `$LDF_CODE_ROOT`
+- [ ] Replace project-specific paths with `$LDF_CODE_ROOT`
 - [ ] Replace file find commands with `ldf_find_code` / `config.find_code_files()`
 - [ ] Use `$LDF_VERSION_FILE` for version extraction
 - [ ] Use `$LDF_BUG_TRACKER`, `$LDF_CHANGELOG`, etc. for doc paths
 - [ ] Test with multiple language profiles (Python, JS, Go)
 - [ ] Document any language-specific assumptions
+
+---
 
 ## Extraction Pattern
 
@@ -155,6 +208,8 @@ if __name__ == '__main__':
     main()
 ```
 
+---
+
 ## Testing
 
 After extracting each tool:
@@ -180,13 +235,19 @@ After extracting each tool:
    - Check file paths are resolved
    - Check no hardcoded extensions remain
 
+---
+
 ## Progress
 
 - [x] Configuration system created (config.py, load-config.sh)
+- [x] **confidence_engine.py** - Advanced confidence scoring (VERIFIED)
+- [x] **github_sync.py** - GitHub sync (PARTIAL - import verified)
+- [x] **devmemory/** - Session memory module (PARTIAL)
 - [ ] Dashboard generator extracted
-- [ ] Confidence calculator extracted
 - [ ] Auto-doc-mapper extracted
-- [ ] Remaining 12 tools extracted
+- [ ] Remaining utilities extracted
+
+---
 
 ## Dependencies
 
@@ -195,14 +256,18 @@ After extracting each tool:
 - Python 3.8+
 - jq (for JSON processing in shell scripts)
 
+### For github_sync.py
+- GitHub CLI (`gh`) - Install with `brew install gh` or `winget install GitHub.cli`
+
 ### Optional
 - yq (for YAML parsing - more robust than grep)
 - Chart.js (loaded via CDN for dashboards)
 
+---
+
 ## Next Steps
 
 1. Extract dashboard-v3.sh with full generalization
-2. Extract calculate_confidence.py
-3. Extract auto-doc-mapper.sh
-4. Create integration tests
-5. Document tool APIs
+2. Extract auto-doc-mapper.sh
+3. Create integration tests
+4. Document tool APIs

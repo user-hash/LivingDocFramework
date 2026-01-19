@@ -1,0 +1,43 @@
+{
+  "version": "1.0.0",
+  "description": "File tier classifications for risk assessment. Add your critical files to Tier A.",
+  "tiers": {
+    "A": {
+      "label": "Tier A",
+      "color": "#ff6b6b",
+      "criteria": "Critical files - require invariant citation before edit",
+      "files": [],
+      "patterns": []
+    },
+    "B": {
+      "label": "Tier B",
+      "color": "#ffa502",
+      "criteria": "Important files - moderate risk",
+      "files": [],
+      "patterns": [
+        "*Manager.*",
+        "*Controller.*",
+        "*Service.*"
+      ]
+    },
+    "C": {
+      "label": "Tier C",
+      "color": "#2ed573",
+      "criteria": "Standard files - low risk",
+      "files": [],
+      "patterns": []
+    },
+    "D": {
+      "label": "Tier D",
+      "color": "#a4b0be",
+      "criteria": "Generated/config files - rarely touched",
+      "files": [],
+      "patterns": [
+        "*.generated.*",
+        "*.Designer.*",
+        "*.meta"
+      ]
+    }
+  },
+  "default_tier": "C"
+}

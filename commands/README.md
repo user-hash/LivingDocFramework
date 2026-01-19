@@ -163,22 +163,20 @@ Invoke with: `/refactor-file src/auth/login.py`
 2. **Don't skip doc updates**: Always update docs in workflow
 3. **Don't assume context**: Explicitly load what you need
 
-## Commands to Extract from Nebulae
+## Commands Status
 
-### High Priority
+### Available Commands
 1. ✅ living-docs.md - Doc health check
-2. ⏳ session-start.md - Session initialization
-3. ⏳ bug-fix.md - Structured bug fixing
-4. ⏳ code-review.md - Multi-agent review
+2. ✅ session-start.md - Session initialization
+3. ✅ session-end.md - Session cleanup and state saving
 
-### Medium Priority
-5. ⏳ bug-hunt.md - Multi-agent bug discovery
-6. ⏳ cognitive-fix.md - Pattern-aware fixing
-7. ⏳ perf-check.md - Performance analysis
-
-### Lower Priority
-8. ⏳ quick-fix.md - Single bug fixes
-9. ⏳ mp-cognitive-fix.md - Multiplayer-specific (example)
+### To Extract from Nebulae
+4. ⏳ bug-fix.md - Structured bug fixing
+5. ⏳ code-review.md - Multi-agent review
+6. ⏳ bug-hunt.md - Multi-agent bug discovery
+7. ⏳ cognitive-fix.md - Pattern-aware fixing
+8. ⏳ perf-check.md - Performance analysis
+9. ⏳ quick-fix.md - Single bug fixes
 10. ⏳ sync-tag.md - Version tagging
 
 ## Integration Examples
@@ -212,7 +210,9 @@ claude "/living-docs"
 
 - ✅ Commands directory structure created
 - ✅ README with usage guide
-- ⏳ Example commands to extract
-- ⏳ Integration with Claude Code
+- ✅ living-docs.md command available
+- ✅ session-start.md command available
+- ✅ session-end.md command available
+- ✅ Integration with Claude Code (via settings.json hooks)
 
-**Next**: Extract sample commands or move to Phase 8 (documentation).
+**Next**: Extract additional commands (bug-fix, code-review) as needed.
