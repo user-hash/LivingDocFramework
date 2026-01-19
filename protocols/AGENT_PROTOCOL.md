@@ -133,8 +133,7 @@ Your report MUST include:
 
 3. **For Bulk Scans (10+ bugs found)**
    - Verify at least 30% of bugs before reporting
-   - Flag confidence level (high/medium/low)
-   - If <70% confidence, run verification pass first
+   - Run verification pass before creating patterns
 
 ---
 
@@ -145,7 +144,6 @@ Your report MUST include:
 The CODE_DOC_MAP is the **master file-to-doc registry**. When it drifts:
 - New files don't get documented
 - Deleted files clutter the map
-- Dashboard shows misleading "STALE" warnings
 - Agents lose trust in the system
 
 ### Hygiene Rules

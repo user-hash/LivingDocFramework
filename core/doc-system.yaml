@@ -17,25 +17,19 @@ categories:
       - name: "sev_p0"
         pattern: '"P0":\s*(\d+)'
         weight: 10
-        dashboard: true
       - name: "sev_p1"
         pattern: '"P1":\s*(\d+)'
         weight: 3
-        dashboard: true
       - name: "sev_p2"
         pattern: '"P2":\s*(\d+)'
         weight: 1
-        dashboard: true
       - name: "sev_p3"
         pattern: '"P3":\s*(\d+)'
         weight: 0.05  # Low priority/improvements
-        dashboard: true
       - name: "bugs_open"
         pattern: 'bugs_open:\s*(\d+)'
-        dashboard: true
       - name: "bugs_fixed"
         pattern: 'bugs_fixed:\s*(\d+)'
-        dashboard: false
 
   patterns:
     name: "Bug Patterns"
@@ -45,7 +39,6 @@ categories:
       - name: "patterns_total"
         pattern: '### PATTERN-(\d+)'
         count: true
-        dashboard: false
     subcategories:
       # Define your project's subsystems here
       # Examples: multiplayer, audio, ui, thread, database, api, etc.
@@ -68,7 +61,6 @@ categories:
       - name: "invariants_total"
         pattern: '### INV-[\d.]+'
         count: true
-        dashboard: false
     subcategories:
       # Group invariants by domain - customize for your project
       - name: "thread_safety"
@@ -95,7 +87,6 @@ categories:
       - name: "golden_total"
         pattern: '### GP-\d+'
         count: true
-        dashboard: false
 
   decisions:
     name: "Architecture Decisions"
@@ -105,7 +96,6 @@ categories:
       - name: "adrs_total"
         pattern: '### ADR-\d+'
         count: true
-        dashboard: false
     subcategories:
       - name: "accepted"
         pattern: '\*\*Status:\*\*.*Accepted'
@@ -119,9 +109,7 @@ categories:
     computed: true
     metrics:
       - name: "stale_count"
-        dashboard: true
       - name: "avg_staleness"
-        dashboard: true
 
 # =============================================================================
 # FILE TIERING RULES - Auto-tier based on patterns
@@ -223,66 +211,6 @@ auto_mapping:
         - "**/tests/**/auth*.{{TEST_EXT}}"
 
 # =============================================================================
-# DASHBOARD CONFIGURATION - What to show on graphs
-# =============================================================================
-dashboard:
-  main_chart:
-    title: "Project Health Over Time"
-    y_axis_left:
-      label: "Confidence %"
-      min: 0
-      max: 100
-    y_axis_right:
-      label: "Count"
-      auto_scale: true
-    series:
-      - metric: "confidence"
-        color: "#00d4ff"
-        fill: true
-        label: "Confidence %"
-      - metric: "sev_p0"
-        color: "#ff4444"
-        label: "P0 Bugs"
-        scale: "right"
-      - metric: "sev_p1"
-        color: "#ff8800"
-        label: "P1 Bugs"
-        scale: "right"
-      - metric: "sev_p2"
-        color: "#ffcc00"
-        label: "P2 Bugs"
-        scale: "right"
-      - metric: "stale_count"
-        color: "#aa44ff"
-        dashed: true
-        label: "Stale Docs"
-        scale: "right"
-
-  category_breakdown:
-    title: "Documentation Categories"
-    type: "stacked_bar"
-    auto_populate: true  # Auto-add from categories with subcategories
-
-  health_cards:
-    - metric: "confidence"
-      label: "Confidence"
-      format: "percent"
-      thresholds:
-        good: 75
-        warn: 50
-        bad: 25
-    - metric: "sev_p0"
-      label: "P0 Bugs"
-      format: "count"
-      thresholds:
-        good: 0
-        warn: 1
-        bad: 2
-    - metric: "bugs_open"
-      label: "Open Bugs"
-      format: "count"
-
-# =============================================================================
 # LOOP CLOSURE - Ensure all related files are updated
 # File patterns use {{EXT}} placeholder - replaced at runtime based on language
 # =============================================================================
@@ -312,32 +240,6 @@ loop_closure:
         - "CHANGELOG.md"
         - "{{VERSION_FILE}}"  # Configured per language
         - "CLAUDE.md"
-
-# =============================================================================
-# CONFIDENCE SCORING - How to calculate system confidence
-# =============================================================================
-confidence:
-  formula: "weighted_average"
-  components:
-    - name: "documentation_coverage"
-      weight: 0.30
-      calculation: "mapped_files / total_files"
-
-    - name: "pattern_prevention"
-      weight: 0.25
-      calculation: "patterns_documented / total_patterns"
-
-    - name: "invariant_compliance"
-      weight: 0.25
-      calculation: "tier_a_with_citations / tier_a_total"
-
-    - name: "freshness"
-      weight: 0.15
-      calculation: "1 - (stale_docs / total_docs)"
-
-    - name: "test_coverage"
-      weight: 0.05
-      calculation: "files_with_tests / tier_a_files"
 
 # =============================================================================
 # LANGUAGE PLACEHOLDERS

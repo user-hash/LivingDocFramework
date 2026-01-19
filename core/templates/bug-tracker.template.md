@@ -61,6 +61,4 @@ Priority Levels:
 
 This file integrates with:
 - github_sync.py: Syncs with GitHub Issues
-- confidence_engine.py: Bug counts affect confidence score
-- Dashboard: Visualizes bug trends
 -->

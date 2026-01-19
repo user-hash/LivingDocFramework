@@ -16,9 +16,8 @@ document_types:
     id: patterns
     name: "Bug Patterns"
     description: "Anti-patterns, bug signatures, and lessons learned"
-    icon: "🐛"
     tier: B
-    path: "BUG_PATTERNS.md"  # Root level (not docs/)
+    path: "BUG_PATTERNS.md"
     schema: "schemas/pattern.schema.json"
     template: "templates/pattern.template.md"
     triggers:
@@ -32,20 +31,13 @@ document_types:
       - fix
       - prevention
     searchable: true
-    auto_link: true  # Auto-link pattern IDs in commits/code
-    subcategories:  # Group patterns by system
-      - multiplayer
-      - audio
-      - ui
-      - thread
-      - tooling
+    auto_link: true
 
   # Best practices and recommended approaches
   golden_paths:
     id: golden_paths
     name: "Golden Paths"
     description: "Best practices and recommended implementation patterns"
-    icon: "✨"
     tier: B
     path: "docs/GOLDEN_PATHS.md"
     schema: "schemas/golden-path.schema.json"
@@ -67,7 +59,6 @@ document_types:
     id: invariants
     name: "Invariants"
     description: "Safety rules that must never be violated"
-    icon: "🛡️"
     tier: A  # CRITICAL - Must be cited when editing related code
     path: "docs/INVARIANTS.md"
     schema: "schemas/invariant.schema.json"
@@ -84,22 +75,15 @@ document_types:
       - linked_tests
     citation_required: true
     linked_to_tests: true
-    subcategories:  # Group invariants by domain
-      - thread_safety
-      - audio
-      - multiplayer
-      - security
-      - performance
 
   # Architecture Decision Records
   decisions:
     id: decisions
     name: "Decisions (ADR)"
     description: "Architecture Decision Records"
-    icon: "📐"
     tier: B
     path: "docs/decisions/"
-    pattern: "ADR-*.md"  # Multiple files matching pattern
+    pattern: "ADR-*.md"
     schema: "schemas/decision.schema.json"
     template: "templates/decision.template.md"
     triggers:
@@ -113,61 +97,26 @@ document_types:
       - context
       - decision
       - consequences
-    auto_number: true  # Auto-increment ADR numbers
-    subcategories:  # Group by status
-      - accepted
-      - deprecated
-      - proposed
+    auto_number: true
 
   # Code to documentation mapping
   code_map:
     id: code_map
     name: "Code-Doc Map"
     description: "Maps code files to their documentation"
-    icon: "🗺️"
     tier: C
-    path: "docs/CODE_DOC_MAP.md"
-    schema: "schemas/code-map.schema.json"
+    path: "CODE_DOC_MAP.md"
     triggers:
       - new_file
       - file_rename
       - major_refactor
-    auto_generate: true  # Can be partially auto-generated
-
-  # Bug tracker (instance-specific, not pattern)
-  tracker:
-    id: tracker
-    name: "Bug Tracker"
-    description: "Current bugs and investigation status"
-    icon: "📋"
-    tier: B
-    path: "BUG_TRACKER.md"
-    triggers:
-      - bug_report
-      - bug_fix
-      - investigation
-    retention: "90d"  # Archive entries older than 90 days
-    metrics:
-      - name: "bugs_open"
-        pattern: 'bugs_open:\s*(\d+)'
-      - name: "bugs_fixed"
-        pattern: 'bugs_fixed:\s*(\d+)'
-      - name: "sev_p0"
-        pattern: '"P0":\s*(\d+)'
-        weight: 10
-      - name: "sev_p1"
-        pattern: '"P1":\s*(\d+)'
-        weight: 3
-      - name: "sev_p2"
-        pattern: '"P2":\s*(\d+)'
-        weight: 1
+    auto_generate: true
 
   # Changelog
   changelog:
     id: changelog
     name: "Changelog"
     description: "Version history and release notes"
-    icon: "📝"
     tier: A
     path: "CHANGELOG.md"
     triggers:
@@ -185,28 +134,18 @@ tiers:
     description: "Must be cited when editing related code"
     citation_required: true
     pre_commit_block: true
-    color: "#ff4444"
 
   B:
     name: "Important"
     description: "Should be updated when relevant changes occur"
     citation_required: false
     pre_commit_block: false
-    color: "#ffaa00"
 
   C:
     name: "Reference"
     description: "Helpful but not blocking"
     citation_required: false
     pre_commit_block: false
-    color: "#44aa44"
-
-  D:
-    name: "Legacy/Deprecated"
-    description: "No longer actively maintained"
-    citation_required: false
-    pre_commit_block: false
-    color: "#888888"
 
 # =============================================================================
 # TRIGGERS - Events that should prompt documentation updates
@@ -214,7 +153,7 @@ tiers:
 triggers:
   bug_fix:
     description: "When fixing a bug"
-    updates: [patterns, tracker, changelog]
+    updates: [patterns, changelog]
     prompt: "Add pattern to BUG_PATTERNS.md?"
 
   new_feature:
@@ -237,29 +176,10 @@ triggers:
     updates: [invariants]
     requires_citation: true
 
-  post_mortem:
-    description: "After incident resolution"
-    updates: [patterns, tracker]
-
-  regression:
-    description: "When a bug recurs"
-    updates: [patterns]
-    escalate: true  # Flag for review
-
 # =============================================================================
 # HOOKS - Automated checks and actions
 # =============================================================================
 hooks:
-  session_start:
-    - action: git_sync
-      command: "git fetch origin {{MAIN_BRANCH}} && git log --oneline -3"
-    - action: load_context
-      files: [CURRENT_WORK.md, CLAUDE.md]
-    - action: version_check
-      compare: [local, "origin/{{MAIN_BRANCH}}"]
-    - action: staleness_check
-      max_age: "7d"
-
   pre_commit:
     - action: changelog_check
       condition: "code_changed"
@@ -267,56 +187,8 @@ hooks:
     - action: tier_a_citation
       condition: "tier_a_files_changed"
       block: true
-    - action: pattern_check
-      condition: "bug_fix_commit"
-      warn: true
     - action: blast_radius
-      threshold: 5  # Warn if > 5 files changed
-
-  post_commit:
-    - action: update_dashboard
-    - action: confidence_score
-
-  post_fix:
-    - action: prompt_pattern
-      message: "Add this fix to BUG_PATTERNS.md?"
-
-# =============================================================================
-# DASHBOARD - Dynamic dashboard configuration
-# =============================================================================
-dashboard:
-  output: "docs/DASHBOARD.md"
-  html_output: ".claude/dashboard/index.html"
-  history_file: ".claude/dashboard/history.json"
-  refresh: "on_change"  # or "manual", "hourly"
-
-  sections:
-    - id: health
-      title: "Documentation Health"
-      type: metrics
-      metrics:
-        - staleness_score
-        - coverage_score
-        - citation_compliance
-
-    - id: recent
-      title: "Recent Updates"
-      type: activity
-      max_items: 10
-
-    - id: documents
-      title: "Core Documents"
-      type: document_list
-      show_status: true
-
-    - id: triggers
-      title: "Update Triggers"
-      type: trigger_matrix
-
-    - id: confidence
-      title: "System Confidence"
-      type: confidence_scores
-      source: "CHANGELOG.md"  # Extract from confidence table
+      threshold: 5
 
 # =============================================================================
 # RELATIONSHIPS - How documents relate to each other
@@ -337,11 +209,6 @@ relationships:
     type: "implements"
     description: "Decisions are implemented in mapped code"
 
-  - from: tracker
-    to: patterns
-    type: "graduates_to"
-    description: "Fixed bugs graduate to patterns"
-
 # =============================================================================
 # AUTO-DISCOVERY - Find documents not explicitly listed
 # =============================================================================
@@ -356,20 +223,14 @@ discovery:
     - "vendor/**"
     - "build/**"
     - "dist/**"
-  classify_by:
-    - frontmatter  # YAML frontmatter with type field
-    - filename_pattern  # ADR-*, PATTERN-*, etc.
-    - content_markers  # ## Pattern:, ## Decision:, etc.
 
 # =============================================================================
 # LANGUAGE-SPECIFIC CONFIGURATION
 # =============================================================================
-# Override these in project-config.yaml based on your language
-# See core/languages/*.yaml for language-specific defaults
 language:
-  name: "{{LANGUAGE}}"  # python, javascript, go, rust, java, csharp, etc.
-  version_file: "{{VERSION_FILE}}"  # Where version is defined
-  version_pattern: "{{VERSION_PATTERN}}"  # Regex to extract version
-  code_root: "{{CODE_ROOT}}"  # Root directory for code
-  code_extensions: ["{{EXT}}"]  # File extensions to track
-  test_pattern: "{{TEST_PATTERN}}"  # Glob for test files
+  name: "{{LANGUAGE}}"
+  version_file: "{{VERSION_FILE}}"
+  version_pattern: "{{VERSION_PATTERN}}"
+  code_root: "{{CODE_ROOT}}"
+  code_extensions: ["{{EXT}}"]
+  test_pattern: "{{TEST_PATTERN}}"
