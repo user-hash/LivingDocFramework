@@ -74,20 +74,7 @@ echo "Updating $LDF_CODE_DOC_MAP"  # Not hardcoded CODE_DOC_MAP.md
 - Use config paths for all doc references
 - Make report format configurable
 
-### Priority 3 - Session Tools
-
-#### session-memory-pack.sh
-**Purpose**: Create session context packages
-**Generalizations**:
-```bash
-# Pack relevant files
-- $LDF_CHANGELOG
-- $LDF_BUG_TRACKER
-- $LDF_CLAUDE_MD (or equivalent project guide)
-- Recent git commits
-```
-
-### Priority 4 - Utility Tools
+### Priority 3 - Utility Tools
 
 #### why-diff.sh
 **Purpose**: Git diff analyzer

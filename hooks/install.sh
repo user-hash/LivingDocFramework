@@ -43,7 +43,33 @@ fi
 mkdir -p "$GIT_HOOKS_DIR"
 
 # Determine framework path relative to project root
-REL_PATH=$(realpath --relative-to="$PROJECT_ROOT" "$FRAMEWORK_ROOT")
+# Use realpath if available (Linux), otherwise use Python fallback (macOS compatibility)
+get_relative_path() {
+    local target="$1"
+    local base="$2"
+
+    # Try GNU realpath first (Linux, Git Bash on Windows)
+    if command -v realpath &>/dev/null && realpath --relative-to="$base" "$target" 2>/dev/null; then
+        return
+    fi
+
+    # Fallback: Use Python for cross-platform compatibility (macOS, etc.)
+    if command -v python3 &>/dev/null; then
+        python3 -c "import os.path; print(os.path.relpath('$target', '$base'))"
+        return
+    fi
+
+    # Last resort: Use Python 2 if available
+    if command -v python &>/dev/null; then
+        python -c "import os.path; print(os.path.relpath('$target', '$base'))"
+        return
+    fi
+
+    # Ultimate fallback: assume framework is in a subdirectory
+    echo "LivingDocFramework"
+}
+
+REL_PATH=$(get_relative_path "$FRAMEWORK_ROOT" "$PROJECT_ROOT")
 
 # Create pre-commit hook
 cat > "$GIT_HOOKS_DIR/pre-commit" << EOF
