@@ -7,7 +7,7 @@ When a bug is reported:
 - Root cause may be non-obvious
 - Multiple systems may be involved
 
-**Traditional approach:** Hours of exploration, trial-and-error fixes, repeated prompting.
+**Traditional approach:** Hours of exploration, trial-and-error fixes.
 
 **With Living Docs:** Minutes to understand, correct fix on first attempt.
 
