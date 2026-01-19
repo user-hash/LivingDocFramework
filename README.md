@@ -159,11 +159,17 @@ Any folder containing CODE_DOC_MAP.md is a doc-set. No config needed.
 
 ## Why It Exists
 
-Built for a 181K LOC codebase where manual discipline stopped working.
+We had a 181K LOC codebase. Documentation existed but drifted. New people asked the same questions. Bugs repeated because the fix wasn't written down — or was written down but nobody found it.
 
-External reviewers read the docs first and have full context before touching code. Bug fixes reference linked invariants — no archaeology to understand constraints. Cognitive load drops because the hooks remember what's critical.
+We tried code reviews. We tried wikis. We tried "just remember to update the docs." None of it stuck.
 
-64 bug patterns. 36 invariants. 284 mapped files. All enforced at commit time.
+So we made the hooks enforce it. Now:
+
+- Reviewers read INVARIANTS.md before touching code. They know the rules.
+- Bug fixes check BUG_PATTERNS.md first. Similar problem? Apply the known fix.
+- Nobody has to remember which files are critical. The hooks remember.
+
+64 bug patterns. 36 invariants. 284 mapped files.
 
 
 ## Documentation
