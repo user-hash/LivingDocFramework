@@ -123,7 +123,7 @@ document_types:
     description: "Architecture Decision Records"
     tier: B
     # Multi-file (PROVEN - this pattern works):
-    path: "docs/decisions/"
+    path: "docs/DECISIONS/"
     pattern: "ADR-*.md"
     schema: "schemas/decision.schema.json"
     template: "templates/decision.template.md"

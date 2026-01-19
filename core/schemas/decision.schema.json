@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "decision.schema.json",
   "title": "Architecture Decision Record",
-  "description": "Schema for ADRs in docs/decisions/",
+  "description": "Schema for ADRs in DECISIONS/ folder",
   "type": "object",
   "required": ["id", "title", "status", "context", "decision", "consequences"],
   "properties": {

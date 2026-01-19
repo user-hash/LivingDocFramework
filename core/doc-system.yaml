@@ -55,7 +55,7 @@ categories:
   decisions:
     name: "Architecture Decisions"
     files:
-      - "DECISIONS.md"
+      - "DECISIONS/"          # Folder containing ADR-*.md files
     subcategories:
       - name: "accepted"
         pattern: '\*\*Status:\*\*.*Accepted'

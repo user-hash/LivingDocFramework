@@ -1,0 +1,14 @@
+# Ensure shell scripts always use LF line endings (Unix)
+*.sh text eol=lf
+hooks/* text eol=lf
+core/*.sh text eol=lf
+
+# Keep these as auto (let git decide)
+*.md text
+*.yaml text
+*.json text
+
+# Binary files
+*.png binary
+*.jpg binary
+*.gif binary

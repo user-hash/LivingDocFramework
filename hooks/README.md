@@ -49,6 +49,16 @@ Validates commit message format.
 - Starts with type: `feat:`, `fix:`, `docs:`, `refactor:`, etc.
 - References docs if Tier A files changed
 
+## Requirements
+
+**Bash 4.0+** is required (for associative arrays used in Tier A tracking).
+
+| Platform | How to get Bash 4+ |
+|----------|-------------------|
+| macOS | `brew install bash` (default `/bin/bash` is 3.2) |
+| Windows | Git Bash (bundled with Git for Windows) |
+| Linux | Usually already 4.0+, verify with `bash --version` |
+
 ## Installation
 
 ### Automatic (Recommended)

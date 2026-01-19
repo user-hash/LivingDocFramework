@@ -46,14 +46,14 @@ Before making ANY code change:
 1. READ the relevant CODE_DOC_MAP.md (check `docs/*/CODE_DOC_MAP.md` for doc-sets)
 2. READ the sibling INVARIANTS.md if touching Tier A files
 3. READ the relevant architecture doc (see CODE_DOC_MAP for which doc)
-4. READ docs/DECISIONS.md if the file has an ADR (architectural decisions)
+4. READ sibling DECISIONS/ folder if the file has an ADR (architectural decisions)
 
 After making ANY code change:
 1. UPDATE the sibling INVARIANTS.md if any invariant values changed
 2. UPDATE the relevant CODE_DOC_MAP.md if new files created
 3. UPDATE the relevant architecture doc if behavior changed
 4. UPDATE BUG_PATTERNS.md if new pattern discovered
-5. UPDATE docs/DECISIONS.md if making a major architectural choice (add new ADR)
+5. ADD to sibling DECISIONS/ folder if making a major architectural choice (new ADR)
 
 **Doc-Set Rule**: If file is in `docs/{subsystem}/CODE_DOC_MAP.md`, update `docs/{subsystem}/INVARIANTS.md`.
 

@@ -43,16 +43,16 @@ fi
 # MATCHING RULES:
 # 1. Requires TIER A token on the SAME LINE as the file path (prevents false positives)
 # 2. Uses repo-relative paths only (no basename fallback - deterministic matching)
-# 3. Escapes special characters in file path for grep safety
+# 3. Two-stage matching: grep for "tier a", then fixed-string match for file path
+#    (avoids regex issues with special characters in paths like . + [ ] etc.)
 find_tier_a_map_for_file() {
     local file="$1"
-    # Escape special regex characters in file path
-    local escaped=$(printf '%s' "$file" | sed 's/[.[\*^$()+?{|]/\\&/g')
 
     # Use while-read pattern to handle spaces in paths
     while IFS= read -r map; do
-        # Match: file path AND "TIER A" on the SAME LINE (case-insensitive)
-        if grep -iE "^\|.*\`$escaped\`.*TIER[[:space:]]*A|\`$escaped\`.*TIER[[:space:]]*A|TIER[[:space:]]*A.*\`$escaped\`" "$map" >/dev/null 2>&1; then
+        # Two-stage match: find lines with "tier a", then check for exact file path
+        # -F = fixed-string (no regex interpretation of file path)
+        if grep -i "tier a" "$map" 2>/dev/null | grep -Fq "\`$file\`"; then
             echo "$map"
             return 0
         fi
@@ -60,7 +60,7 @@ find_tier_a_map_for_file() {
 
     # Backward compat: root-level CODE_DOC_MAP.md (DEPRECATED - emit warning)
     if [ -f "$PROJECT_ROOT/CODE_DOC_MAP.md" ]; then
-        if grep -iE "^\|.*\`$escaped\`.*TIER[[:space:]]*A|\`$escaped\`.*TIER[[:space:]]*A|TIER[[:space:]]*A.*\`$escaped\`" "$PROJECT_ROOT/CODE_DOC_MAP.md" >/dev/null 2>&1; then
+        if grep -i "tier a" "$PROJECT_ROOT/CODE_DOC_MAP.md" 2>/dev/null | grep -Fq "\`$file\`"; then
             echo -e "${YELLOW}Warning: Using deprecated root CODE_DOC_MAP.md${NC}" >&2
             echo -e "${YELLOW}  → Migrate to docs/<subsystem>/CODE_DOC_MAP.md${NC}" >&2
             echo "$PROJECT_ROOT/CODE_DOC_MAP.md"
@@ -81,12 +81,12 @@ get_sibling_invariants() {
 # Detect file listed in multiple CODE_DOC_MAPs (MUST NOT happen)
 check_tier_a_conflicts() {
     local file="$1"
-    local escaped=$(printf '%s' "$file" | sed 's/[.[\*^$()+?{|]/\\&/g')
     local maps_found=0
     local found_maps=""
 
     while IFS= read -r map; do
-        if grep -iE "^\|.*\`$escaped\`.*TIER[[:space:]]*A|\`$escaped\`.*TIER[[:space:]]*A|TIER[[:space:]]*A.*\`$escaped\`" "$map" >/dev/null 2>&1; then
+        # Two-stage match: find lines with "tier a", then check for exact file path
+        if grep -i "tier a" "$map" 2>/dev/null | grep -Fq "\`$file\`"; then
             maps_found=$((maps_found + 1))
             found_maps="$found_maps $map"
         fi
