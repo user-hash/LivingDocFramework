@@ -4,6 +4,24 @@ All notable changes to the Living Documentation Framework.
 
 ---
 
+## [1.2.0] - 2025-01-22
+
+### Added
+- **Quickstart example**: Runnable example with actual Python code
+  - `examples/quickstart/` with auth.py as Tier A file
+  - Experience the failure/fix loop in under 5 minutes
+- **Tutorial**: Step-by-step walkthrough in `docs/TUTORIAL.md`
+- **Glossary**: Term definitions in `docs/GLOSSARY.md`
+
+### Changed
+- README completely rewritten for clarity
+  - Clearer structure: Why → What → How
+  - "What this is not" section for honest boundaries
+  - AGPL clarification for adoption confidence
+  - Design principles section
+
+---
+
 ## [1.1.0] - 2025-01-19
 
 ### Added
@@ -47,6 +65,7 @@ All notable changes to the Living Documentation Framework.
 
 ## Version History
 
+- **1.2.0**: Quickstart example and improved onboarding
 - **1.1.0**: Doc-set discovery for per-subsystem documentation
 - **1.0.0**: Initial public release
 
