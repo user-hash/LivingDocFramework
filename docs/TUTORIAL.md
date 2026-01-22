@@ -30,7 +30,7 @@ git add .
 git commit -m "init"
 
 # Install hooks (path relative to quickstart folder)
-../../hooks/install.sh
+bash ../../hooks/install.sh
 ```
 
 

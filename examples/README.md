@@ -49,7 +49,7 @@ cp LivingDocFramework/examples/python-project/living-doc-config.yaml .
 nano living-doc-config.yaml
 
 # Install hooks
-./LivingDocFramework/hooks/install.sh
+bash LivingDocFramework/hooks/install.sh
 ```
 
 ## Creating Your Own Example

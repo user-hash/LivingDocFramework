@@ -144,7 +144,7 @@ Basic flow:
 ```bash
 # From your repo root
 git submodule add https://github.com/user-hash/LivingDocFramework.git
-./LivingDocFramework/hooks/install.sh
+bash LivingDocFramework/hooks/install.sh
 ```
 
 Then:

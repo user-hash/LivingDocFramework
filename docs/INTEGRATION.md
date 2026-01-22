@@ -86,14 +86,13 @@ cp LivingDocFramework/core/templates/bug-patterns.template.md BUG_PATTERNS.md
 ## Step 4: Install Git Hooks
 
 ```bash
-./LivingDocFramework/hooks/install.sh
+bash LivingDocFramework/hooks/install.sh
 ```
 
-**Windows users**: Run from Git Bash, or manually copy hooks:
+If you get "permission denied", the `bash` prefix handles it. Alternatively:
 ```bash
-cp LivingDocFramework/hooks/pre-commit .git/hooks/
-cp LivingDocFramework/hooks/commit-msg .git/hooks/
-chmod +x .git/hooks/*
+chmod +x LivingDocFramework/hooks/install.sh
+./LivingDocFramework/hooks/install.sh
 ```
 
 ### What Hooks Enforce

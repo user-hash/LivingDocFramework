@@ -65,7 +65,7 @@ Validates commit message format.
 ### Automatic (Recommended)
 ```bash
 cd your-project/
-./LivingDocFramework/hooks/install.sh
+bash LivingDocFramework/hooks/install.sh
 ```
 
 ### Manual

@@ -10,6 +10,10 @@ All notable changes to the Living Documentation Framework.
 - Set executable bit on `core/load-config.sh` (was 644, now 755)
 - Added `nul` to .gitignore (Windows artifact)
 
+### Changed
+- Install commands now use `bash` prefix for better cross-platform reliability
+  - Works even if scripts aren't marked executable after extraction
+
 ---
 
 ## [1.2.1] - 2025-01-22
