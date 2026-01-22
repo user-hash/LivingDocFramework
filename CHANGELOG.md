@@ -4,6 +4,16 @@ All notable changes to the Living Documentation Framework.
 
 ---
 
+## [1.2.1] - 2025-01-22
+
+### Fixed
+- Hook execution on Windows/MSYS2 (Git Bash)
+  - Fixed `set -e` exit when test_pattern config is empty
+  - Fixed extension parsing matching both code and test extensions
+  - Fixed CHANGELOG check producing invalid comparison
+
+---
+
 ## [1.2.0] - 2025-01-22
 
 ### Added
@@ -65,6 +75,7 @@ All notable changes to the Living Documentation Framework.
 
 ## Version History
 
+- **1.2.1**: Bug fixes for Windows/Git Bash compatibility
 - **1.2.0**: Quickstart example and improved onboarding
 - **1.1.0**: Doc-set discovery for per-subsystem documentation
 - **1.0.0**: Initial public release
