@@ -184,7 +184,7 @@ fi
 CODE_CHANGED=$(echo "$CHANGED_FILES" | grep -E "\.($CODE_EXT_PATTERN)$" | wc -l || echo "0")
 
 if [ "$CODE_CHANGED" -gt 0 ]; then
-    CHANGELOG_UPDATED=$(echo "$CHANGED_FILES" | grep -c "CHANGELOG" || echo "0")
+    CHANGELOG_UPDATED=$(echo "$CHANGED_FILES" | grep -c "CHANGELOG") || CHANGELOG_UPDATED=0
 
     if [ "$CHANGELOG_UPDATED" -eq 0 ]; then
         echo -e "${YELLOW}CHANGELOG NOT UPDATED${NC}"

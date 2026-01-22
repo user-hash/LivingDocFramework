@@ -90,7 +90,7 @@ parse_yaml() {
 
     # Tests section
     local test_pattern=$(get_section_field "tests:" "pattern:" "$file")
-    [ -n "$test_pattern" ] && export LDF_TEST_PATTERN="$test_pattern"
+    [ -n "$test_pattern" ] && export LDF_TEST_PATTERN="$test_pattern" || true
 }
 
 # Helper: get yq value or default (yq returns "null" string for missing keys)
@@ -128,7 +128,8 @@ if [ -n "$LDF_LANGUAGE" ]; then
             [ "$CODE_EXTS" = "null" ] && CODE_EXTS=""
         else
             # Extract extensions from YAML array: ["py", "pyw"] -> py,pyw
-            CODE_EXTS=$(grep "extensions:" "$LANG_PROFILE" | sed 's/.*\[\([^]]*\)\].*/\1/' | tr -d ' "')
+            # Use head -1 to only get code.extensions (first match), not tests.extensions
+            CODE_EXTS=$(grep "extensions:" "$LANG_PROFILE" | head -1 | sed 's/.*\[\([^]]*\)\].*/\1/' | tr -d ' "')
         fi
         if [ -n "$CODE_EXTS" ]; then
             export LDF_CODE_EXTS="$CODE_EXTS"
