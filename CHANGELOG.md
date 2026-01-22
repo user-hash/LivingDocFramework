@@ -4,6 +4,14 @@ All notable changes to the Living Documentation Framework.
 
 ---
 
+## [1.2.2] - 2025-01-22
+
+### Fixed
+- Set executable bit on `core/load-config.sh` (was 644, now 755)
+- Added `nul` to .gitignore (Windows artifact)
+
+---
+
 ## [1.2.1] - 2025-01-22
 
 ### Fixed
@@ -75,6 +83,7 @@ All notable changes to the Living Documentation Framework.
 
 ## Version History
 
+- **1.2.2**: Executable bit fix for load-config.sh
 - **1.2.1**: Bug fixes for Windows/Git Bash compatibility
 - **1.2.0**: Quickstart example and improved onboarding
 - **1.1.0**: Doc-set discovery for per-subsystem documentation
