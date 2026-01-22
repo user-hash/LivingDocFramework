@@ -2,7 +2,20 @@
 
 This directory contains example projects showing how to integrate the Living Documentation Framework.
 
+
+## Recommended Starting Point
+
+Start with **quickstart/** — includes actual code to trigger and fix violations.
+
+
 ## Available Examples
+
+### 0. Quickstart (Start Here)
+A minimal runnable example with actual Python code:
+- Experience the failure/fix loop in 5 minutes
+- Pre-configured for immediate use
+
+See [quickstart/README.md](quickstart/README.md)
 
 ### 1. Python Project
 A complete Python project example with:

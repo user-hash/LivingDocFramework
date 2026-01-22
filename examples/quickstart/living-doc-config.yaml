@@ -1,0 +1,20 @@
+project:
+  name: "quickstart"
+  language: "python"
+  main_branch: "main"
+
+version:
+  file: "src/api/__init__.py"
+  pattern: '__version__\s*=\s*"([0-9.]+)"'
+
+code:
+  root: "src/"
+  extensions: ["py"]
+
+hooks:
+  pre_commit:
+    tier_a_citation: true
+    changelog_updated: false  # Disabled for tutorial simplicity
+    blast_radius:
+      enabled: true
+      threshold: 5

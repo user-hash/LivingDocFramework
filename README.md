@@ -1,190 +1,220 @@
-# Living Documentation Framework
+# LivingDocFramework
 
-Git hooks that block commits when documentation falls out of sync with code.
+Living documentation enforced at commit time — before context is lost.
 
+LivingDocFramework is a lightweight framework that binds critical code to explicit, enforceable documentation using Git hooks.
 
-## The Problem
-
-Documentation drifts.
-
-You change code, forget to update docs, and six months later nobody knows why auth.py contains that "temporary" retry logic.
-
-Code review catches some of it. Most slips through.
+It does not generate docs.
+It does not analyze correctness.
+It forces context to be written while it still exists.
 
 
-## The Solution
+## Why this exists
 
-Link critical code to documentation. Enforce the link at commit time.
+Modern development has a new bottleneck:
 
-If a file is marked critical, changing it requires updating the documentation that explains what must always remain true.
+- Code is cheap to write
+- Changes happen fast
+- Context decays immediately
 
-Example:
+Whether changes come from humans or automated tools, the result is the same: Critical decisions get lost.
 
-    You edit src/api/auth.py (marked Tier A in CODE_DOC_MAP.md)
-    You try to commit without updating invariants:
+LivingDocFramework treats context as a first-class artifact and enforces it the same way we enforce tests or formatting.
 
-    $ git commit -m "fix auth retry"
-
-    ERROR: Tier A file changed but INVARIANTS not updated
-       Missing update: docs/api/INVARIANTS.md
-
-The commit is blocked until you document what changed and why.
-
-No reminders. No dashboards. No bots. Just Git enforcing rules.
+If critical code changes, the framework requires you to explain why.
 
 
-## What You Get
+## What LivingDocFramework does
 
-Enforced linkage — critical files cannot change without updating their documentation.
+LivingDocFramework introduces three simple ideas:
 
-Tiered enforcement — Tier A blocks, Tier B warns, Tier C has no enforcement.
+### 1. Code Tiers
 
-Scales with your codebase — single mapping file for small projects, per-subsystem doc-sets for large ones.
+You explicitly classify files by importance:
 
-Zero external dependencies — just Git and Bash 4+.
+- **Tier A (Critical)** – blocks commits if documentation isn't updated
+- **Tier B (Important)** – warns, but allows commit
+- **Tier C (Standard)** – no enforcement
 
+### 2. Doc-Sets
 
-## Quick Start
+Each subsystem owns its documentation, stored next to it:
 
-    # Add framework
-    git submodule add https://github.com/user-hash/LivingDocFramework.git
+```
+docs/api/
+├── CODE_DOC_MAP.md
+├── INVARIANTS.md
+└── BUG_PATTERNS.md
+```
 
-    # Create config
-    cp LivingDocFramework/core/project-config.template.yaml living-doc-config.yaml
+Presence of `CODE_DOC_MAP.md` defines a doc-set.
 
-    # Create docs
-    mkdir -p docs
-    touch CODE_DOC_MAP.md CHANGELOG.md docs/INVARIANTS.md
+### 3. Git Hook Enforcement
 
-    # Install hooks
-    ./LivingDocFramework/hooks/install.sh
+Pre-commit hooks enforce the rules:
 
-That's it. The hooks are now active.
+- Modify Tier A code → you must update its invariants
+- Forget → commit is blocked
+- Emergency → `--no-verify` exists (explicit escape hatch)
 
-
-## How It Works
-
-1. Map files to tiers
-
-CODE_DOC_MAP.md defines which files matter and how much:
-
-    | File                | Tier   | Description          |
-    |---------------------|--------|----------------------|
-    | `src/api/auth.py`   | TIER A | Authentication logic |
-    | `src/api/users.py`  | TIER B | User endpoints       |
-    | `src/utils.py`      | TIER C | Utilities            |
-
-Tier A files must be documented when changed.
+No CI required.
+No runtime overhead.
+No dependencies beyond Git + Bash.
 
 
-2. Document invariants
+## What this gives you (in practice)
 
-Invariants capture what must always remain true.
+- Architectural decisions don't disappear
+- Critical assumptions are written down when they change
+- AI-generated code cannot silently bypass constraints
+- Refactors stay explainable months later
+- "Why is this like this?" has an answer in the repo
 
-docs/INVARIANTS.md:
+This is especially valuable in:
 
-    ## INV-001: Auth retry must not exceed 3 attempts
-
-    Why: Prevents account lockout cascades during outages.
-    Enforced in: src/api/auth.py:45-67
-
-These are not tutorials. They are rules the code must respect.
-
-
-3. Commit normally
-
-The pre-commit hook checks:
-
-- Did you change a Tier A file? INVARIANTS.md must be staged.
-- Same file listed in multiple doc-sets? Block (ambiguous ownership).
-- Version file and CHANGELOG mismatch? Block.
-- Code changed but CHANGELOG not updated? Warn.
+- Fast-moving projects
+- AI-assisted workflows
+- Small teams with large codebases
+- Long-lived systems without heavy process
 
 
-## Folder Structure
+## What this is not
 
-Small project:
+LivingDocFramework is **not**:
 
-    project/
-    ├── living-doc-config.yaml
-    ├── CODE_DOC_MAP.md
-    ├── BUG_PATTERNS.md
-    ├── CHANGELOG.md
-    ├── docs/
-    │   ├── INVARIANTS.md
-    │   └── GOLDEN_PATHS.md
-    └── LivingDocFramework/
+- Automatic documentation generation
+- A linter
+- A style guide
+- An AI replacement
+- Correctness verification
 
-Large project with doc-sets:
-
-    project/
-    ├── living-doc-config.yaml
-    ├── CHANGELOG.md
-    ├── docs/
-    │   ├── api/
-    │   │   ├── CODE_DOC_MAP.md
-    │   │   ├── INVARIANTS.md
-    │   │   ├── BUG_PATTERNS.md
-    │   │   ├── GOLDEN_PATHS.md
-    │   │   └── DECISIONS/
-    │   │       ├── ADR-001.md
-    │   │       └── ADR-002.md
-    │   ├── database/
-    │   │   ├── CODE_DOC_MAP.md
-    │   │   └── ...
-    │   └── global/
-    │       ├── CODE_DOC_MAP.md
-    │       └── ...
-    └── LivingDocFramework/
-
-Any folder containing CODE_DOC_MAP.md is a doc-set. No config needed.
+LivingDoc enforces *accountability*, not correctness.
 
 
-## Pre-Commit Checks
+## Quickstart (5 minutes)
 
-    Check                                          Behavior
-    -----------------------------------------------------------
-    Tier A file changed, invariants not updated    Block
-    File listed in multiple CODE_DOC_MAPs          Block
-    Version mismatch (version file vs CHANGELOG)   Block
-    Code changed, CHANGELOG not updated            Warn
-    Large commit (>5 files)                        Warn
+The fastest way to understand LivingDocFramework is to feel it block a commit.
+
+**Start here:** [examples/quickstart/](examples/quickstart/)
+
+In under 5 minutes you will:
+
+1. Install hooks
+2. Change a critical file
+3. Get blocked with a clear error
+4. Update documentation
+5. Commit successfully
+
+This failure → fix loop is the core learning experience.
+
+
+## Typical workflow
+
+1. Developer (or automation) changes code
+2. Commit hook detects Tier A change
+3. Commit is blocked if invariants aren't updated
+4. Rationale is written while context is fresh
+5. Commit succeeds
+6. Future changes inherit that context
+
+No meetings. No tickets. No tribal knowledge.
+
+
+## Repository structure
+
+```
+LivingDocFramework/
+├── hooks/                 # Pre-commit hooks (core enforcement)
+├── docs/                  # Framework documentation
+│   ├── TUTORIAL.md
+│   ├── GLOSSARY.md
+│   ├── CONFIG.md
+│   └── INTEGRATION.md
+├── examples/
+│   ├── quickstart/        # Runnable onboarding example (recommended)
+│   └── python-project/    # Structural example
+└── core/templates/        # Doc-set templates
+```
+
+
+## Installation (existing project)
+
+Basic flow:
+
+```bash
+# From your repo root
+git submodule add https://github.com/user-hash/LivingDocFramework.git
+./LivingDocFramework/hooks/install.sh
+```
+
+Then:
+
+1. Create a doc-set
+2. Define tiers in `CODE_DOC_MAP.md`
+3. Add invariants
+4. Commit with confidence
+
+Full instructions: [docs/INTEGRATION.md](docs/INTEGRATION.md)
+
+
+## Configuration
+
+LivingDocFramework is configured via YAML.
+
+You can control:
+
+- Tier enforcement behavior
+- Warning vs blocking
+- File discovery
+- Version tracking
+
+See: [docs/CONFIG.md](docs/CONFIG.md)
+
+
+## Documentation
+
+- [docs/TUTORIAL.md](docs/TUTORIAL.md) — getting started (5 min)
+- [docs/GLOSSARY.md](docs/GLOSSARY.md) — terminology
+- [docs/CONFIG.md](docs/CONFIG.md) — configuration options
+- [docs/INTEGRATION.md](docs/INTEGRATION.md) — integrating into existing projects
+- [hooks/README.md](hooks/README.md) — hook behavior and customization
+
+
+## Design principles
+
+- **Locality** – docs live next to code
+- **Explicitness** – nothing inferred
+- **Minimalism** – Git + Bash only
+- **Enforcement over advice**
+- **Human-readable over clever**
+
+
+## When not to use this
+
+LivingDocFramework may not be a good fit if:
+
+- Your codebase is throwaway
+- You don't control commit hooks
+- You already enforce design via heavy process
+- You want auto-generated documentation
 
 
 ## Requirements
 
 - Git
-- Bash 4.0+ (macOS: brew install bash, Windows: Git Bash, Linux: usually satisfied)
+- Bash 4.0+ (macOS: `brew install bash`, Windows: Git Bash, Linux: usually satisfied)
 
 
-## Why It Exists
+## Status
 
-Built for a 181K LOC codebase where manual discipline stopped working.
-
-External reviewers read the docs first and have full context before touching code. Bug fixes reference linked invariants — no archaeology to understand constraints. Cognitive load drops because the hooks remember what's critical.
-
-● Speeds up:
-  - Time to detect bugs 
-  - Time to transfer context to new reviewers
-  - Time to fix bugs
-  - Onboarding
-  - Code review (context is upfront)
-
-  Reduces:
-  - Repeated bugs
-  - Knowledge loss when people leave
-  - "Why is this like this?" questions
-  - Cognitive load (hooks remember what's critical, you don't have to)
-  - Documentation drift (enforced, not optional)
-  - Trial and error debugging
-
-## Documentation
-
-- docs/CONFIG.md — configuration options
-- docs/INTEGRATION.md — integrating into existing projects
-- hooks/README.md — hook behavior and customization
+- Used in production
+- Actively developed
+- Designed for long-lived codebases
+- Stable core, evolving onboarding
 
 
 ## License
 
 AGPL v3
+
+Using LivingDocFramework as a submodule or hook does not impose AGPL obligations on your application code. The license applies to modifications of LivingDocFramework itself.
