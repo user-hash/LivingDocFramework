@@ -62,6 +62,13 @@ No runtime overhead.
 No dependencies beyond Git + Bash.
 
 
+### Visual: Scaled Implementation
+
+![Documentation Tree Structure](docs/images/publish/DocTree.png)
+
+*Optional dashboard visualization (separate tool) showing doc-sets at scale: bug patterns, invariants, code maps, and tier coverage.*
+
+
 ## What this gives you (in practice)
 
 - Architectural decisions don't disappear
