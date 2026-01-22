@@ -4,6 +4,46 @@ All notable changes to the Living Documentation Framework.
 
 ---
 
+## [0.2.0] - 2025-01-22
+
+### Added
+- **Proactive context loading**: New `core/print-context.sh` script
+  - Portable context lookup for any file (Git + Bash only)
+  - Dynamic tier detection from CODE_DOC_MAP.md (not heuristics)
+  - Shows doc-set, required reading, and invariants
+  - UNMAPPED state distinct from Tier C
+- **Session Protocol**: `protocols/SESSION_PROTOCOL.md`
+  - Version sync rules (git fetch before code changes)
+  - Cognitive loading order (PROJECT_CONTEXT → CHANGELOG → CODE_DOC_MAP)
+  - Pre-work checklist
+- **Agent Protocol update**: `protocols/AGENT_PROTOCOL.md`
+  - Bug verification rule (no reports without code proof)
+  - print-context.sh integration
+  - Streamlined compliance requirements
+- **Project Context template**: `core/templates/project-context.template.md`
+  - Persistent project memory across sessions
+  - Tracks constraints, decisions, and known issues
+- **Doc-Systems example**: `examples/doc-systems/`
+  - Testbed for print-context.sh
+  - Demonstrates Tier A/B/C classification
+  - Shows CODE_DOC_MAP.md parsing contract
+
+### Changed
+- Version numbering reset to 0.x (pre-stable)
+- Tool-agnostic core: no vendor lock-in, Git + Bash only
+- CODE_DOC_MAP.md parsing contract defined:
+  - File in backticks: `` `path/to/file` ``
+  - Tier in same row: `| A |` or `| TIER A |`
+
+### Design Principles (v0.2)
+1. Tool-agnostic core (Git + Bash only, no vendor lock-in)
+2. Dynamic, not hardcoded (tier from CODE_DOC_MAP.md, not heuristics)
+3. Derived, not magic (doc mapping from structure)
+4. Optional integrations (Claude Code adapter separate, not core)
+5. Parseable contracts (machine-readable with defined structure)
+
+---
+
 ## [1.2.2] - 2025-01-22
 
 ### Fixed
@@ -87,6 +127,7 @@ All notable changes to the Living Documentation Framework.
 
 ## Version History
 
+- **0.2.0**: Proactive context loading + print-context.sh
 - **1.2.2**: Executable bit fix for load-config.sh
 - **1.2.1**: Bug fixes for Windows/Git Bash compatibility
 - **1.2.0**: Quickstart example and improved onboarding

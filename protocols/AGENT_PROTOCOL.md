@@ -2,87 +2,113 @@
 
 > **Purpose**: Ensures AI agents maintain living documentation when making code changes
 > **Status**: MANDATORY - ALL AGENTS MUST FOLLOW
-> **Version**: 2.0 (Language-Agnostic)
+> **Version**: 0.2 (Tool-Agnostic)
 
 ---
 
-## 🛑 PRE-FLIGHT CHECKLIST
+## Quick Start: Context Lookup
 
-**STOP. Before launching ANY agent via Task tool, verify:**
+Before editing any file, run:
 
-```
-□ 1. Have I read the living documentation this session?
-□ 2. Am I including this AGENT PROTOCOL in the agent prompt?
-□ 3. Is this a code-modifying agent? → Require doc updates in report
-□ 4. Are target files Tier A? → Require invariant citations
-□ 5. Have I specified the MANDATORY report format?
+```bash
+./LivingDocFramework/core/print-context.sh <file>
 ```
 
-**If ANY checkbox is unchecked → DO NOT LAUNCH AGENT**
+This tells you the tier, doc-set, and required reading.
 
 ---
 
-## Why This Protocol Exists
+## 1. Bug Verification Rule
 
-**Problem**: Sub-agents spawned via Task tool don't automatically inherit the Living Docs system rules. This leads to:
-- Agents making changes without updating documentation
-- Drift between code and docs
-- Future sessions finding stale/incorrect documentation
-- Compounding errors across sessions
+**No bug report without code verification.**
 
-**Solution**: This protocol is MANDATORY context for EVERY agent prompt.
+Before ANY bug report:
+1. Read the ACTUAL file (not from memory/cache)
+2. Find the specific line with the issue
+3. Verify the bug EXISTS in current code
+4. If NOT FOUND -> DO NOT REPORT
+
+**Why:** Pattern-matching on theoretical concerns creates false positives.
 
 ---
 
-## MANDATORY: Include In Every Agent Prompt
+## 2. Pre-Work Requirements
 
-When spawning ANY agent via the Task tool, you MUST include this block:
+**Before ANY code change:**
+1. Run: `./LivingDocFramework/core/print-context.sh <file>`
+2. READ the docs listed in output
+3. If Tier A: READ INVARIANTS.md and CITE invariants in comments
+
+**After ANY code change:**
+1. UPDATE docs if behavior changed
+2. UPDATE INVARIANTS.md if constraints changed
+3. REPORT compliance proof (see format below)
+
+---
+
+## 3. Mandatory Report Format
+
+Every agent report MUST end with:
 
 ```markdown
-## Agent Protocol (MANDATORY COMPLIANCE)
+## Files Changed
+- [list of files modified]
 
-### Documentation Requirements
-Before making ANY code change:
-1. READ the relevant CODE_DOC_MAP.md (check `docs/*/CODE_DOC_MAP.md` for doc-sets)
-2. READ the sibling INVARIANTS.md if touching Tier A files
-3. READ the relevant architecture doc (see CODE_DOC_MAP for which doc)
-4. READ sibling DECISIONS/ folder if the file has an ADR (architectural decisions)
+## Docs Updated
+- [list of docs updated, or "None needed"]
 
-After making ANY code change:
-1. UPDATE the sibling INVARIANTS.md if any invariant values changed
-2. UPDATE the relevant CODE_DOC_MAP.md if new files created
-3. UPDATE the relevant architecture doc if behavior changed
-4. UPDATE BUG_PATTERNS.md if new pattern discovered
-5. ADD to sibling DECISIONS/ folder if making a major architectural choice (new ADR)
-
-**Doc-Set Rule**: If file is in `docs/{subsystem}/CODE_DOC_MAP.md`, update `docs/{subsystem}/INVARIANTS.md`.
-
-### Tier A Files (EXTRA SCRUTINY)
-Files in CODE_DOC_MAP.md marked as "TIER A" require INVARIANT CITATION before editing.
-
-**Before editing ANY Tier A file, cite the relevant invariant:**
-```
-I'm editing [FILE.ext].
-Relevant: INV-X.Y: [Name] - [How I'm respecting it]
+## Compliance Proof
+- [ ] Read docs before changes
+- [ ] Cited invariants if Tier A
+- [ ] Updated affected docs
+- [ ] Verified changes in current code
 ```
 
-**Full list**: Check CODE_DOC_MAP.md for Tier A files
+---
 
-### Report Format (MANDATORY)
+## 4. Agent Prompt Template
+
+When launching sub-agents, include this block:
+
+```markdown
+---Agent Protocol (MANDATORY)
+
+Before ANY code change:
+1. Run: ./LivingDocFramework/core/print-context.sh <file>
+2. READ the docs listed in output
+3. CITE invariants in code comments if Tier A
+
+After ANY code change:
+1. UPDATE docs if behavior changed
+2. REPORT compliance proof
+
 Your report MUST include:
+## Files Changed | ## Docs Updated | ## Compliance Proof
+---
 ```
-## Documentation Updates
-- Files updated: [list or "None required - read-only task"]
-- INVARIANTS.md: [Updated section X / No change needed / N/A]
-- CODE_DOC_MAP.md: [Updated / No change needed / N/A]
-- Architecture docs: [Updated X / No change needed / N/A]
 
-## Proof of Compliance
-- [ ] Read CODE_DOC_MAP.md before changes
-- [ ] Read INVARIANTS.md for Tier A files
-- [ ] Updated all affected docs
-- [ ] No drift introduced
+---
+
+## 5. Tier A Rules
+
+Tier A files are critical. Extra requirements:
+
+- **Must read INVARIANTS.md** before editing
+- **Must cite invariant IDs** in commit message or code comments
+- **Commit will be blocked** if INVARIANTS.md not updated
+
+Example citation in code:
+```python
+# INV-AUTH-001: Retry attempts bounded to MAX_RETRIES
+for attempt in range(MAX_RETRIES):
+    ...
 ```
+
+Example citation in commit:
+```
+fix: Add retry limit to auth flow
+
+Respects INV-AUTH-001 (retry attempts bounded).
 ```
 
 ---
@@ -250,6 +276,12 @@ Your report MUST end with:
 ---
 
 ## Version History
+
+- v0.2 (2025-01-22): print-context.sh Integration
+  - Added Quick Start with print-context.sh command
+  - Streamlined pre-work requirements
+  - Tool-agnostic: Git + Bash only
+  - Bug verification rule prominent
 
 - v2.1 (2025-01-19): Doc-Set Discovery Support
   - Updated for per-subsystem doc-sets (`docs/*/CODE_DOC_MAP.md`)
