@@ -38,7 +38,8 @@ Roslyn breaks through that ceiling by understanding what code means, not just wh
   It also brings a LOT of benefits to the codebase itself, like live verifications of various calculations, argument ordering, and type level correctness bugs that compile clean, but fail silently at
   runtime. In my own project, Roslyn caught a reflection call where arguments were passed in the wrong order and detected that more advanced math operation would still be better and almost as fastthan appoximated function (while beeing 15% more precise) Roslyn sees the semantic contract, not just the syntax!
 
-
+  As a teaser I am also adding the visualization of my Unity codebase, using taxonomy pricinples from the nature and principles of LDF framework. 
+  https://www.youtube.com/watch?v=UQ2W9P4EIZQ
 
 
 # LivingDocFramework
