@@ -5,7 +5,7 @@ thanks for checking LDF!
 I plan to update the repo shortly. During recent development I have learned a lot some new stuff that will greatly benefit the Living Doc Framework.
 For now I will just dump it here, but I plan to follow up with the repo update when I have more time.
 
-In short - for AI assisted development it is crucial to have proper architecture and framework from the start. So as soon as you have builded a prototype that is working, start progressing into hexagonal architecture (of ports and adapters). 
+In short - for AI assisted development it is crucial to have proper architecture and framework from the start. So as soon as you have a prototype that is working, start progressing into hexagonal architecture (of ports and adapters). 
 
 1. Using Hexagonal Architecture as a core component of LDF , we gain modularity, testability, abillity to replace and swap components and much more. https://medium.com/ssense-tech/hexagonal-architecture-there-are-always-two-sides-to-every-story-bc0780ed7d9c
 2. The second piece of the puzzle is to use Roslyn (or something similar for your programming language) that enables semantic code understanding - not just text level pattern matching, but actually detecting the lifeblood flowing though codebases. https://github.com/dotnet/roslyn
