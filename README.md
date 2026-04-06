@@ -14,25 +14,13 @@ LDF v1 enforced at the text level: "you changed a Tier A file, update the docs o
 
 Roslyn breaks through that ceiling by understanding what code means, not just what it says:
 
-
-
-  ┌────────────────────────────┬──────────────────────────────────────────────────────────────────┐
-  │   What LDF checks today    │                  What Roslyn enables (semantic)                  │
-  │           (text)           │                                                                  │
-  ├────────────────────────────┼──────────────────────────────────────────────────────────────────┤
-  │ "File X was modified"      │ "File X now references a type from a forbidden namespace"        │
-  ├────────────────────────────┼──────────────────────────────────────────────────────────────────┤
-  │ "Invariant doc wasn't      │ "The invariant itself is violated in the code"                   │
-  │ updated"                   │                                                                  │
-  ├────────────────────────────┼──────────────────────────────────────────────────────────────────┤
-  │ "Tier A file changed"      │ "This change affects 47 downstream files — here's the blast      │
-  │                            │ radius"                                                          │
-  ├────────────────────────────┼──────────────────────────────────────────────────────────────────┤
-  │ Manual tier classification │ Automatic tier inference from coupling metrics                   │
-  ├────────────────────────────┼──────────────────────────────────────────────────────────────────┤
-  │ Namespace-level boundary   │ Method-body-level verification — catches fully-qualified         │
-  │ checks                     │ references that bypass using                                     │
-  └────────────────────────────┴──────────────────────────────────────────────────────────────────┘
+  | What LDF checks today (text)    | What Roslyn enables (semantic) |
+  | "File X was modified"           | "File X now references a type from a forbidden namespace" |
+  | "Invariant doc wasn't updated"  | "The invariant itself is violated in the code" |
+  | "Tier A file changed"           | "This change affects 47 downstream files — here's the blast radius" |
+  | Manual tier classification      | Automatic tier inference from coupling metrics |
+  | Namespace-level boundary checks | Method-body-level verification — catches fully-qualified
+  references that bypass using      |
 
   Why this matters for LDF and your codebase too: Text-based hooks can enforce "did you update the docs?" — but Roslyn powered hooks can enforce did your change actually violate an invariant?
   That's the difference between process enforcement and semantic enforcement.
