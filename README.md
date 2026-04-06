@@ -2,7 +2,7 @@ Hey!
 
 thanks for checking LDF!
 
-I plan to update the repo shortly. During recent development I have learned a lot some new stuff that will greatly benefiting the Living Doc Framework.
+I plan to update the repo shortly. During recent development I have learned a lot some new stuff that will greatly benefit the Living Doc Framework.
 For now I will just dump it here, but I plan to follow up with the repo update when I have more time.
 
 In short - for AI assisted development it is crucial to have proper architecture and framework from the start. So as soon as you have builded a prototype that is working, start progressing into hexagonal architecture (of ports and adapters). 
