@@ -1,10 +1,10 @@
-# Case Study: DAWG - Digital Audio Workstation Game - A DAW made in Unity game engine.
+# Case Study: DAWG (Digital Audio Workstation Game)
 
 [Back to README](../README.md)
 
 ---
 
-We build **AWG - Digital Audio Workstation Game** ([dawgtools.org](https://dawgtools.org) | [itch.io](https://dawg-tools.itch.io/)). This is what works for us.
+We build **DAWG** (Digital Audio Workstation Game) ([dawgtools.org](https://dawgtools.org) | [itch.io](https://dawg-tools.itch.io/)). A DAW made in Unity game engine. This is what works for us.
 
 ## The Codebase
 
@@ -25,7 +25,7 @@ We build **AWG - Digital Audio Workstation Game** ([dawgtools.org](https://dawgt
 
 ## The Hard Lesson
 
-AI agents are great at producing code volume but terrible at maintaining architectural coherence across sessions. Without LDF, each session introduced small boundary violations, magic numbers, invariant breaks, agents make duplicated content or they do not wire the functions to finish the task - My personal oppinion is most AI projects fall appart because of this, tightly connected with not testing the result. 
+AI agents are great at producing code volume but terrible at maintaining architectural coherence across sessions. Without LDF, each session introduced small boundary violations, magic numbers, invariant breaks. Agents make duplicated content or they do not wire the functions to finish the task. Most AI projects fall apart because of this, tightly connected with not testing the result.
 
 **Visualization of the codebase using taxonomy principles and LDF:** [YouTube demo](https://www.youtube.com/watch?v=UQ2W9P4EIZQ)
 

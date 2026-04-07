@@ -65,7 +65,7 @@ The code agent executes. The chat agent thinks. The human decides. [Full workflo
 
 ---
 
-## Proven on DAWG Beatcraft
+## Proven on DAWG (Digital Audio Workstation Game)
 
 406,000 lines of C#. 51 assemblies, 13 pure. 76 invariants across 35 scopes. Solo dev, 5 months, zero prior Unity experience. [Full case study with anonymized doc tree](docs/CASE_STUDY.md)
 
