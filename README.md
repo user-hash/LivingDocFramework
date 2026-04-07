@@ -1,47 +1,3 @@
-Hey,
-
-thanks for checking LDF!
-
-I plan to update the repo shortly. During recent development I have discovered a lot of stuff that will greatly benefit the Living Doc Framework.
-For now I will just dump it here, but I plan to follow up with the repo update when I have more time.
-
-In short - for AI assisted development it is crucial to have proper architecture and framework from the start. So as soon as you have a prototype that is working, start progressing into hexagonal architecture (of ports and adapters). 
-
-1. Using Hexagonal Architecture as a core component of LDF , we gain modularity, testability, abillity to replace and swap components and much more. https://medium.com/ssense-tech/hexagonal-architecture-there-are-always-two-sides-to-every-story-bc0780ed7d9c
-2. The second piece of the puzzle is to use Roslyn (or something similar for your programming language) that enables semantic code understanding - not just text level pattern matching, but actually detecting the lifeblood flowing though codebases. https://github.com/dotnet/roslyn
- 
-LDF v1 enforced at the text level: "you changed a Tier A file, update the docs or the commit is blocked." That works. But agent can also just bump the doc version, decide to disobey, go around the invariant or just ignore it entierly.
-
-Roslyn breaks through that ceiling by understanding what code means, not just what it says:
-
-● What LDF checks today (text) → What Roslyn enables (semantic)
-
-  - "File X was modified" → "File X now references a type from a forbidden namespace"
-  - "Invariant doc wasn't updated" → "The invariant itself is violated in the code"
-  - "Tier A file changed" → "This change affects 47 downstream files - here's the blast radius"
-  - Manual tier classification → Automatic tier inference from coupling metrics
-  - Namespace-level boundary checks → Method-body-level verification - catches fully qualified references that bypass using
-
-  Why this matters for LDF and your codebase too: Text-based hooks can enforce "did you update the docs?" — but Roslyn powered hooks can enforce did your change actually violate an invariant?
-  That's the difference between process enforcement and semantic enforcement.
-
-  For example, an invariant like INV-AUTH-001: Password never logged can be verified by Roslyn scanning method bodies for Debug.Log/Console.Write calls that reference fields typed as
-  password/credential — something no grep pattern can reliably do.
-
-  Combined with hexagonal architecture, Roslyn can automatically:
-  - Classify tiers from coupling metrics instead of manual tagging
-  - Detect boundary violations at the type level, not just the namespace level
-  - Compute blast radius so you know which doc sets need updating when a port interface changes
-  - Find stale invariants that reference code paths that no longer exist
-
-  The key insight: Roslyn turns documentation enforcement from reactive ("you changed a file, update the docs") into proactive ("your change violates this specific constraint, here's the proof").
-  It also brings a LOT of benefits to the codebase itself, like live verifications of various calculations, argument ordering, and type level correctness bugs that compile clean, but fail silently at
-  runtime. In my own project, Roslyn caught a reflection call where arguments were passed in the wrong order and detected that more advanced math operation would still be better and almost as fastthan appoximated function (while beeing 15% more precise) Roslyn sees the semantic contract, not just the syntax!
-
-  As a teaser I am also adding the visualization of my Unity codebase, using taxonomy pricinples from the nature and principles of LDF framework. 
-  https://www.youtube.com/watch?v=UQ2W9P4EIZQ
-
-
 # LivingDocFramework
 
 How to keep a codebase architecturally coherent when AI writes most of the code.
@@ -492,7 +448,7 @@ In practice our workflow looks like this:
 6. Human reviews and decides what to harden
 ```
 
-Zip the codebase scripts and feed it to the chat agent. Ours is about 5MB, fits in one conversation. Or just feed it CLAUDE.md and a specific question.
+Zip the codebase and feed it to the chat. Ours fits in one conversation. Or just feed it a specific question and the relevant files.
 
 **The code agent executes. The chat agent thinks. The human decides.**
 
