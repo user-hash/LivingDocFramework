@@ -1,18 +1,13 @@
 # Getting Started
 
-Time: 5 minutes
+Time: 10 minutes
 
 
-## Why LivingDoc Blocks Commits
+## What You Will Learn
 
-Blocking is intentional.
+This tutorial walks you through the core LDF experience: classifying a file, writing an invariant, and seeing the enforcement loop in action.
 
-LivingDoc assumes:
-- Critical code changes are expensive
-- Documentation debt compounds faster than code debt
-- Humans and AI both forget context
-
-Blocking forces decisions to be recorded while context is fresh.
+You do not need to adopt every part of LDF to get value. Start here, expand when you need to.
 
 
 ## Prerequisites
@@ -34,7 +29,26 @@ bash ../../hooks/install.sh
 ```
 
 
-## Step 2: Trigger a Failure (Intentional)
+## Step 2: Understand the Structure
+
+Look at what the quickstart gives you:
+
+```
+quickstart/
+├── src/api/
+│   ├── __init__.py      # Version
+│   └── auth.py          # Classified as Tier A
+├── docs/api/
+│   ├── CODE_DOC_MAP.md  # Maps auth.py to Tier A
+│   └── INVARIANTS.md    # Safety rules for this doc-set
+├── living-doc-config.yaml
+└── CHANGELOG.md
+```
+
+`docs/api/CODE_DOC_MAP.md` explicitly classifies `auth.py` as Tier A. This means changes to `auth.py` trigger enforcement.
+
+
+## Step 3: Trigger Enforcement (Intentional)
 
 Open `src/api/auth.py`. Change:
 
@@ -77,26 +91,18 @@ ERROR: Tier A file changed but INVARIANTS not updated
    To skip (emergency only): git commit --no-verify
 ```
 
-<details>
-<summary>Why this happens</summary>
-
-`auth.py` is TIER A in `docs/api/CODE_DOC_MAP.md`.
-
-Tier A files require their sibling `INVARIANTS.md` to be updated.
-
-This forces you to record *why* you changed critical code.
-</details>
+This is the enforcement loop: you changed a critical file, the system asks you to record your reasoning.
 
 
-## Step 3: Fix It (2 min)
+## Step 4: Record Your Decision (2 min)
 
-Open `docs/api/INVARIANTS.md`. Update the "Last verified" line:
+Open `docs/api/INVARIANTS.md`. Update or add a note:
 
 ```markdown
 **Last verified:** [Today] - Increased to 5 because [your reason]
 ```
 
-Commit:
+Commit both files:
 
 ```bash
 git add docs/api/INVARIANTS.md src/api/auth.py
@@ -118,22 +124,47 @@ Pre-commit checks passed
 ```
 
 
-## Escape Hatch
+## Step 5: Try Context Loading
 
-Use `--no-verify` only during active incidents. Follow up with a doc-fix commit.
+From the quickstart directory, look up the context for any file:
+
+```bash
+../../core/print-context.sh src/api/auth.py
+```
+
+Output:
+
+```
+File: src/api/auth.py
+Tier: A (Critical)
+Doc-Set: docs/api
+Map: docs/api/CODE_DOC_MAP.md
+
+Required Reading:
+  1. docs/api/INVARIANTS.md
+  2. docs/api/CODE_DOC_MAP.md
+
+Invariants:
+  - INV-AUTH-001: Retry attempts bounded
+```
+
+This is the proactive side of LDF: load context before editing, not just after.
 
 
-## Typical Workflow
+## When to Use Enforcement
 
-1. Developer or AI changes code
-2. Hook blocks if context is missing
-3. Developer records decision
-4. Commit succeeds
-5. Future changes inherit context
+The hooks are one tool, not a mandate. In practice:
+
+- **Use hooks** when you want automated reminders for critical files
+- **Skip hooks** (`--no-verify`) during emergencies, follow up with a doc-fix commit
+- **Don't use hooks at all** if your team prefers manual knowledge hardening
+
+The core value is the structure (doc-sets, invariants, code maps), not the enforcement mechanism.
 
 
 ## What's Next
 
-- [Integration Guide](INTEGRATION.md) - Add to your project
-- [Configuration](CONFIG.md) - Customize behavior
-- [Glossary](GLOSSARY.md) - Terminology
+- [Integration Guide](INTEGRATION.md) — Add LDF to your project
+- [Configuration](CONFIG.md) — Customize behavior
+- [Glossary](GLOSSARY.md) — Terminology
+- Back to [README](../README.md) — Full methodology

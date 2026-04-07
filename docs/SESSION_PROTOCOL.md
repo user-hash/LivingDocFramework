@@ -1,6 +1,6 @@
 # Session Start Protocol
 
-Version sync protocol for AI-assisted workflows. Used in production on Nebulae; extracted and documented here.
+Version sync protocol for AI-assisted workflows. Used in production on DAWG; extracted and documented here.
 
 ## Why This Matters
 
@@ -120,9 +120,9 @@ This protocol is production-tested:
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Session start/resume | Production | Used in Nebulae |
-| Session end/save | Production | Used in Nebulae |
-| Version tracking | Production | Used in Nebulae |
+| Session start/resume | Production | Used in DAWG |
+| Session end/save | Production | Used in DAWG |
+| Version tracking | Production | Used in DAWG |
 
 ## Integration
 

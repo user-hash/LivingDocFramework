@@ -4,6 +4,32 @@ All notable changes to the Living Documentation Framework.
 
 ---
 
+## [2.0.0] - 2026-04-07
+
+### Changed
+- **Complete repositioning**: LDF is now a methodology for AI-assisted architectural development, not a hook toolkit
+- **README rewritten** around 7 core ideas: hexagonal architecture, pure assemblies, invariants, framework-first, tiered classification, AI instruction files, ratchet testing
+- **Intentional knowledge hardening** replaces mandatory doc updates on every commit
+- **Tutorial** rewritten to explain enforcement as one tool, not the whole point
+- **Protocols** softened from "mandatory compliance" to "guidance for AI agents"
+- **Commands and examples READMEs** cleaned up, stale roadmap items removed
+
+### Added
+- **Roslyn section**: Major section on semantic code understanding for C#/.NET, with real production examples
+- **Dual-AI workflow**: Code agent (embedded) + Chat agent (disconnected) pattern
+- **Human/AI role separation**: Who maintains what, who decides what
+- **Anonymized production tree**: Full doc structure from a 400k LOC project showing 76 invariants, 18 invariant files, 10 bug pattern files
+- **DAWG case study**: Real numbers and lessons from building with LDF
+
+### Removed
+- `requirements.txt` (no Python code in repo)
+- `hooks/post-commit` (empty, did nothing)
+- `examples/incident_example/` (superseded by sample_workflow)
+- `examples/python-project/` (redundant with quickstart + doc-systems)
+- Stale "to extract" roadmap items from commands and protocols
+
+---
+
 ## [0.2.0] - 2025-01-22
 
 ### Added

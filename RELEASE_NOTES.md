@@ -1,113 +1,54 @@
-# Living Documentation Framework - Release Notes
+# Release Notes
+
+## v2.0.0 — LDF v2
+
+**Date**: 2026-04-07
+**Status**: Active development
+
+LDF v2 is a ground-up repositioning. The framework is no longer about hooks and commit blocking. It is a methodology for building well-architected codebases with AI assistance.
+
+### What changed
+
+**New core ideas:**
+- Hexagonal architecture as the structural foundation
+- Pure assemblies with compiler-enforced boundaries
+- Invariant-driven development (INV-xxx codes)
+- Framework over hardcoding
+- AI instruction files (CLAUDE.md)
+- Ratchet testing
+- Intentional knowledge hardening (not mandatory on every change)
+
+**Roslyn section:**
+- Major new section on semantic code understanding for C#/.NET
+- Why text-level tools are not enough for complex codebases
+- Real examples from a 400k LOC Unity project
+- Call to action: every language needs a Roslyn equivalent
+
+**Dual-AI workflow:**
+- Code agent (embedded, full codebase access) + Chat agent (disconnected, broad perspective)
+- Clear role separation: human decides, code agent executes, chat agent thinks
+
+**Human/AI roles:**
+- AI agents maintain docs, humans architect
+- Addresses the most common question about LDF
+
+**Anonymized production tree:**
+- Full doc structure from a real project: 76 invariants, 18 invariant files, 10 bug pattern files, 11 code maps, 23 architecture docs
+
+**Cleanup:**
+- Removed dead files (empty post-commit hook, unused requirements.txt, legacy examples)
+- Updated all docs to match new direction
+- Removed stale roadmap items and "coming soon" stubs
+
+### Numbers from the project that proved this methodology
+
+- 1,718 C# files, 406,000+ lines of code
+- 51 assemblies, 13 pure (zero engine references)
+- 76 invariant codes across 35 scopes
+- Built by a solo developer with AI assistance over 5 months
 
 ---
 
-## v1.0.1 - Initial Public Release
+## v0.2.0
 
-**Release Date**: 2026-01-10
-**Status**: Production Ready
-**Extracted From**: Nebulae Project (v0.913+)
-
----
-
-## v1.0.0 - Foundation Release
-
-**Release Date**: 2026-01-04
-**Status**: Production Ready
-**Extracted From**: Nebulae Project (v0.913+)
-
----
-
-## What's Included
-
-### Core System
-- 4 JSON schemas (pattern, golden-path, invariant, decision)
-- 4 Markdown templates
-- 2 generalized manifests (manifest.yaml, doc-system.yaml)
-- 5 language profiles (Python, JavaScript, Go, Rust, C#)
-- Project configuration template
-- Configuration loaders (Shell + Python)
-
-### Git Hooks
-- install.sh - Hook installer
-- pre-commit - Documentation validation
-- post-commit - Automatic updates
-- commit-msg - Message format validation
-
-### Protocols & Commands
-- AGENT_PROTOCOL.md - Mandatory agent compliance
-- Slash command system
-- living-docs.md - Health check command
-
-### Examples
-- Python project with complete configuration
-- Incident example with real-world bug prevention
-
-### Documentation
-- README.md - Project overview
-- docs/INTEGRATION.md - Integration guide
-- docs/CONFIG.md - Configuration reference
-- docs/SESSION_PROTOCOL.md - Version sync protocol
-- CONTRIBUTING.md - Contribution guidelines
-
----
-
-## Key Features
-
-### 1. Language-Agnostic Architecture
-Works with **any language**: Python, JavaScript, Go, Rust, C#, and more.
-- Language profiles define language-specific defaults
-- Config system uses placeholders
-- File finding uses config helpers
-
-### 2. Config-Driven
-Everything configurable via `living-doc-config.yaml`:
-```yaml
-project:
-  name: "MyProject"
-  language: "python"
-
-code:
-  root: "src/"
-  extensions: ["py"]
-```
-
-### 3. Automatic Enforcement
-Git hooks validate:
-- Tier A files have invariant citations
-- CHANGELOG.md updated with code changes
-- Blast radius warnings
-- Commit message format
-
-### 4. AI Agent Compliance
-Protocol ensures agents:
-- Read docs before making changes
-- Update docs after making changes
-- Cite invariants for critical files
-
-### 5. Scalable Organization
-Group docs by subsystem - each maintains its own patterns, invariants, decisions.
-
----
-
-## Proven in Production
-
-Extracted from Nebulae project:
-- **181,048 lines** of code managed
-- **284 files** tracked
-- **64 bug patterns** documented
-- **36 invariants** enforced
-- **6 months** of production use
-
----
-
-## Requirements
-
-- Git
-- Bash 4.0+
-
----
-
-## License
-
-AGPL v3 - See [LICENSE](LICENSE)
+See [CHANGELOG.md](CHANGELOG.md) for earlier versions.

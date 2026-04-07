@@ -289,7 +289,7 @@ Your report MUST end with:
   - Doc-set hygiene notes added
 
 - v2.0 (2025-01-04): Generalized for Living Documentation Framework
-  - Removed Nebulae-specific file lists
+  - Removed project-specific file lists
   - Made language-agnostic
   - References CODE_DOC_MAP.md for Tier A files
 
