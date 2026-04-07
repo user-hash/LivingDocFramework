@@ -18,7 +18,7 @@ Grep tells you a function name appears in 12 files. Roslyn tells you which 8 are
 
 ## What This Looks Like in Practice
 
-We develop **DAWG Beatcraft** ([dawgtools.org](https://dawgtools.org) | [itch.io](https://dawg-tools.itch.io/)), a Unity project: 406,000 lines of C#, 51 assemblies, real-time audio DSP, multiplayer networking, MIDI integration, and a complex UI layer. Roslyn is essential infrastructure for AI-assisted development at this scale.
+We develop **DAWG - Digital Audio Workstation Game** ([dawgtools.org](https://dawgtools.org) | [itch.io](https://dawg-tools.itch.io/)), a Unity project: 406,000 lines of C#, 51 assemblies, real-time audio DSP, multiplayer networking, MIDI integration, and a complex UI layer. Roslyn is essential infrastructure for AI-assisted development at this scale.
 
 **DSP flow verification:** Our audio pipeline processes samples on the audio thread with strict rules: no allocations, no main-thread calls, specific processing order. Roslyn scans method bodies in the DSP assembly and instantly detects violations that would compile fine but produce audio glitches or crashes at runtime. When an AI agent writes DSP code, Roslyn catches wrong argument ordering in reflection calls, identifies math operations where the precise function is actually faster than the approximated version, and verifies that filter coefficients are identical across mono and stereo paths.
 
