@@ -1,7 +1,7 @@
 # Agent Protocol - Mandatory Compliance
 
 > **Purpose**: Ensures AI agents maintain living documentation when making code changes
-> **Status**: MANDATORY - ALL AGENTS MUST FOLLOW
+> **Status**: Recommended guidelines for AI agents that modify code
 > **Version**: 0.2 (Tool-Agnostic)
 
 ---
@@ -71,7 +71,7 @@ Every agent report MUST end with:
 When launching sub-agents, include this block:
 
 ```markdown
----Agent Protocol (MANDATORY)
+---Agent Protocol
 
 Before ANY code change:
 1. Run: ./LivingDocFramework/core/print-context.sh <file>
@@ -214,7 +214,7 @@ If your agent creates/deletes/renames files, include:
 Before launching ANY agent, verify:
 - [ ] Agent prompt includes AGENT_PROTOCOL block
 - [ ] Agent has doc update requirements if code-modifying
-- [ ] Agent has mandatory report format
+- [ ] Agent has report format defined
 
 ### Post-Completion Verification
 After agent completes, verify:
@@ -243,7 +243,7 @@ If an agent returns without proper documentation:
 ### Instructions
 [SPECIFIC TASK INSTRUCTIONS]
 
-### Agent Protocol (MANDATORY COMPLIANCE)
+### Agent Protocol
 [PASTE THE FULL AGENT PROTOCOL BLOCK FROM ABOVE]
 
 ### Expected Output

@@ -40,9 +40,6 @@ hooks:
       blocking: false     # Warning only
 ```
 
-### post-commit
-Automated actions after successful commit.
-
 ### commit-msg
 Validates commit message format.
 

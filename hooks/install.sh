@@ -76,7 +76,6 @@ REL_PATH=$(get_relative_path "$FRAMEWORK_ROOT" "$PROJECT_ROOT")
 # Backup existing hooks before overwriting
 backup_hook "pre-commit"
 backup_hook "commit-msg"
-backup_hook "post-commit"
 
 # Create pre-commit hook
 cat > "$GIT_HOOKS_DIR/pre-commit" << EOF
@@ -109,37 +108,20 @@ else
 fi
 EOF
 
-# Create post-commit hook
-cat > "$GIT_HOOKS_DIR/post-commit" << EOF
-#!/usr/bin/env bash
-# Living Documentation Framework - Post-Commit Hook
-
-HOOK_SCRIPT="$REL_PATH/hooks/post-commit"
-
-if [ -f "\$HOOK_SCRIPT" ]; then
-    bash "\$HOOK_SCRIPT"
-fi
-exit 0
-EOF
-
 # Make hooks executable
 chmod +x "$GIT_HOOKS_DIR/pre-commit" 2>/dev/null || true
 chmod +x "$GIT_HOOKS_DIR/commit-msg" 2>/dev/null || true
-chmod +x "$GIT_HOOKS_DIR/post-commit" 2>/dev/null || true
 
 chmod +x "$FRAMEWORK_ROOT/hooks/pre-commit" 2>/dev/null || true
 chmod +x "$FRAMEWORK_ROOT/hooks/commit-msg" 2>/dev/null || true
-chmod +x "$FRAMEWORK_ROOT/hooks/post-commit" 2>/dev/null || true
 
 echo "Installed hooks:"
 echo "   - pre-commit     Documentation validation"
 echo "   - commit-msg     Commit message format"
-echo "   - post-commit    Post-commit actions"
 echo ""
 echo "Hook locations:"
 echo "   .git/hooks/pre-commit  -> $REL_PATH/hooks/pre-commit"
 echo "   .git/hooks/commit-msg  -> $REL_PATH/hooks/commit-msg"
-echo "   .git/hooks/post-commit -> $REL_PATH/hooks/post-commit"
 echo ""
 echo "Usage:"
 echo "   Skip hooks:  git commit --no-verify"
