@@ -426,7 +426,7 @@ What it does:
 - Offers design alternatives ("three ways to structure this, here are the tradeoffs")
 - Sanity checks invariants ("INV-DSP-003 says audio-thread-only, but what about the preview path?")
 
-Cannot grep, cannot run tests, cannot verify. That is its strength.
+It sees the codebase fresh every time you upload it. No history, no anchoring, no accumulated assumptions. That is its strength.
 
 ### Why Two Agents, Two Providers
 
