@@ -27,13 +27,13 @@ Separate domain logic from infrastructure. Pure domain has zero platform imports
 Group code into modules with explicit dependency rules. Some are pure: zero platform references, compiler-enforced. AI cannot break what the build system protects.
 
 ### 3. Invariant-Driven Development
-Critical rules written as numbered codes: `INV-DSP-003: Voice mutation is audio-thread-only`. The AI reads them before writing code. They are enforced, not aspirational.
+Critical rules written as numbered codes: `INV-DSP-003: Voice mutation is audio-thread-only`. The AI reads them before writing code. Written down, citable, verifiable.
 
 ### 4. Framework Over Hardcoding
 If a system already provides the answer, use it. OKLab for colors, not raw hex. Springs for animation, not manual lerp. Factory methods for UI, not raw constructors.
 
 ### 5. Tiered Code Classification
-Not all code is equal. Tier A = critical (commits blocked without doc updates). Tier B = important (warnings). Tier C = standard. Classification is explicit in `CODE_DOC_MAP.md`.
+Not all code is equal. Tier A = critical (highest attention). Tier B = important. Tier C = standard. Classification is explicit in `CODE_DOC_MAP.md`. How you enforce each tier is up to you.
 
 ### 6. AI Instruction File (CLAUDE.md)
 One file at the project root. Every invariant, every boundary, every framework mandate. AI loads it at session start. Most impactful file in the repo.

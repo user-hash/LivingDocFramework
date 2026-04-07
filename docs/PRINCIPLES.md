@@ -61,7 +61,7 @@ If a file in `Domain` tries to import a platform namespace, the build fails. The
 
 ## 3. Invariant-Driven Development
 
-Critical rules are written as numbered, citable invariants with a unique ID prefix. They live in documentation files, are referenced in code comments and commit messages, and can be enforced by hooks and ratchet tests.
+Critical rules written as numbered, citable invariants with a unique ID prefix. They live in documentation files and are referenced in code comments and commit messages. How you verify them is up to you: hooks, ratchet tests, Roslyn, CI, or just team discipline.
 
 **Format:**
 
@@ -121,9 +121,9 @@ Not all code is equal. Classify files by criticality. Enforcement scales with im
 
 | Tier | Name | Enforcement |
 |------|------|-------------|
-| **A** | Critical | Commit blocked unless invariants updated |
-| **B** | Important | Warning issued |
-| **C** | Standard | No enforcement |
+| **A** | Critical | Highest attention. Update invariants when changing these. |
+| **B** | Important | Worth documenting when you change them. |
+| **C** | Standard | No special requirements. |
 
 Classification is explicit, written in `CODE_DOC_MAP.md`, not guessed from file paths.
 
