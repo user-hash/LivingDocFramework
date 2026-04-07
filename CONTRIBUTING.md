@@ -73,7 +73,7 @@ git add . && git commit -m "test: Test commit"
 
 Test with multiple languages:
 ```bash
-cd examples/python-project
+cd examples/quickstart
 ../../hooks/install.sh
 git add . && git commit -m "test: Test hooks"
 ```

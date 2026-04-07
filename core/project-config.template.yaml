@@ -105,7 +105,7 @@ hooks:
 
     - check: "changelog_updated"
       enabled: true
-      blocking: true
+      blocking: false    # Warning only by default. Set true if you want it strict.
 
     - check: "blast_radius"
       enabled: true
