@@ -47,11 +47,14 @@ Metrics that can only improve. Monolith file count capped. LOC capped. Platform 
 
 Grep finds strings. [Roslyn](https://learn.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/) sees the lifeblood flowing through the codebase. For C#/.NET, this is a game changer. **Every language needs a Roslyn equivalent. It is open source. It should not be that hard to port the concept.** [Full Roslyn deep-dive](docs/ROSLYN.md)
 
+Roslyn gives AI agents IDE-like access to code: go-to-definition, find-all-references, flow checking, math verification, logic verification, type checking, pipeline stage ordering. The AI sees code the way an IDE does, not the way grep does.
+
 Highlights:
 - Traced a rogue frequency to a wet signal fed into the wrong buffer. Seconds vs a week of manual debugging.
+- Found that the precise math function was both faster AND 17% more accurate than the approximation an AI agent chose.
 - Catches architecture violations inside method bodies, not just at the `using` level.
 - Finds dead code by tracing real call chains, not text matches.
-- Silent runtime bugs that compile clean but fail in production.
+- Verifies calculations, argument ordering, formula correctness. Catches bugs that compile clean but fail silently.
 
 ---
 
