@@ -20,7 +20,7 @@ Without explicit structure, every AI session introduces boundary violations, mag
 
 Each stands alone. They compound when combined. [Full details with examples](docs/PRINCIPLES.md)
 
-### 1. Hexagonal Architecture of ports and adapters https://medium.com/ssense-tech/hexagonal-architecture-there-are-always-two-sides-to-every-story-bc0780ed7d9c
+### 1. [Hexagonal Architecture](https://medium.com/ssense-tech/hexagonal-architecture-there-are-always-two-sides-to-every-story-bc0780ed7d9c) (Ports & Adapters)
 Separate domain logic from infrastructure. Pure domain has zero platform imports. The compiler enforces the boundary, not code review.
 
 ### 2. Pure Assemblies
@@ -43,9 +43,9 @@ Metrics that can only improve. Monolith file count capped. LOC capped. Platform 
 
 ---
 
-## Roslyn: Semantic Code Understanding https://github.com/dotnet/roslyn
+## [Roslyn](https://github.com/dotnet/roslyn): Semantic Code Understanding
 
-Grep finds strings. Roslyn sees the lifeblood flowing through the codebase. For C#/.NET, this is a game changer. **Every language needs a Roslyn equivalent ASAP in my oppition - since it is opensource it should not be too hard right=).** [Full Roslyn deep-dive](docs/ROSLYN.md)
+Grep finds strings. [Roslyn](https://learn.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/) sees the lifeblood flowing through the codebase. For C#/.NET, this is a game changer. **Every language needs a Roslyn equivalent. It is open source. It should not be that hard to port the concept.** [Full Roslyn deep-dive](docs/ROSLYN.md)
 
 Highlights:
 - Traced a rogue frequency to a wet signal fed into the wrong buffer. Seconds vs a week of manual debugging.
