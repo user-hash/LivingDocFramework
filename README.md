@@ -492,7 +492,7 @@ In practice our workflow looks like this:
 6. Human reviews and decides what to harden
 ```
 
-Feed the chat agent your CLAUDE.md, a specific file, or a design question. It reasons about architecture without needing the full codebase.
+Zip the codebase scripts and feed it to the chat agent. Ours is about 5MB, fits in one conversation. Or just feed it CLAUDE.md and a specific question.
 
 **The code agent executes. The chat agent thinks. The human decides.**
 
@@ -710,14 +710,14 @@ LivingDocFramework/
 
 ## Design Principles
 
-1. **Architecture over documentation.** Coherent architecture is the goal. Docs are the enforcement mechanism.
-2. **Compiler walls over code review.** If the build rejects it, nobody needs to catch it.
-3. **Explicit over inferred.** Tiers are declared. Invariants are written. Nothing is guessed.
-4. **Minimal tooling.** Git + Bash. No CI, no runtime, no vendor lock-in.
-5. **AI-native.** CLAUDE.md, invariants, and ratchets constrain AI behavior where it drifts.
-6. **Incremental.** Start with 5 invariants. Scales to 400k LOC.
-7. **Enforcement over advice.** A blocked commit changes behavior.
-8. **Intentional, not constant.** Update docs when it matters, not on every change.
+1. **Architecture first.** Good architecture makes good docs possible. Not the other way around.
+2. **Let the compiler do the work.** Pure assemblies and dependency rules catch more than any code review.
+3. **Write it down.** Tiers, invariants, decisions. If it is not written, it does not exist.
+4. **Keep it simple.** Git + Bash. No complex CI, no vendor lock-in.
+5. **Built for AI.** CLAUDE.md and invariants exist so agents know the rules before they write code.
+6. **Start small.** 5 invariants on day one. 76 after five months. It grows with you.
+7. **Block, don't suggest.** A blocked commit changes behavior. A wiki suggestion does not.
+8. **Only when it matters.** You decide when to harden knowledge. The framework does not nag.
 
 ---
 
