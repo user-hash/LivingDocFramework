@@ -416,7 +416,9 @@ Deep context, narrow perspective. Sees every line of code but can get tunnel vis
 
 ### The Chat Agent (disconnected)
 
-A separate AI, ideally from a different provider. Not connected to your repo, terminal, or local files. Just a chat window. You paste or upload what it needs.
+A separate AI, ideally from a different provider. No terminal, no git, no file system access. Just a chat window. You upload or paste the codebase (or parts of it) at the start of each conversation.
+
+It knows your codebase. But it gets a fresh copy every time. No memory from yesterday, no accumulated assumptions, no "I already looked at this." Every conversation starts from zero with the current state of the code.
 
 What it does:
 
@@ -425,8 +427,6 @@ What it does:
 - Challenges assumptions ("why is this a port and not a direct dependency?")
 - Offers design alternatives ("three ways to structure this, here are the tradeoffs")
 - Sanity checks invariants ("INV-DSP-003 says audio-thread-only, but what about the preview path?")
-
-It sees the codebase fresh every time you upload it. No history, no anchoring, no accumulated assumptions. That is its strength.
 
 ### Why Two Agents, Two Providers
 
