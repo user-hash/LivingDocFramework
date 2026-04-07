@@ -416,7 +416,7 @@ Deep context, narrow perspective. Sees every line of code but can get tunnel vis
 
 ### The Chat Agent (disconnected)
 
-A separate AI, ideally from a different provider, with NO direct access to the codebase. You feed it only what it needs.
+A separate AI, ideally from a different provider. Not connected to your repo, terminal, or local files. Just a chat window. You paste or upload what it needs.
 
 What it does:
 
