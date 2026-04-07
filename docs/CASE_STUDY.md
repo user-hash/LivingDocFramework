@@ -1,10 +1,10 @@
-# Case Study: DAWG Beatcraft
+# Case Study: DAWG - Digital Audio Workstation Game - A DAW made in Unity game engine.
 
 [Back to README](../README.md)
 
 ---
 
-We build **DAWG Beatcraft** ([dawgtools.org](https://dawgtools.org) | [itch.io](https://dawg-tools.itch.io/)). This is what works for us.
+We build **AWG - Digital Audio Workstation Game** ([dawgtools.org](https://dawgtools.org) | [itch.io](https://dawg-tools.itch.io/)). This is what works for us.
 
 ## The Codebase
 
