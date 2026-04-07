@@ -25,7 +25,7 @@ We build **AWG - Digital Audio Workstation Game** ([dawgtools.org](https://dawgt
 
 ## The Hard Lesson
 
-AI agents are great at producing code volume but terrible at maintaining architectural coherence across sessions. Without LDF, each session introduced small boundary violations, magic numbers, subtle invariant breaks. With LDF the codebase improved monotonically. Every session left it strictly no worse.
+AI agents are great at producing code volume but terrible at maintaining architectural coherence across sessions. Without LDF, each session introduced small boundary violations, magic numbers, invariant breaks, agents make duplicated content or they do not wire the functions to finish the task - My personal oppinion is most AI projects fall appart because of this, tightly connected with not testing the result. 
 
 **Visualization of the codebase using taxonomy principles and LDF:** [YouTube demo](https://www.youtube.com/watch?v=UQ2W9P4EIZQ)
 
