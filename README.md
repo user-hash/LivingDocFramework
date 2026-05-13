@@ -21,7 +21,7 @@ Without explicit structure, every AI session introduces boundary violations, mag
 Each stands alone. They compound when combined. [Full details with examples](docs/PRINCIPLES.md)
 
 ### 1. [Hexagonal Architecture](https://medium.com/ssense-tech/hexagonal-architecture-there-are-always-two-sides-to-every-story-bc0780ed7d9c) (Ports & Adapters)
-Separate domain logic from infrastructure. Pure domain has zero platform imports. The compiler enforces the boundary, not code review.
+Separate domain logic from infrastructure. Pure domain has zero platform imports. The compiler enforces the boundary, not code review. Lego style block can be easily replaced while keeping architecture the same.
 
 ### 2. Pure Assemblies
 Group code into modules with explicit dependency rules. Some are pure: zero platform references, compiler-enforced. AI cannot break what the build system protects.
